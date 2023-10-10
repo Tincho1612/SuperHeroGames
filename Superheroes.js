@@ -27,29 +27,62 @@
 
 //Inicio busqueda superheroes
 async function MostrarSuperheroes() {
-    console.log('Llamando...');
+    console.log('Llamando...'); 
     try{ 
-        let i=1;
-        SolicitarDeA20SuperHeroes(i);
-
-         //agregarElementos(result.value);
+        PasarDePagina ();
     }catch(error){
       console.log(error);
     };
   }
 //Fin busqueda superheroes
 
-async function SolicitarDeA20SuperHeroes(i){
-    let j=i+20;
+async function SolicitarDeAVariosSuperHeroes(j){
+  let i=j-10;
+    
+    const contenedor = document.getElementById ("tablaSuperheroes");
+    contenedor.innerHTML="";
+    const FragmentoSuperheroe= document.createDocumentFragment();
+
     for (i;i<j;i++){
         let result = await PedidoAPI(i); ///Llamo a pedido api, con el numero de id llama un superheroe
 
-       // console.log('respuesta JSON');
-        //console.log(result); 
+        const item=document.createElement ("tr"); ///Creo una fila en la tabla para el nombre y la foto
+        item.innerHTML = result.id; 
 
+        const item2 = document.createElement ("td");
+        item2.innerHTML= result.name;
+
+        item.appendChild(item2);
+        FragmentoSuperheroe.appendChild(item);
+       
+        // console.log('respuesta JSON');
+        //console.log(result); 
        // console.log('Nombre superheroe: ');
         console.log(result.name);
+        contenedor.appendChild(FragmentoSuperheroe);
     }
+    
+}
+
+let j;
+function PasarDePagina (){
+  console.log("hace algo");
+  if(j==null){
+    j=11;
+  }else{
+    j=j+10;
+  }
+    SolicitarDeAVariosSuperHeroes (j);
+}
+
+function DetrasDePagina (){
+  console.log("hace algo");
+  if(j==null || j==11){
+    j=11;
+  }else{
+    j=j-10;
+  }
+    SolicitarDeAVariosSuperHeroes (j);
 }
 
 MostrarSuperheroes();
