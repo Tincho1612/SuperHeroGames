@@ -1,7 +1,10 @@
- async function PedidoAPI(id){
-    let url = `https://superheroapi.com/api.php/3715170588728325/${id}`; //Al no haber una url q llame a todos (o no encontre), hago cada una en el metodo especifico
-  
-    try {
+const contenedor = document.getElementById("tablaSuperheroes");
+const contenedor2 = document.getElementById("tablaSuperheroes2");
+
+async function PedidoAPI(id) {
+  let url = `https://superheroapi.com/api.php/3715170588728325/${id}`; //Al no haber una url q llame a todos (o no encontre), hago cada una en el metodo especifico
+
+  try {
     const response = await fetch(url, { ///ACA DECLARO RESPONSE
       method: "GET"
     });
@@ -10,10 +13,10 @@
       throw new Error("Error en el llamado");
     }
 
-   /// console.log(response);
+    /// console.log(response);
 
     data = await response.json(); //DECLARO DATA PARA GUARDAR LOS DATOS EN JSON Y RETORNARLOS
-   // console.log(data);
+    // console.log(data);
 
     return data;
 
@@ -27,62 +30,67 @@
 
 //Inicio busqueda superheroes
 async function MostrarSuperheroes() {
-    console.log('Llamando...'); 
-    try{ 
-        PasarDePagina ();
-    }catch(error){
-      console.log(error);
-    };
-  }
+  console.log('Llamando...');
+  try {
+    PasarDePagina();
+  } catch (error) {
+    console.log(error);
+  };
+}
 //Fin busqueda superheroes
 
-async function SolicitarDeAVariosSuperHeroes(j){
-  let i=j-10;
-    
-    const contenedor = document.getElementById ("tablaSuperheroes");
-    contenedor.innerHTML="";
-    const FragmentoSuperheroe= document.createDocumentFragment();
+async function SolicitarDeAVariosSuperHeroes(j) {
+  let i = j - 10;
 
-    for (i;i<j;i++){
-        let result = await PedidoAPI(i); ///Llamo a pedido api, con el numero de id llama un superheroe
+  contenedor.innerHTML = "";
+  contenedor2.innerHTML = "";
 
-        const item=document.createElement ("tr"); ///Creo una fila en la tabla para el nombre y la foto
-        item.innerHTML = result.id; 
+  const FragmentoSuperheroe = document.createDocumentFragment();
 
-        const item2 = document.createElement ("td");
-        item2.innerHTML= result.name;
+  const requests = [];
 
-        item.appendChild(item2);
-        FragmentoSuperheroe.appendChild(item);
-       
-        // console.log('respuesta JSON');
-        //console.log(result); 
-       // console.log('Nombre superheroe: ');
-        console.log(result.name);
-        contenedor.appendChild(FragmentoSuperheroe);
+  for (i; i < j; i++) {
+    requests.push(PedidoAPI(i)); //Guarda las promesas en un array
+  }
+
+  const results = await Promise.all(requests); //Las resuelve todas juntas (Basicamente hace que sea más rapida la carga)
+
+  results.forEach((result, i) => {
+    const item = document.createElement("tr");
+    item.innerHTML = `
+      <td>${result.id}</td>
+      <td>${result.name}</td>
+      <td><img class="img-fluid rounded" src="${result.image.url}"></td>
+    `;
+
+    FragmentoSuperheroe.appendChild(item);
+
+    if (i % 2 == 0) {
+      contenedor.appendChild(FragmentoSuperheroe);
+    } else {
+      contenedor2.appendChild(FragmentoSuperheroe);
     }
-    
+  })
 }
+
 
 let j;
-function PasarDePagina (){
-  console.log("hace algo");
-  if(j==null){
-    j=11;
-  }else{
-    j=j+10;
+function PasarDePagina() {
+  if (j == null) {
+    j = 11;
+  } else {
+    j = j + 10;
   }
-    SolicitarDeAVariosSuperHeroes (j);
+  SolicitarDeAVariosSuperHeroes(j);
 }
 
-function DetrasDePagina (){
-  console.log("hace algo");
-  if(j==null || j==11){
-    j=11;
-  }else{
-    j=j-10;
+function DetrasDePagina() {
+  if (j == null || j == 11) {
+    j = 11;
+  } else {
+    j = j - 10;
   }
-    SolicitarDeAVariosSuperHeroes (j);
+  SolicitarDeAVariosSuperHeroes(j);
 }
 
 MostrarSuperheroes();
