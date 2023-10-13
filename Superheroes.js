@@ -107,6 +107,7 @@ const modalContent = document.querySelector(".modal-content")
 
 
 async function mostrarInfoDetallada(id){
+  data= await PedidoAPI(id)
 
   modal.style.display = "block";
 
@@ -120,7 +121,7 @@ async function mostrarInfoDetallada(id){
       }
   });
   console.log(id)
-  data= await PedidoAPI(id)
+  
   console.log(data)
   let titulo=modalContent.querySelector(".titulo-SuperHeroe")
   titulo.innerHTML=`${data.name}`
