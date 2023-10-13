@@ -16,7 +16,7 @@ async function PedidoAPI(id) {
     /// console.log(response);
 
     data = await response.json(); //DECLARO DATA PARA GUARDAR LOS DATOS EN JSON Y RETORNARLOS
-    // console.log(data);
+     console.log(data);
 
     return data;
 
@@ -61,6 +61,7 @@ async function SolicitarDeAVariosSuperHeroes(j) {
       <td>${result.id}</td>
       <td>${result.name}</td>
       <td><img class="img-fluid rounded" src="${result.image.url}"></td>
+      <td><button class="btn btn-outline-light" onclick="mostrarInfoDetallada(${result.id})">Ver mas</button></td>
     `;
 
     FragmentoSuperheroe.appendChild(item);
@@ -94,3 +95,36 @@ function DetrasDePagina() {
 }
 
 MostrarSuperheroes();
+
+
+//Logica de ventana display 
+
+const modal = document.getElementById("myModal");
+const abrirModalButtons = document.querySelectorAll('.ver-mas-btn');
+const cerrarModalButton = document.getElementById("cerrarModal");
+const modalContent = document.querySelector(".modal-content")
+
+
+
+async function mostrarInfoDetallada(id){
+
+  modal.style.display = "block";
+
+  cerrarModalButton.addEventListener('click', function() {
+      modal.style.display = "none";
+  });
+
+  window.addEventListener('click', function(event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+  });
+  console.log(id)
+  data= await PedidoAPI(id)
+  console.log(data)
+  let titulo=modalContent.querySelector(".titulo-SuperHeroe")
+  titulo.innerHTML=`${data.name}`
+
+  let descripcionSuperHeroe = modalContent.querySelector(".descripcion")
+  descripcionSuperHeroe.innerHTML=`Creador: ${data.biography.publisher} <br> <h5>Estadisticas:</h3>  Combate:${data.powerstats.combat}`
+}
