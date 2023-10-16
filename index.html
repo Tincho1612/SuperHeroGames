@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.2/lux/bootstrap.min.css"
+        integrity="sha512-zTvuig0lp44Ol8dgsXd7DGM3vSuLu8lIaGIEZ9pvh62u5lXNKMqZzqcBxBqju8pacqCCS2J5hWKrVS4IzJXEyQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
@@ -14,40 +16,26 @@
     <!--NAVBAR-->
     <nav class="navbar navbar-expand-lg navbar bg-dark border-bottom border-body" data-bs-theme="dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
-            </div>
+            <a class="navbar-brand" href="#">SHG</a>
+            
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+            </form>
         </div>
     </nav>
 
     <!--TABLA-->
 
     <h1 class="h1 text-bg-dark text-center mb-md-5">
-        Tabla de Heroes 
+        Tabla de Heroes
     </h1>
 
     <div class="container mt-xl-5">
         <div class="row">
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table">
                         <tbody id="tablaSuperheroes" class="table-dark ancho-personalizado-tbody">
 
                         </tbody>
@@ -56,7 +44,7 @@
             </div>
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table">
                         <tbody id="tablaSuperheroes2" class="table-dark ancho-personalizado-tbody">
 
                         </tbody>
@@ -65,9 +53,10 @@
             </div>
         </div>
     </div>
-    
+
 
     <!--BOTONES SIGUIENTE-ANTERIOR-->
+
 
     <div class="d-flex justify-content-center">
         <div class="btn-group mx-auto" role="group" aria-label="Basic example">
@@ -75,7 +64,11 @@
             <button class="btn btn-outline-light" onclick="PasarDePagina()">Siguiente</button>
         </div>
     </div>
-    
+
+
+    <!-- MODAL ESTADISTICAS -->
+
+
     <div id="myModal" class="modal">
         <div class="modal-content">
             <h2 class="titulo-SuperHeroe">Detalles del Superhéroe</h2>
@@ -83,6 +76,8 @@
             <button id="cerrarModal">Cerrar</button>
         </div>
     </div>
+
+    <!--SCRIPT-->
 
     <script src="Superheroes.js"></script>
 </body>
