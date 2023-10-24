@@ -1,8 +1,4 @@
-.ancho-personalizado-tbody td img{
-    height: 100px;
-    width: 95px;
-}
-
+/* You can add global styles to this file, and also import other style files */
 .modal {
     display: none;
     position: fixed;
