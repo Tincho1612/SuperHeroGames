@@ -13,11 +13,15 @@ export class SuperHeroApiService {
 
   constructor(private http: HttpClient) { 
     this.apiUrl = "https://superheroapi.com/api.php/";
-    this.apiKey = "/3715170588728325"
+    this.apiKey = "/3715170588728325/"
    }
 
-   getHeroes(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}${this.apiKey}/search/a`);
+   getListHeroes(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}${this.apiKey}search/a`);
+  }
+
+  getHeroe(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}${this.apiKey}${id}`);
   }
 
 }

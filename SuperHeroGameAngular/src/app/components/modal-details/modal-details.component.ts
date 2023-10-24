@@ -1,26 +1,36 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, numberAttribute} from '@angular/core';
+import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 
 @Component({
   selector: 'app-modal-details',
   templateUrl: './modal-details.component.html',
   styleUrls: ['./modal-details.component.css']
 })
-export class ModalDetailsComponent {
-  
-  @ViewChild('myModal', { static: false }) modalElement: ElementRef;
+export class ModalDetailsComponent implements OnInit{
 
-  constructor() {
+  heroeActual: any;
+
+  constructor(private _serviceHeroe: SuperHeroApiService){
   }
 
-  ngAfterViewInit() {
-    this.modalElement.nativeElement.style.display = 'none';
-  }
+  @ViewChild('myModal')
+  modalElement!: ElementRef;
 
-  abrirModal() {
-    this.modalElement.nativeElement.style.display = 'block';
+  @Input({required: true, transform:  numberAttribute}) id!: number;
+
+  ngOnInit(): void {
+    this.getHeroeModal();
   }
 
   cerrarModal() {
     this.modalElement.nativeElement.style.display = 'none';
   }
+
+  getHeroeModal(){
+    this._serviceHeroe.getHeroe(this.id).subscribe((data)=>{
+      this.heroeActual = data;
+      console.log(this.heroeActual);
+    });
+  }
+
 }

@@ -1,4 +1,4 @@
-<app-modal-details></app-modal-details>
+<app-modal-details [id]="idHeroeActual" *ngIf="modal"></app-modal-details>
 
 <h1 class="h1 text-bg-dark text-center mb-md-5">
   Tabla de Heroes
@@ -20,7 +20,7 @@
           <td>{{heroe.id}}</td>
           <td>{{heroe.name}}</td>
           <td><img class="img-fluid rounded" src={{heroe.image.url}} style=" height: 100px; width: 95px;"></td>
-          <td><button class="btn btn-outline-primary">Ver mas</button></td>
+          <td><button class="btn btn-outline-primary" (click)="abrirModal(heroe.id)">Ver mas</button></td>
         </tr>
       </tbody>
     </table>
