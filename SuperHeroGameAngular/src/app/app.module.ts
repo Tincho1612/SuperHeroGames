@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { TablaHeroesComponent } from './components/tabla-heroes/tabla-heroes.component';
+import { ModalDetailsComponent } from './components/modal-details/modal-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    TablaHeroesComponent
+    TablaHeroesComponent,
+    ModalDetailsComponent
   ],
   imports: [
     BrowserModule,
