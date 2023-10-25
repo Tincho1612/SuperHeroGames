@@ -1,28 +1,30 @@
-<div #myModal class="modal">
+<div #myModal class="modal modal-xl">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-             
-    <div class="modal-header" style="display: flex; align-items: center;">
-        <img src="{{heroeActual.image.url}}" alt="Imagen del superhéroe" class="img-fluid rounded" style="max-width: 100px;">
-        <h2>{{heroeActual.name}}</h2>
-        <p>{{heroeActual.biography["full-name"]}}</p>
-      </div>
-  
-      <!-- <div class="modal-body">
-        <h3>Estadisticas:</h3>
-        <h5>Promedio Estadisticas ${dataE.promedio}</h5>
-        <p>Combate: ${dataE.combatValue}</p>
-        <p>Durabilidad: ${dataE.durabilityValue}</p>
-        <p>Inteligencia: ${dataE.intelligenceValue}</p>
-        <p>Poder: ${dataE.powerValue}</p>
-        <p>Velocidad: ${dataE.speedValue}</p>
-        <p>Fuerza: ${dataE.strengthValue}</p>
-        <br> <h5>Editorial: ${data.biography.publisher}</h5>
-      </div> -->
-  
-      <div class="modal-footer">
-        <button class="btn btn-outline-dark" (click)="cerrarModal()">Cerrar</button>
-      </div>
+
+            <div class="modal-header" style="display: flex; align-items: center;">
+                <img src="{{heroeActual.image.url}}" alt="Imagen del superhéroe" class="img-fluid rounded"
+                    style="max-width: 100px;">
+                <h2>{{heroeActual.name}}</h2>
+                <p>{{heroeActual.biography["full-name"]}}</p>
+            </div>
+
+            <div class="modal-body">
+                <h3>Estadisticas:</h3>
+                <h5>Promedio Estadisticas {{estadisticasHeroe.promedio}}</h5>
+                <p>Combate: {{estadisticasHeroe.combatValue}}</p>
+                <p>Durabilidad: {{estadisticasHeroe.durabilityValue}}</p>
+                <p>Inteligencia: {{estadisticasHeroe.intelligenceValue}}</p>
+                <p>Poder: {{estadisticasHeroe.powerValue}}</p>
+                <p>Velocidad: {{estadisticasHeroe.speedValue}}</p>
+                <p>Fuerza: {{estadisticasHeroe.strengthValue}}</p>
+                <br>
+                <h5>Editorial: {{heroeActual.biography.publisher}}</h5>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-dark" (click)="cerrarModal()">Cerrar</button>
+            </div>
         </div>
     </div>
 </div>

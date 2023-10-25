@@ -26,7 +26,7 @@ export class TablaHeroesComponent{
   }
 
   abrirModal(id: string){
-    this.modal = !this.modal;
+    this.modal = !this.modal
     this.idHeroeActual = Number(id);
   }
   
