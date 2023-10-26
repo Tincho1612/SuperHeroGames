@@ -1,16 +1,17 @@
-<nav class="navbar navbar-expand-lg navbar bg-dark border-bottom border-body" data-bs-theme="dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" routerLink="/">SHG</a>
-        <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link active" routerLink="lista">Lista
-                <span class="visually-hidden">(current)</span>
-              </a>
-            </li>
-          </ul>
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-light" type="submit">Search</button>
-        </form>
-    </div>
-</nav>
+<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">SHG</a>
+    <ul class="navbar-nav me-auto">
+      <li class="nav-item">
+        <a class="nav-link active" routerLink="lista">Lista
+          <span class="visually-hidden">(current)</span>
+        </a>
+      </li>
+    </ul>
+    <form class="d-flex ml-auto">
+      <input class="form-control me-sm-2" type="search" placeholder="Buscar heroe o palabra" [(ngModel)]="searchQuery"
+        name="searchQuery">
+      <button class="btn btn-secondary my-2 my-sm-0" type="button" (click)="search()">Buscar</button>
+    </form>
+  </div>
+</nav>  

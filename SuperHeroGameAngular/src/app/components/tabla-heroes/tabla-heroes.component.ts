@@ -1,5 +1,5 @@
-import { compileNgModule } from '@angular/compiler';
-import { Component, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Heroe } from 'src/app/interfaces/Heroe';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 
@@ -8,29 +8,47 @@ import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
   templateUrl: './tabla-heroes.component.html',
   styleUrls: ['./tabla-heroes.component.css']
 })
-export class TablaHeroesComponent{
-
+export class TablaHeroesComponent implements OnInit {
   listHeroes: Heroe[] = [];
   modal: boolean = false;
-  idHeroeActual: number = 0;  
+  idHeroeActual: number = 0;
   loading: boolean = false;
 
-  constructor(private _serviceHeroe: SuperHeroApiService){
-    this.getHeroes();
+  constructor(private _serviceHeroe: SuperHeroApiService, private aRouter: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    //Para recibir el parametro de la url, el cual es ingresado en la barra de busqueda en la nav
+    this.aRouter.paramMap.subscribe((params) => {
+      const heroeParam = params.get('heroe');
+      console.log(heroeParam);
+      if (heroeParam === null) {
+        this.getHeroesDefault();
+      } else {
+        this.getHeroesParam(heroeParam)
+      }
+    });
   }
 
-  getHeroes(){
+  getHeroesDefault() {
     this.loading = true;
-    this._serviceHeroe.getListHeroes().subscribe((data)=>{
+    this._serviceHeroe.getListHeroes().subscribe((data) => {
       this.listHeroes = data.results;
       console.log(this.listHeroes);
       this.loading = false;
     });
   }
 
-  abrirModal(id: string){
-    this.modal = !this.modal
+  getHeroesParam(heroe: string) {
+    this.loading = true;
+    this._serviceHeroe.getHeroesByWord(heroe).subscribe((data)=>{
+      this.listHeroes = data.results;
+      console.log(this.listHeroes);
+      this.loading = false;
+    })
+  }
+
+  abrirModal(id: string) {
+    this.modal = !this.modal;
     this.idHeroeActual = Number(id);
   }
-  
 }

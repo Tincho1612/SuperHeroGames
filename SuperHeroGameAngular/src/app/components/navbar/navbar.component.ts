@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -6,4 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  
+  searchQuery: string = '';
+
+  constructor(private router: Router) { }
+
+  search() {
+    this.router.navigate([`/lista/${this.searchQuery}`]);
+  }
 }

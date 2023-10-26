@@ -23,4 +23,8 @@ export class SuperHeroApiService {
     return this.http.get<any>(`${this.apiUrl}${this.apiKey}${id}`);
   }
 
+  getHeroesByWord(word: string): Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}${this.apiKey}search/${word}`);
+  }
+
 }
