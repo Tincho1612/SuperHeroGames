@@ -1,7 +1,7 @@
 <div #myModal class="modal modal-xl">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-
+        <app-spinner *ngIf="loading"></app-spinner>
+        <div class="modal-content" *ngIf="!loading">
             <div class="modal-header" style="display: flex; align-items: center;">
                 <img src="{{heroeActual.image.url}}" alt="Imagen del superhéroe" class="img-fluid rounded"
                     style="max-width: 100px;">

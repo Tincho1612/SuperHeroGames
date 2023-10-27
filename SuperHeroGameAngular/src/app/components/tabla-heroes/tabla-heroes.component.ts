@@ -13,15 +13,18 @@ export class TablaHeroesComponent{
   listHeroes: Heroe[] = [];
   modal: boolean = false;
   idHeroeActual: number = 0;  
+  loading: boolean = false;
 
   constructor(private _serviceHeroe: SuperHeroApiService){
     this.getHeroes();
   }
 
   getHeroes(){
+    this.loading = true;
     this._serviceHeroe.getListHeroes().subscribe((data)=>{
       this.listHeroes = data.results;
       console.log(this.listHeroes);
+      this.loading = false;
     });
   }
 

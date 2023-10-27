@@ -10,6 +10,7 @@ export class ModalDetailsComponent implements OnInit {
 
   heroeActual: any;
   estadisticasHeroe: any;
+  loading: boolean = false;
 
   constructor(private _serviceHeroe: SuperHeroApiService) {
   }
@@ -31,9 +32,11 @@ export class ModalDetailsComponent implements OnInit {
   }
 
   getHeroeModal() {
+    this.loading = true;
     this._serviceHeroe.getHeroe(this.id).subscribe((data) => {
       this.heroeActual = data;
       this.estadisticasHeroe = this.getEstadisticasHeroe(this.heroeActual);
+      this.loading = false;
     });
   }
 

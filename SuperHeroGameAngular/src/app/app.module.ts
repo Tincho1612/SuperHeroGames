@@ -7,13 +7,15 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { TablaHeroesComponent } from './components/tabla-heroes/tabla-heroes.component';
 import { ModalDetailsComponent } from './components/modal-details/modal-details.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     TablaHeroesComponent,
-    ModalDetailsComponent
+    ModalDetailsComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
