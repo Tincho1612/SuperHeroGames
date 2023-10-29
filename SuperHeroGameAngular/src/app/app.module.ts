@@ -9,6 +9,7 @@ import { TablaHeroesComponent } from './components/tabla-heroes/tabla-heroes.com
 import { ModalDetailsComponent } from './components/modal-details/modal-details.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
+import { FormRegisterComponent } from './components/form-register/form-register.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { FormsModule } from '@angular/forms';
     NavbarComponent,
     TablaHeroesComponent,
     ModalDetailsComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    FormRegisterComponent
   ],
   imports: [
     BrowserModule,

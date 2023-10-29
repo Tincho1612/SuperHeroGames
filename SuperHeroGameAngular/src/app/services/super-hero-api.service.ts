@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { User } from '../interfaces/User';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SuperHeroApiService {
-
+  listusers:User[]=[];
   apiUrl: string;
   apiKey: string;
 
@@ -25,6 +26,14 @@ export class SuperHeroApiService {
 
   getHeroesByWord(word: string): Observable<any>{
     return this.http.get<any>(`${this.apiUrl}${this.apiKey}search/${word}`);
+  }
+
+  getusers():User[]{
+    return this.listusers;
+  }
+
+  postUser(user:User){
+      this.listusers.push(user);
   }
 
 }
