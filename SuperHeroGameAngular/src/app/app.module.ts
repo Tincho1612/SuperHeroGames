@@ -10,6 +10,7 @@ import { ModalDetailsComponent } from './components/modal-details/modal-details.
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
 import { FormRegisterComponent } from './components/form-register/form-register.component';
+import { FormLoginComponent } from './components/form-login/form-login.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { FormRegisterComponent } from './components/form-register/form-register.
     TablaHeroesComponent,
     ModalDetailsComponent,
     SpinnerComponent,
-    FormRegisterComponent
+    FormRegisterComponent,
+    FormLoginComponent
   ],
   imports: [
     BrowserModule,
