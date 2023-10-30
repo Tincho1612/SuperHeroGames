@@ -21,8 +21,8 @@ export interface Heroe {
   appearance: {
     gender: string;
     race: string;
-    height: [string, string]; // Array con dos elementos: pies y centímetros
-    weight: [string, string]; // Array con dos elementos: libras y kilogramos
+    height: [string, string];
+    weight: [string, string];
     'eye-color': string;
     'hair-color': string;
   };

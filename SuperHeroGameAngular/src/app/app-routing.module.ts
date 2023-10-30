@@ -5,10 +5,10 @@ import { FormRegisterComponent } from './components/form-register/form-register.
 import { FormLoginComponent } from './components/form-login/form-login.component';
 
 const routes: Routes = [
-  {path: 'lista/:heroe', component: TablaHeroesComponent},
-  {path: 'lista', component: TablaHeroesComponent},
-  {path:'register',component: FormRegisterComponent},
-  {path:'login',component: FormLoginComponent}
+  { path: 'lista/:heroe', component: TablaHeroesComponent },
+  { path: 'lista', component: TablaHeroesComponent },
+  { path: 'register', component: FormRegisterComponent },
+  { path: 'login', component: FormLoginComponent }
 ];
 
 @NgModule({

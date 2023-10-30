@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/interfaces/User';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 
@@ -8,52 +10,43 @@ import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
   templateUrl: './form-register.component.html',
   styleUrls: ['./form-register.component.css']
 })
-export class FormRegisterComponent implements OnInit {
-  formulario:any=document.querySelector(".registration-form");
-  registerForm:FormGroup;
-  constructor(private _data: SuperHeroApiService,private readonly fb:FormBuilder){
-    
-    this.registerForm = this.fb.group({
-      name:['',[Validators.required,Validators.minLength(4),Validators.maxLength(10)]],
-      apellido:['',[Validators.required,Validators.minLength(4),Validators.maxLength(10)]],
-      email:['',[Validators.email,Validators.min(5),Validators.required]],
-      password:['',[Validators.required,Validators.minLength(8),Validators.maxLength(24)]]
+export class FormRegisterComponent {
+
+  form: FormGroup;
+  constructor(private _data: SuperHeroApiService,
+    private readonly fb: FormBuilder,
+    private toastr: ToastrService,
+    private router: Router) {
+
+    this.form = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]],
+      apellido: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]],
+      email: ['', [Validators.email, Validators.min(5), Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]]
     })
   }
-  ngOnInit(): void {
+
+  sendData() {
+    let usuario: User = {
+      nombre: this.form.value.name,
+      apellido: this.form.value.apellido,
+      email: this.form.value.email,
+      password: this.form.value.password
+    }
+
+    if (this.validarEmail(this.form.value.email)) {
+      this.toastr.success('Usuario creado con éxito', 'Registro exitoso');
+      this._data.postUser(usuario)
+      console.log(this._data.getusers())
+      this.router.navigate(['login']);
+    } else {
+      this.toastr.error('Ese email ya está en uso, probá utilizando otro', 'Error');
+    }
 
   }
-  
 
-
-  sendData(){
-      let usuario:User
-      const name = this.registerForm.get('name')
-      const lastName = this.registerForm.get('apellido')
-      const email = this.registerForm.get('email')
-      const password = this.registerForm.get('password')
-      if (name?.errors || lastName?.errors || email?.errors || password?.errors){
-        alert("Algunos de los campos no son validos: Recuerde que la contraseña debe contener entre 8 y 24 caracteres y todos los campos son requeridos")
-      }else{
-        if (this.validarEmail(email?.value)){
-          this._data.postUser(new User(name?.value,lastName?.value,email?.value,password?.value))
-          console.log(this._data.getusers())
-        }else{
-          alert("Ese Email ya esta en uso")
-        }
-        
-      }
+  validarEmail(email: string): boolean {
+    return !this._data.getusers().some(element => element.email === email);
   }
-
-  validarEmail(email:string):boolean{
-      let validado=true;
-      this._data.getusers().forEach(element => {
-        if (element.email==email){
-          validado==false
-        }
-      });
-      return validado;
-  }
-  
 
 }
