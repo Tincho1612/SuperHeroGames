@@ -10,18 +10,23 @@ import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 })
 export class FormRegisterComponent implements OnInit {
   formulario:any=document.querySelector(".registration-form");
-  registerForm!:FormGroup;
+  registerForm:FormGroup;
   constructor(private _data: SuperHeroApiService,private readonly fb:FormBuilder){
     
-    
+    this.registerForm = this.fb.group({
+      name:['',[Validators.required,Validators.minLength(4),Validators.maxLength(10)]],
+      apellido:['',[Validators.required,Validators.minLength(4),Validators.maxLength(10)]],
+      email:['',[Validators.email,Validators.min(5),Validators.required]],
+      password:['',[Validators.required,Validators.minLength(8),Validators.maxLength(24)]]
+    })
   }
   ngOnInit(): void {
-    this.registerForm=this.initForm();
+
   }
   
 
 
-  sendDataReactive(){
+  sendData(){
       let usuario:User
       const name = this.registerForm.get('name')
       const lastName = this.registerForm.get('apellido')
@@ -38,15 +43,6 @@ export class FormRegisterComponent implements OnInit {
         }
         
       }
-  }
-
-  initForm():FormGroup{
-      return this.fb.group({
-        name:['',[Validators.required,Validators.minLength(4),Validators.maxLength(10)]],
-        apellido:['',[Validators.required,Validators.minLength(4),Validators.maxLength(10)]],
-        email:['',[Validators.email,Validators.min(5),Validators.required]],
-        password:['',[Validators.required,Validators.minLength(8),Validators.maxLength(24)]]
-      })
   }
 
   validarEmail(email:string):boolean{
