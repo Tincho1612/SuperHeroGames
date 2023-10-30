@@ -8,7 +8,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { TablaHeroesComponent } from './components/tabla-heroes/tabla-heroes.component';
 import { ModalDetailsComponent } from './components/modal-details/modal-details.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormRegisterComponent } from './components/form-register/form-register.component';
 import { FormLoginComponent } from './components/form-login/form-login.component';
 
@@ -27,6 +27,7 @@ import { FormLoginComponent } from './components/form-login/form-login.component
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
