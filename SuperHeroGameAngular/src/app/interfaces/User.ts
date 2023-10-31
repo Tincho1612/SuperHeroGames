@@ -3,5 +3,5 @@ export interface User{
     apellido:string
     email:string
     password:string
-    favoritos:number[]
+    favoritos?:number[]
 }
