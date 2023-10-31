@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/interfaces/User';
-import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-form-register',
@@ -13,7 +13,7 @@ import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 export class FormRegisterComponent {
 
   form: FormGroup;
-  constructor(private _data: SuperHeroApiService,
+  constructor(private _data: UsersService,
     private readonly fb: FormBuilder,
     private toastr: ToastrService,
     private router: Router) {
@@ -32,6 +32,7 @@ export class FormRegisterComponent {
       apellido: this.form.value.apellido,
       email: this.form.value.email,
       password: this.form.value.password
+       
     }
 
     if (this.validarEmail(this.form.value.email)) {

@@ -7,7 +7,7 @@ import { User } from '../interfaces/User';
   providedIn: 'root'
 })
 export class SuperHeroApiService {
-  listusers:User[]=[];
+  
   apiUrl: string;
   apiKey: string;
 
@@ -28,12 +28,6 @@ export class SuperHeroApiService {
     return this.http.get<any>(`${this.apiUrl}${this.apiKey}search/${word}`);
   }
 
-  getusers():User[]{
-    return this.listusers;
-  }
-
-  postUser(user:User){
-      this.listusers.push(user);
-  }
+  
 
 }

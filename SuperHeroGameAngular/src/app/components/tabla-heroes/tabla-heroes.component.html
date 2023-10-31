@@ -24,6 +24,7 @@
             <td>{{heroe.name}}</td>
             <td><img class="img-fluid rounded" src={{heroe.image.url}} style=" height: 100px; width: 95px;"></td>
             <td><button class="btn btn-outline-primary" (click)="abrirModal(heroe.id)">Ver mas</button></td>
+            <td><button class="btn btn-outline-primary" (click)="cargarFavorito(heroe.id)">Añadir Favorito</button></td>
           </tr>
         </tbody>
       </table>
