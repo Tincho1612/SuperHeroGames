@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/interfaces/User';
-import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-form-login',
@@ -14,7 +14,7 @@ export class FormLoginComponent {
   form: FormGroup;
   textoLogueo: string = "";
 
-  constructor(private _data: SuperHeroApiService, 
+  constructor(private _data: UsersService, 
     private fb: FormBuilder,
     private toastr: ToastrService,
     private router: Router) {
@@ -28,7 +28,7 @@ export class FormLoginComponent {
     if (this.form.valid) {
       const email = this.form.get('email')?.value;
       const password = this.form.get('password')?.value;
-
+      console.log(this._data.getusers())
       this.BuscarUsuario(this._data.getusers(), email, password);
     }
   }
@@ -42,6 +42,7 @@ export class FormLoginComponent {
     } else {
       this.toastr.success('Inicio de sesión exitoso!', 'Ingresando');
       console.log(usuarioEncontrado);
+      this._data.currentUser=usuarioEncontrado;
       this.router.navigate(['lista']);
     }
   }

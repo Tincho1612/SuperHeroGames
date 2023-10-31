@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Heroe } from 'src/app/interfaces/Heroe';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-tabla-heroes',
@@ -14,7 +15,7 @@ export class TablaHeroesComponent implements OnInit {
   idHeroeActual: number = 0;
   loading: boolean = false;
 
-  constructor(private _serviceHeroe: SuperHeroApiService, private aRouter: ActivatedRoute) { }
+  constructor(private _serviceHeroe: SuperHeroApiService, private aRouter: ActivatedRoute,private _serviceUser:UsersService) { }
 
   ngOnInit(): void {
     //Para recibir el parametro de la url, el cual es ingresado en la barra de busqueda en la nav
@@ -50,5 +51,8 @@ export class TablaHeroesComponent implements OnInit {
   abrirModal(id: string) {
     this.modal = !this.modal;
     this.idHeroeActual = Number(id);
+  }
+  cargarFavorito(idHeroe:string){
+    this._serviceUser.currentUser.favoritos?.push(Number(idHeroe))
   }
 }

@@ -18,6 +18,8 @@ import { ModalDetailsComponent } from './components/modal-details/modal-details.
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { FormRegisterComponent } from './components/form-register/form-register.component';
 import { FormLoginComponent } from './components/form-login/form-login.component';
+import { FavoritosComponent } from './components/favoritos/favoritos.component';
+import { ItemFavoritoComponent } from './components/item-favorito/item-favorito.component';
 
 
 @NgModule({
@@ -28,7 +30,9 @@ import { FormLoginComponent } from './components/form-login/form-login.component
     ModalDetailsComponent,
     SpinnerComponent,
     FormRegisterComponent,
-    FormLoginComponent
+    FormLoginComponent,
+    FavoritosComponent,
+    ItemFavoritoComponent
   ],
   imports: [
     BrowserModule,
