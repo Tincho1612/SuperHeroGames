@@ -4,13 +4,15 @@ import { TablaHeroesComponent } from './components/tabla-heroes/tabla-heroes.com
 import { FormRegisterComponent } from './components/form-register/form-register.component';
 import { FormLoginComponent } from './components/form-login/form-login.component';
 import { FavoritosComponent } from './components/favoritos/favoritos.component';
+import { authGuard } from './utils/auth.guard';
 
 const routes: Routes = [
-  { path: 'lista/:heroe', component: TablaHeroesComponent },
-  { path: 'lista', component: TablaHeroesComponent },
+  { path: 'lista/:heroe', component: TablaHeroesComponent, canActivate: [authGuard] },
+  { path: 'lista', component: TablaHeroesComponent, canActivate: [authGuard] },
   { path: 'register', component: FormRegisterComponent },
   { path: 'login', component: FormLoginComponent },
-  {path:'favoritos',component:FavoritosComponent}
+  { path: 'favoritos', component: FavoritosComponent },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
 
 @NgModule({

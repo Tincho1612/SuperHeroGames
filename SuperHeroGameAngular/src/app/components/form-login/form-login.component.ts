@@ -14,7 +14,7 @@ export class FormLoginComponent {
   form: FormGroup;
   textoLogueo: string = "";
 
-  constructor(private _data: UsersService, 
+  constructor(private _data: UsersService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private router: Router) {
@@ -37,13 +37,16 @@ export class FormLoginComponent {
     let usuarioEncontrado = usuarios.find(user => user.email === email && user.password === password);
 
     if (usuarioEncontrado === undefined) {
-      this.toastr.error('El usuario no fué encontrado', 'Error'); 
-      console.log(usuarioEncontrado);
+
+      this.toastr.error('El usuario no fué encontrado', 'Error');
+
     } else {
+
       this.toastr.success('Inicio de sesión exitoso!', 'Ingresando');
-      console.log(usuarioEncontrado);
-      this._data.currentUser=usuarioEncontrado;
+      this._data.currentUser = usuarioEncontrado;
+      localStorage.setItem('usuarioActual', JSON.stringify(usuarioEncontrado));
       this.router.navigate(['lista']);
+
     }
   }
 }

@@ -15,4 +15,9 @@ export class NavbarComponent {
   search() {
     this.router.navigate([`/lista/${this.searchQuery}`]);
   }
+
+  logout(){
+    localStorage.removeItem('usuarioActual');
+    this.router.navigate(['/login']);
+  }
 }

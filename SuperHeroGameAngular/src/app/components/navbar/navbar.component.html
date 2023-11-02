@@ -18,10 +18,11 @@
         </a>
       </li>
     </ul>
-    <form class="d-flex ml-auto">
+    <div class="d-flex">
       <input class="form-control me-sm-2" type="search" placeholder="Buscar heroe o palabra" [(ngModel)]="searchQuery"
         name="searchQuery">
-      <button class="btn btn-secondary my-2 my-sm-0" type="button" (click)="search()">Buscar</button>
-    </form>
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" (click)="search()">Buscar</button>
+    </div>
+    <button type="button" class="btn btn-outline-danger" (click)="logout()">Logout</button>
   </div>
 </nav>  
