@@ -18,6 +18,7 @@ export class UsersService {
     if(storedUser){
       this.currentUser = JSON.parse(storedUser);  
     }
+
    }
 
   getusers(): User[] {
@@ -27,6 +28,10 @@ export class UsersService {
   postUser(user: User) {
     this.listusers.push(user);
     localStorage.setItem('usuariosData', JSON.stringify(this.listusers));
+  }
+
+  actualizarFavoritos(idHeroe: number) {
+    this.currentUser.favoritos?.push(idHeroe);
   }
 
 }

@@ -54,5 +54,6 @@ export class TablaHeroesComponent implements OnInit {
   }
   cargarFavorito(idHeroe:string){
     this._serviceUser.currentUser.favoritos?.push(Number(idHeroe))
+    console.log (this._serviceUser.currentUser);
   }
 }

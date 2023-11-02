@@ -1,2 +1,33 @@
-<p>favoritos works!</p>
+<app-modal-details [id]="idHeroeActual" *ngIf="modal" (modalClosed)="modal = false"></app-modal-details>
 
+<app-spinner *ngIf="loading"></app-spinner>
+
+<div *ngIf="!loading">
+  <h1 class="h1 text-bg-dark text-center mb-md-5 ">
+    TUS HEROES FAVORITOS
+  </h1>
+
+  <div class="container mt-xl-5">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Imagen</th>
+            <th scope="col">Detalles</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let heroe of SuperheroesFav" class="table-default">
+            <td>{{heroe.id}}</td>
+            <td>{{heroe.name}}</td>
+            <td><img class="img-fluid rounded" src={{heroe.image.url}} style=" height: 100px; width: 95px;"></td>
+            <td><button class="btn btn-outline-primary" (click)="abrirModal(heroe.id)">Ver mas</button></td>
+            <td><button class="btn btn-outline-primary" (click)="eliminarFavorito(heroe.id)">Eliminar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

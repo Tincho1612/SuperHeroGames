@@ -32,7 +32,7 @@ export class FormRegisterComponent {
       email: this.form.value.email,
       password: this.form.value.password,
       favoritos:[]
-       
+      
     }
 
     if (this.validarEmail(this.form.value.email)) {
