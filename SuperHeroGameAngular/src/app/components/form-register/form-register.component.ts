@@ -11,7 +11,6 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./form-register.component.css']
 })
 export class FormRegisterComponent {
-   aux:number[]=[]
   form: FormGroup;
   constructor(private _data: UsersService,
     private readonly fb: FormBuilder,
@@ -32,7 +31,7 @@ export class FormRegisterComponent {
       apellido: this.form.value.apellido,
       email: this.form.value.email,
       password: this.form.value.password,
-      favoritos:this.aux
+      favoritos:[]
        
     }
 

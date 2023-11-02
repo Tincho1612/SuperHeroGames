@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -9,8 +9,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class NavbarComponent {
   
   searchQuery: string = '';
+  shouldShowNavbar: boolean = true;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) { 
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const currentRoute = this.router.routerState.snapshot.url;
+        this.shouldShowNavbar = !['/login', '/register'].includes(currentRoute);
+      }
+    });
+   }
 
   search() {
     this.router.navigate([`/lista/${this.searchQuery}`]);

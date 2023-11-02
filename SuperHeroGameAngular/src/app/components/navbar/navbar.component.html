@@ -1,28 +1,34 @@
-<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
-  <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/">SHG</a>
-    <ul class="navbar-nav me-auto">
-      <li class="nav-item">
-        <a class="nav-link active" routerLink="lista">Lista
-          <span class="visually-hidden">(current)</span>
-        </a>   
-      </li>
-      <li class="nav-item">
-        <a class="nav-link active" routerLink="register">Registrarse
-          <span class="visually-hidden">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link active" routerLink="login">Iniciar sesion
-          <span class="visually-hidden">(current)</span>
-        </a>
-      </li>
-    </ul>
-    <div class="d-flex">
-      <input class="form-control me-sm-2" type="search" placeholder="Buscar heroe o palabra" [(ngModel)]="searchQuery"
-        name="searchQuery">
+<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light" *ngIf="shouldShowNavbar">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="col d-flex">
+      <a class="navbar-brand" routerLink="/">SHG</a>
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" routerLink="lista">Lista
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-6 d-flex">
+      <input class="form-control me-sm-2" type="search" placeholder="Buscar héroe o palabra" [(ngModel)]="searchQuery" name="searchQuery">
       <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" (click)="search()">Buscar</button>
     </div>
-    <button type="button" class="btn btn-outline-danger" (click)="logout()">Logout</button>
+
+    <div class="col d-flex justify-content-end">
+      <div class="dropdown-center">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Opciones
+        </button>
+        <ul class="dropdown-menu text-center">
+          <a class="nav-link active mb-2" routerLink="register">Registrarse<span class="visually-hidden">(current)</span></a>
+          <div class="dropdown-divider"></div>
+          <a class="nav-link active mb-2" (click)="logout()">Iniciar sesión nuevamente<span class="visually-hidden">(current)</span></a>
+          <div class="dropdown-divider"></div>
+          <button type="button" class="btn btn-outline-danger mt-2" (click)="logout()" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Logout</button>
+        </ul>
+      </div>
+    </div>
   </div>
-</nav>  
+</nav>
