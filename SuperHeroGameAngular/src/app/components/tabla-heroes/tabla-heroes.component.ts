@@ -53,7 +53,12 @@ export class TablaHeroesComponent implements OnInit {
     this.idHeroeActual = Number(id);
   }
   cargarFavorito(idHeroe:string){
-    this._serviceUser.currentUser.favoritos?.push(Number(idHeroe))
+    const dato= Number (idHeroe);
+    if (!this._serviceUser.currentUser.favoritos?.includes(dato)) {
+      // Si no existe, agrégalo al array
+      this._serviceUser.currentUser.favoritos?.push(Number(idHeroe))
+    }
+    
     console.log (this._serviceUser.currentUser);
   }
 }

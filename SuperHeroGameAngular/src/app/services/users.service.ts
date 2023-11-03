@@ -30,8 +30,4 @@ export class UsersService {
     localStorage.setItem('usuariosData', JSON.stringify(this.listusers));
   }
 
-  actualizarFavoritos(idHeroe: number) {
-    this.currentUser.favoritos?.push(idHeroe);
-  }
-
 }
