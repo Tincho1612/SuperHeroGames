@@ -5,13 +5,15 @@ import { FormRegisterComponent } from './components/form-register/form-register.
 import { FormLoginComponent } from './components/form-login/form-login.component';
 import { FavoritosComponent } from './components/favoritos/favoritos.component';
 import { authGuard } from './utils/auth.guard';
+import { RuletaComponent } from './components/ruleta/ruleta.component';
 
 const routes: Routes = [
   { path: 'register', component: FormRegisterComponent },
   { path: 'login', component: FormLoginComponent },
   { path: 'lista/:heroe', component: TablaHeroesComponent, canActivate: [authGuard] },
   { path: 'lista', component: TablaHeroesComponent, canActivate: [authGuard] },
-  { path: 'favoritos', component: FavoritosComponent, canActivate: [authGuard]},
+  { path: 'favoritos', component: FavoritosComponent, canActivate: [authGuard] },
+  { path: 'ruleta', component: RuletaComponent },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
 

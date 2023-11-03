@@ -19,6 +19,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { FormRegisterComponent } from './components/form-register/form-register.component';
 import { FormLoginComponent } from './components/form-login/form-login.component';
 import { FavoritosComponent } from './components/favoritos/favoritos.component';
+import { RuletaComponent } from './components/ruleta/ruleta.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { FavoritosComponent } from './components/favoritos/favoritos.component';
     FormRegisterComponent,
     FormLoginComponent,
     FavoritosComponent,
+    RuletaComponent,
   ],
   imports: [
     BrowserModule,

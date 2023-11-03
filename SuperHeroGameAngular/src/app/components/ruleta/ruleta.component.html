@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="d-flex justify-content-center align-items-center flex-column mb-5">
+        <canvas #canvas width="500" height="500"></canvas>
+        <button class="btn btn-outline-primary" type="button" (click)="spin()">Girar</button>
+    </div>
+    <div class="container mt-xl-5">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Imagen</th>
+                        <th scope="col">Seleccionar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let heroe of listHeroes" class="table-default">
+                        <td>{{heroe.id}}</td>
+                        <td>{{heroe.name}}</td>
+                        <td><img class="img-fluid rounded" src={{heroe.image.url}} style=" height: 100px; width: 95px;">
+                        </td>
+                        <td><button class="btn btn-outline-primary" type="button" (click)="seleccionarHeroe(heroe.id)" >Elegir</button></td>
+                    </tr>   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
