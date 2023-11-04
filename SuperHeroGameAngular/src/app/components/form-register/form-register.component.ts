@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { map } from 'rxjs';
 import { User } from 'src/app/interfaces/User';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -31,7 +32,9 @@ export class FormRegisterComponent {
       apellido: this.form.value.apellido,
       email: this.form.value.email,
       password: this.form.value.password,
-      favoritos:[]
+      favoritos:[],
+      equipos: [],
+      
       
     }
 
