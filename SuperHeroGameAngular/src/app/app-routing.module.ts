@@ -6,6 +6,7 @@ import { FormLoginComponent } from './components/form-login/form-login.component
 import { FavoritosComponent } from './components/favoritos/favoritos.component';
 import { authGuard } from './utils/auth.guard';
 import { RuletaComponent } from './components/ruleta/ruleta.component';
+import { EquipoComponent } from './components/equipo/equipo.component';
 
 const routes: Routes = [
   { path: 'register', component: FormRegisterComponent },
@@ -14,7 +15,9 @@ const routes: Routes = [
   { path: 'lista', component: TablaHeroesComponent, canActivate: [authGuard] },
   { path: 'favoritos', component: FavoritosComponent, canActivate: [authGuard] },
   { path: 'ruleta', component: RuletaComponent },
-  { path: '**', redirectTo: 'login', pathMatch: 'full' }
+  {path:'misEquipos',component:EquipoComponent},
+  { path: '**', redirectTo: 'login', pathMatch: 'full' },
+  
 ];
 
 @NgModule({
