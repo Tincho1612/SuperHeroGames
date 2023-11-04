@@ -69,8 +69,8 @@ export class RuletaComponent implements OnInit {
     const insideRadius = 125;
 
     if (this.ctx) {
-      this.ctx.strokeStyle = "black";
-      this.ctx.lineWidth = 4;
+      this.ctx.strokeStyle = "grey";
+      this.ctx.lineWidth = 1;
       this.ctx.font = 'bold 12px Helvetica, Arial';
 
       for (let i = 0; i < this.optionsLength; i++) {
@@ -102,14 +102,14 @@ export class RuletaComponent implements OnInit {
     if (this.ctx) {
       this.ctx.fillStyle = "black";
       this.ctx.beginPath();
-      this.ctx.moveTo(250 - 4, 250 - (outsideRadius + 5));
-      this.ctx.lineTo(250 + 4, 250 - (outsideRadius + 5));
-      this.ctx.lineTo(250 + 4, 250 - (outsideRadius - 5));
-      this.ctx.lineTo(250 + 9, 250 - (outsideRadius - 5));
-      this.ctx.lineTo(250, 250 - (outsideRadius - 13));
-      this.ctx.lineTo(250 - 9, 250 - (outsideRadius - 5));
-      this.ctx.lineTo(250 - 4, 250 - (outsideRadius - 5));
-      this.ctx.lineTo(250 - 4, 250 - (outsideRadius + 5));
+      this.ctx.moveTo(250 - 4, 240 - (outsideRadius + 5));
+      this.ctx.lineTo(250 + 4, 240 - (outsideRadius + 5));
+      this.ctx.lineTo(250 + 4, 240 - (outsideRadius - 5));
+      this.ctx.lineTo(250 + 9, 240 - (outsideRadius - 5));
+      this.ctx.lineTo(250, 240 - (outsideRadius - 13));
+      this.ctx.lineTo(250 - 9, 240 - (outsideRadius - 5));
+      this.ctx.lineTo(250 - 4, 240 - (outsideRadius - 5));
+      this.ctx.lineTo(250 - 4, 240 - (outsideRadius + 5));
       this.ctx.fill();
     }
   }
@@ -169,11 +169,19 @@ export class RuletaComponent implements OnInit {
       const index = Math.floor((360 - degrees % 360) / arcd);
       this.ctx.save();
       this.ctx.font = 'bold 30px Helvetica, Arial';
-      const text = this.options[index];
+      const text = this.textoGanador(this.options[index]);
       console.log(text);
-      this.ctx.fillText(text, 250 - this.ctx.measureText(text).width / 2, 250 + 10);
+      this.ctx.fillText(text!, 250 - this.ctx.measureText(text!).width / 2, 250 + 10);
       this.ctx.restore();
       this.isSpinning = false;
+    }
+  }
+
+  textoGanador(letra: string){
+    if(letra == "A"){
+      return this.Heroe1?.name;
+    } else {
+      return this.Heroe2?.name;
     }
   }
 
@@ -193,7 +201,7 @@ export class RuletaComponent implements OnInit {
   }
 
   getColor(item: string): string {
-    return item === 'A' ? this.RGB2Color(0, 0, 0) : this.RGB2Color(255, 255, 255);
+    return item === 'A' ? this.RGB2Color(220, 220, 220) : this.RGB2Color(255, 255, 255);
   }
 
   getHeroesDefault() {
