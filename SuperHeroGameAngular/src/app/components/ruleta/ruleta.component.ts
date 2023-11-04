@@ -1,4 +1,7 @@
+import { compileNgModule } from '@angular/compiler';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Heroe } from 'src/app/interfaces/Heroe';
+import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 
 @Component({
   selector: 'app-ruleta',
@@ -8,12 +11,14 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 export class RuletaComponent implements OnInit {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef; // Para referenciar al elemento del html
 
+  listHeroes: Heroe[] = [];
+
   options: string[] = [];
-  A = 10; //Luego estos dos valores van a entrar como parametro de los promedios de cada heroe
+  A = 104; //Luego estos dos valores van a entrar como parametro de los promedios de cada heroe
   B = 64;
   total = this.A + this.B;
   probabilityA = (this.A / this.total) * 100;
-  probabilityB = (this.B / this.total) * 100; 
+  probabilityB = (this.B / this.total) * 100;
   //Se calculan las probabilidades que tiene cada uno en base a los valores de sus estadisticas
 
   //Variables para el funcionamiento de la ruleta
@@ -26,10 +31,11 @@ export class RuletaComponent implements OnInit {
   spinTimeTotal = 0;
   ctx!: CanvasRenderingContext2D | null;
 
-  constructor() { }
+  constructor(private _serviceHeroe: SuperHeroApiService) { }
 
   //Se ingresan los valores en base a las probabilidades
   ngOnInit() {
+    this.getHeroesDefault();
     if (this.canvasRef) {
       for (let i = 0; i < 100; i++) {
         if (i < this.probabilityA) {
@@ -58,10 +64,10 @@ export class RuletaComponent implements OnInit {
       this.ctx.clearRect(0, 0, 500, 500);
 
       this.ctx.strokeStyle = "black";
-      this.ctx.lineWidth = 2;
+      this.ctx.lineWidth = 4;
       this.ctx.font = 'bold 12px Helvetica, Arial';
 
-      for (let i = 0; i < this.optionsLength; i++) {
+      for (let i = 0; i < this.optionsLength; i++) {  
         const angle = this.startAngle + i * this.arc;
         this.ctx.fillStyle = this.getColor(this.options[i]);
 
@@ -72,7 +78,7 @@ export class RuletaComponent implements OnInit {
         this.ctx.fill();
 
         this.ctx.save();
-        this.ctx.fillStyle = "red";
+        //this.ctx.fillStyle = "red";
         this.ctx.translate(250 + Math.cos(angle + this.arc / 2) * textRadius, 250 + Math.sin(angle + this.arc / 2) * textRadius);
         this.ctx.rotate(angle + this.arc / 2 + Math.PI / 2);
         const text = this.options[i];
@@ -156,5 +162,16 @@ export class RuletaComponent implements OnInit {
     } else {
       return this.RGB2Color(255, 255, 255);
     }
+  }
+
+  getHeroesDefault() {
+    this._serviceHeroe.getListHeroes().subscribe((data) => {
+      this.listHeroes = data.results;
+      console.log(this.listHeroes);
+    });
+  }
+
+  seleccionarHeroe(id: string){
+    console.log(id);
   }
 }
