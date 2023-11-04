@@ -1,50 +1,52 @@
 <nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light" *ngIf="shouldShowNavbar">
-    <div class="col d-flex justify-content-center">
-      <a class="navbar-brand">SHG</a>
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" routerLink="lista">Lista
-            <span class="visually-hidden">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" routerLink="favoritos">Favoritos
-            <span class="visually-hidden">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" routerLink="misEquipos">Mis Equipos
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" routerLink="ruleta">Ruleta
+  <div class="col d-flex justify-content-center">
+    <a class="navbar-brand">SHG</a>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link active" routerLink="lista">Lista
+          <span class="visually-hidden">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" routerLink="favoritos">Favoritos
+          <span class="visually-hidden">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" routerLink="misEquipos">Mis Equipos
+          <span class="visually-hidden">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" routerLink="ruleta">Ruleta
 
-            <span class="visually-hidden">(current)</span>
-          </a>
-        </li>
+          <span class="visually-hidden">(current)</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-6 d-flex">
+    <input class="form-control me-sm-2" type="search" placeholder="Buscar héroe o palabra clave" [(ngModel)]="searchQuery"
+      name="searchQuery">
+    <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" (click)="search()">Buscar</button>
+  </div>
+
+  <div class="col d-flex justify-content-center">
+    <div class="dropdown-center">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Opciones
+      </button>
+      <ul class="dropdown-menu text-center">
+        <a class="nav-link active mb-2" routerLink="register">Registrarse<span
+            class="visually-hidden">(current)</span></a>
+        <div class="dropdown-divider"></div>
+        <a class="nav-link active mb-2" (click)="logout()">Iniciar sesión nuevamente<span
+            class="visually-hidden">(current)</span></a>
+        <div class="dropdown-divider"></div>
+        <button type="button" class="btn btn-outline-danger mt-2" (click)="logout()"
+          style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Logout</button>
       </ul>
     </div>
-
-    <div class="col-6 d-flex">
-      <input class="form-control me-sm-2" type="search" placeholder="Buscar héroe o palabra" [(ngModel)]="searchQuery"
-        name="searchQuery">
-      <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" (click)="search()">Buscar</button>
-    </div>
-
-    <div class="col d-flex justify-content-center">
-      <div class="dropdown-center">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Opciones
-        </button>
-        <ul class="dropdown-menu text-center">
-          <a class="nav-link active mb-2" routerLink="register">Registrarse<span
-              class="visually-hidden">(current)</span></a>
-          <div class="dropdown-divider"></div>
-          <a class="nav-link active mb-2" (click)="logout()">Iniciar sesión nuevamente<span
-              class="visually-hidden">(current)</span></a>
-          <div class="dropdown-divider"></div>
-          <button type="button" class="btn btn-outline-danger mt-2" (click)="logout()"
-            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Logout</button>
-        </ul>
-      </div>
-    </div>
+  </div>
 </nav>

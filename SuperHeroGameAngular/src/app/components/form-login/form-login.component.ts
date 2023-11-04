@@ -22,6 +22,7 @@ export class FormLoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
+    console.log(localStorage.getItem('usuarioActual'));
   }
 
   verifyLogin() {

@@ -13,6 +13,7 @@ export class RuletaComponent implements OnInit {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef; //Referencia al canva del html
 
   //Variables para probabilidades/heroes/vista
+  allHeroes: Heroe[] = [];
   listHeroes: Heroe[] = [];
   Heroe1?: Heroe;
   estadisticasHeroe1: any;
@@ -36,11 +37,18 @@ export class RuletaComponent implements OnInit {
 
   loading: boolean = false; //Para el spinner, se usa cuando la lista está cargando
 
+  //Variables de paginación
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+
+  //Search Bar
+  searchHero: string = '';
+
   constructor(
     private _serviceHeroe: SuperHeroApiService,
     private _serviceEstadisticas: EstadisticasHeroeService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getHeroesDefault(); //Obtiene los datos de la api
@@ -136,7 +144,8 @@ export class RuletaComponent implements OnInit {
   }
 
   spin() { //Funcion usada en el click del html para girar la ruleta
-    if (this.isSpinning || !this.Heroe1 || !this.Heroe2) {
+    if (!this.Heroe1 || !this.Heroe2) {
+      this.toastr.error('Selecciona dos heroes para girarla ruleta!', 'Error');
       return;
     }
 
@@ -177,8 +186,8 @@ export class RuletaComponent implements OnInit {
     }
   }
 
-  textoGanador(letra: string){
-    if(letra == "A"){
+  textoGanador(letra: string) {
+    if (letra == "A") {
       return this.Heroe1?.name;
     } else {
       return this.Heroe2?.name;
@@ -201,31 +210,79 @@ export class RuletaComponent implements OnInit {
   }
 
   getColor(item: string): string {
-    return item === 'A' ? this.RGB2Color(220, 220, 220) : this.RGB2Color(255, 255, 255);
+    return item === 'A' ? this.RGB2Color(153, 255, 153) : this.RGB2Color(255, 102, 102);
   }
 
   getHeroesDefault() {
     this.loading = true;
     this._serviceHeroe.getListHeroes().subscribe((data) => {
-      this.listHeroes = data.results;
+      this.allHeroes = data.results;
       console.log(this.listHeroes);
       this.loading = false;
+      this.currentPage = 1;
+      this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
     });
   }
 
-  seleccionarHeroe(Heroe: Heroe) {
+  seleccionarHeroe(heroe: Heroe) {
+
     if (!this.Heroe1) {
-      this.Heroe1 = Heroe;
-      this.estadisticasHeroe1 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe1);
-      this.A = this.estadisticasHeroe1.promedio;
+      if (heroe == this.Heroe2) {
+        this.toastr.error('Elegí un heroe distinto al otro para jugar', 'Error');
+      } else {
+        this.Heroe1 = heroe;
+        this.estadisticasHeroe1 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe1);
+        this.A = this.estadisticasHeroe1.promedio;
+      }
+
     } else if (!this.Heroe2) {
-      this.Heroe2 = Heroe;
-      this.estadisticasHeroe2 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe2);
-      this.B = this.estadisticasHeroe2.promedio;
+      if (heroe == this.Heroe1) {
+        this.toastr.error('Elegí un heroe distinto al otro para jugar', 'Error');
+      } else {
+        this.Heroe2 = heroe;
+        this.estadisticasHeroe2 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe2);
+        this.B = this.estadisticasHeroe2.promedio;
+      }
+
     } else {
-      this.toastr.error('Elimina un heroe antes de elegir otro', 'Error');
+      this.toastr.error('Elimina un héroe antes de elegir otro', 'Error');
     }
 
     this.agregarProbabilidades();
+  }
+
+  paginateHeroes(heroes: Heroe[], page: number): Heroe[] {
+    const startIndex = (page - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return heroes.slice(startIndex, endIndex);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage * this.itemsPerPage < this.allHeroes.length) {
+      this.currentPage++;
+      this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
+    }
+  }
+
+  searchHeroBtn() {
+    if (this.searchHero == '') {
+      this.getHeroesDefault();
+    } else {
+      this.loading = true;
+      this._serviceHeroe.getHeroesByWord(this.searchHero).subscribe((data) => {
+        this.allHeroes = data.results;
+        console.log(this.listHeroes);
+        this.loading = false;
+        this.currentPage = 1;
+        this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
+      });
+    }
   }
 }
