@@ -7,6 +7,8 @@
           <a class="nav-link active" routerLink="lista">Lista
             <span class="visually-hidden">(current)</span>
           </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link active" routerLink="favoritos">Favoritos
             <span class="visually-hidden">(current)</span>
           </a>
@@ -15,7 +17,8 @@
     </div>
 
     <div class="col-6 d-flex">
-      <input class="form-control me-sm-2" type="search" placeholder="Buscar héroe o palabra" [(ngModel)]="searchQuery" name="searchQuery">
+      <input class="form-control me-sm-2" type="search" placeholder="Buscar héroe o palabra" [(ngModel)]="searchQuery"
+        name="searchQuery">
       <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" (click)="search()">Buscar</button>
     </div>
 
@@ -25,11 +28,14 @@
           Opciones
         </button>
         <ul class="dropdown-menu text-center">
-          <a class="nav-link active mb-2" routerLink="register">Registrarse<span class="visually-hidden">(current)</span></a>
+          <a class="nav-link active mb-2" routerLink="register">Registrarse<span
+              class="visually-hidden">(current)</span></a>
           <div class="dropdown-divider"></div>
-          <a class="nav-link active mb-2" (click)="logout()">Iniciar sesión nuevamente<span class="visually-hidden">(current)</span></a>
+          <a class="nav-link active mb-2" (click)="logout()">Iniciar sesión nuevamente<span
+              class="visually-hidden">(current)</span></a>
           <div class="dropdown-divider"></div>
-          <button type="button" class="btn btn-outline-danger mt-2" (click)="logout()" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Logout</button>
+          <button type="button" class="btn btn-outline-danger mt-2" (click)="logout()"
+            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Logout</button>
         </ul>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Heroe } from 'src/app/interfaces/Heroe';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 import { UsersService } from 'src/app/services/users.service';
@@ -15,7 +16,10 @@ export class TablaHeroesComponent implements OnInit {
   idHeroeActual: number = 0;
   loading: boolean = false;
 
-  constructor(private _serviceHeroe: SuperHeroApiService, private aRouter: ActivatedRoute,private _serviceUser:UsersService) { }
+  constructor(private _serviceHeroe: SuperHeroApiService, 
+    private aRouter: ActivatedRoute,
+    private _serviceUser:UsersService,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
     //Para recibir el parametro de la url, el cual es ingresado en la barra de busqueda en la nav
@@ -57,8 +61,9 @@ export class TablaHeroesComponent implements OnInit {
     if (!this._serviceUser.currentUser.favoritos?.includes(dato)) {
       // Si no existe, agrégalo al array
       this._serviceUser.currentUser.favoritos?.push(Number(idHeroe))
+      this.toastr.success('Heroe agregado a favoritos correctamente', 'Favorito');
+    } else{
+      this.toastr.error('El heroe ya se encuentra en la lista de favoritos', 'Error');
     }
-    
-    console.log (this._serviceUser.currentUser);
   }
 }

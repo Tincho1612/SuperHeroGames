@@ -4,6 +4,7 @@ import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 import { UsersService } from 'src/app/services/users.service';
 import { Heroe } from 'src/app/interfaces/Heroe';
 import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-favoritos',
@@ -18,7 +19,9 @@ export class FavoritosComponent implements OnInit{
   favoritos: number[] = [];
   SuperheroesFav: Heroe[]=[];
 
-  constructor(private _data:SuperHeroApiService, private _dataUsers:UsersService){
+  constructor(private _data:SuperHeroApiService, 
+    private _dataUsers:UsersService,
+    private toastr: ToastrService){
 
   }
 
@@ -47,7 +50,8 @@ export class FavoritosComponent implements OnInit{
  
     this.favoritos.splice(this.favoritos.indexOf(idNumero), 1); ///elimino el dato basandome en la posicion que lo tomo con index
     this.recibirHeroesFav(this.favoritos);
-    console.log (this._dataUsers.currentUser);
+    
+    this.toastr.error('El heroe fuè eliminado de la lista de favoritos', 'Heroe eliminado');
 
   }
 
