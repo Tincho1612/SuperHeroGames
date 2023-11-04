@@ -1,6 +1,7 @@
-import { compileNgModule } from '@angular/compiler';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Heroe } from 'src/app/interfaces/Heroe';
+import { EstadisticasHeroeService } from 'src/app/services/estadisticas-heroe.service';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 
 @Component({
@@ -9,19 +10,19 @@ import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
   styleUrls: ['./ruleta.component.css']
 })
 export class RuletaComponent implements OnInit {
-  @ViewChild('canvas', { static: true }) canvasRef!: ElementRef; // Para referenciar al elemento del html
+  @ViewChild('canvas', { static: true }) canvasRef!: ElementRef; //Referencia al canva del html
 
+  //Variables para probabilidades/heroes/vista
   listHeroes: Heroe[] = [];
-
+  Heroe1?: Heroe;
+  estadisticasHeroe1: any;
+  Heroe2?: Heroe;
+  estadisticasHeroe2: any;
   options: string[] = [];
-  A = 104; //Luego estos dos valores van a entrar como parametro de los promedios de cada heroe
-  B = 64;
-  total = this.A + this.B;
-  probabilityA = (this.A / this.total) * 100;
-  probabilityB = (this.B / this.total) * 100;
-  //Se calculan las probabilidades que tiene cada uno en base a los valores de sus estadisticas
+  A = 0;
+  B = 0;
 
-  //Variables para el funcionamiento de la ruleta
+  //Para el funcionamiento de la ruleta
   startAngle = 0;
   optionsLength = 100;
   arc = Math.PI / (100 / 2);
@@ -31,43 +32,48 @@ export class RuletaComponent implements OnInit {
   spinTimeTotal = 0;
   ctx!: CanvasRenderingContext2D | null;
 
-  constructor(private _serviceHeroe: SuperHeroApiService) { }
+  isSpinning: boolean = false; //Para que el usuario no pueda girar la ruleta en caso de que esté girando
 
-  //Se ingresan los valores en base a las probabilidades
+  loading: boolean = false; //Para el spinner, se usa cuando la lista está cargando
+
+  constructor(
+    private _serviceHeroe: SuperHeroApiService,
+    private _serviceEstadisticas: EstadisticasHeroeService,
+    private toastr: ToastrService
+  ) {}
+
   ngOnInit() {
-    this.getHeroesDefault();
-    if (this.canvasRef) {
-      for (let i = 0; i < 100; i++) {
-        if (i < this.probabilityA) {
-          this.options.push("A");
-        } else {
-          this.options.push("B");
-        }
-      }
-    }
+    this.getHeroesDefault(); //Obtiene los datos de la api
   }
 
-  //Se renderiza la ruleta
   ngAfterViewInit() {
     this.drawRouletteWheel();
   }
 
-  //Funcion para renderizar la ruleta en base al canva del html, además de printear las probabilidades
   drawRouletteWheel() {
-    const canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
+    this.ctx = this.canvasRef.nativeElement.getContext("2d");
+    this.clearCanvas();
+    this.drawWheelSections();
+    this.drawArrow();
+  }
+
+  clearCanvas() {
+    if (this.ctx) {
+      this.ctx.clearRect(0, 0, 500, 500);
+    }
+  }
+
+  drawWheelSections() { //Dibuja las secciones de la ruleta
     const outsideRadius = 200;
     const textRadius = 160;
     const insideRadius = 125;
 
-    this.ctx = canvas.getContext("2d");
     if (this.ctx) {
-      this.ctx.clearRect(0, 0, 500, 500);
-
       this.ctx.strokeStyle = "black";
       this.ctx.lineWidth = 4;
       this.ctx.font = 'bold 12px Helvetica, Arial';
 
-      for (let i = 0; i < this.optionsLength; i++) {  
+      for (let i = 0; i < this.optionsLength; i++) {
         const angle = this.startAngle + i * this.arc;
         this.ctx.fillStyle = this.getColor(this.options[i]);
 
@@ -78,15 +84,22 @@ export class RuletaComponent implements OnInit {
         this.ctx.fill();
 
         this.ctx.save();
-        //this.ctx.fillStyle = "red";
-        this.ctx.translate(250 + Math.cos(angle + this.arc / 2) * textRadius, 250 + Math.sin(angle + this.arc / 2) * textRadius);
+        this.ctx.translate(
+          250 + Math.cos(angle + this.arc / 2) * textRadius,
+          250 + Math.sin(angle + this.arc / 2) * textRadius
+        );
         this.ctx.rotate(angle + this.arc / 2 + Math.PI / 2);
         const text = this.options[i];
         this.ctx.fillText(text, -this.ctx.measureText(text).width / 2, 0);
         this.ctx.restore();
       }
+    }
+  }
 
-      // Para la flecha
+  drawArrow() { //Dibuja la flecha que elije el ganador
+    const outsideRadius = 200;
+
+    if (this.ctx) {
       this.ctx.fillStyle = "black";
       this.ctx.beginPath();
       this.ctx.moveTo(250 - 4, 250 - (outsideRadius + 5));
@@ -101,15 +114,39 @@ export class RuletaComponent implements OnInit {
     }
   }
 
-  //Funcion llamada en el boton para girar la ruleta y variar los valores para su funcionamiento
-  spin() {
+  agregarProbabilidades() { //Calcula la probabilidad y dibuja la ruleta en base a eso / Se llama cada vez que se elije/borra un heroe
+    this.clearCanvas();
+    const total = this.A + this.B;
+    this.options = this.calculateProbabilities(total);
+    this.drawRouletteWheel();
+  }
+
+  calculateProbabilities(total: number): string[] { //Usada en la funcion agregarProbabilidades()
+    const probabilities: string[] = [];
+
+    for (let i = 0; i < 100; i++) {
+      if (i < (this.A / total) * 100) {
+        probabilities.push("A");
+      } else {
+        probabilities.push("B");
+      }
+    }
+
+    return probabilities;
+  }
+
+  spin() { //Funcion usada en el click del html para girar la ruleta
+    if (this.isSpinning || !this.Heroe1 || !this.Heroe2) {
+      return;
+    }
+
+    this.isSpinning = true;
     this.spinArcStart = Math.random() * 10 + 10;
     this.spinTime = 0;
     this.spinTimeTotal = Math.random() * 3 + 4 * 1000;
     this.rotateWheel();
   }
 
-  //Chino
   rotateWheel() {
     this.spinTime += 30;
     if (this.spinTime >= this.spinTimeTotal) {
@@ -122,7 +159,6 @@ export class RuletaComponent implements OnInit {
     this.spinTimeout = setTimeout(() => this.rotateWheel(), 30);
   }
 
-  //Chino y devuelve el valor qué ganó  
   stopRotateWheel() {
     if (this.ctx) {
       if (this.spinTimeout) {
@@ -137,9 +173,9 @@ export class RuletaComponent implements OnInit {
       console.log(text);
       this.ctx.fillText(text, 250 - this.ctx.measureText(text).width / 2, 250 + 10);
       this.ctx.restore();
+      this.isSpinning = false;
     }
   }
-
 
   easeOut(t: number, b: number, c: number, d: number): number {
     const ts = (t /= d) * t;
@@ -157,21 +193,31 @@ export class RuletaComponent implements OnInit {
   }
 
   getColor(item: string): string {
-    if (item === 'A') {
-      return this.RGB2Color(0, 0, 0);
-    } else {
-      return this.RGB2Color(255, 255, 255);
-    }
+    return item === 'A' ? this.RGB2Color(0, 0, 0) : this.RGB2Color(255, 255, 255);
   }
 
   getHeroesDefault() {
+    this.loading = true;
     this._serviceHeroe.getListHeroes().subscribe((data) => {
       this.listHeroes = data.results;
       console.log(this.listHeroes);
+      this.loading = false;
     });
   }
 
-  seleccionarHeroe(id: string){
-    console.log(id);
+  seleccionarHeroe(Heroe: Heroe) {
+    if (!this.Heroe1) {
+      this.Heroe1 = Heroe;
+      this.estadisticasHeroe1 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe1);
+      this.A = this.estadisticasHeroe1.promedio;
+    } else if (!this.Heroe2) {
+      this.Heroe2 = Heroe;
+      this.estadisticasHeroe2 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe2);
+      this.B = this.estadisticasHeroe2.promedio;
+    } else {
+      this.toastr.error('Elimina un heroe antes de elegir otro', 'Error');
+    }
+
+    this.agregarProbabilidades();
   }
 }

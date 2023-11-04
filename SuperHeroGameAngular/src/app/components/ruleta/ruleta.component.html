@@ -8,12 +8,73 @@
 </head>
 
 <body>
-    <div class="d-flex justify-content-center align-items-center flex-column mb-5">
-        <canvas #canvas width="500" height="500"></canvas>
-        <button class="btn btn-outline-primary" type="button" (click)="spin()">Girar</button>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card mt-5 align-items-center text-center" *ngIf="Heroe1">
+                    <h3 class="card-header">{{Heroe1.name}}<button
+                            (click)="this.A = 0; Heroe1 = undefined; agregarProbabilidades()"
+                            class="btn btn-outline-primary"
+                            style="position: absolute; left: 10px; --bs-btn-padding-y: .05rem; --bs-btn-padding-x: .5rem;">X</button>
+                    </h3>
+                    <div class="card-body">
+                        <h5 class="card-title">{{Heroe1.biography["full-name"]}}</h5>
+                        <h6 class="card-subtitle text-muted mt-2">{{Heroe1.biography.publisher}}</h6>
+                    </div>
+                    <img src={{Heroe1.image.url}} alt="Heroe seleccionado 1" class="card-img rounded"
+                        style="width: 125px;">
+                    <div class="card-body">
+                        <h4>Estadisticas</h4>
+                        <h5>Promedio: {{estadisticasHeroe1.promedio}}</h5>
+                        <p class="text-muted">Combate: {{estadisticasHeroe1.combatValue}}</p>
+                        <p class="text-muted">Durabilidad: {{estadisticasHeroe1.durabilityValue}}</p>
+                        <p class="text-muted">Inteligencia: {{estadisticasHeroe1.intelligenceValue}}</p>
+                        <p class="text-muted">Poder: {{estadisticasHeroe1.powerValue}}</p>
+                        <p class="text-muted">Velocidad: {{estadisticasHeroe1.speedValue}}</p>
+                        <p class="text-muted">Fuerza: {{estadisticasHeroe1.strengthValue}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="d-flex justify-content-center align-items-center flex-column mb-5">
+                    <canvas #canvas width="500" height="500"></canvas>
+                    <button class="btn btn-outline-primary" type="button" (click)="spin()">Girar</button>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card mt-5 align-items-center text-center" *ngIf="Heroe2">
+                    <h3 class="card-header">{{Heroe2.name}}<button
+                            (click)="this.B = 0;Heroe2 = undefined; agregarProbabilidades()"
+                            class="btn btn-outline-primary"
+                            style="position: absolute; left: 10px; --bs-btn-padding-y: .05rem; --bs-btn-padding-x: .5rem;">X</button>
+                    </h3>
+                    <div class="card-body">
+                        <h5 class="card-title">{{Heroe2.biography["full-name"]}}</h5>
+                        <h6 class="card-subtitle text-muted mt-2">{{Heroe2.biography.publisher}}</h6>
+                    </div>
+                    <img src={{Heroe2.image.url}} alt="Heroe seleccionado 2" class="card-img rounded"
+                        style="width: 125px;">
+                    <div class="card-body">
+                        <h4>Estadisticas</h4>
+                        <h5>Promedio: {{estadisticasHeroe2.promedio}}</h5>
+                        <p class="text-muted">Combate: {{estadisticasHeroe2.combatValue}}</p>
+                        <p class="text-muted">Durabilidad: {{estadisticasHeroe2.durabilityValue}}</p>
+                        <p class="text-muted">Inteligencia: {{estadisticasHeroe2.intelligenceValue}}</p>
+                        <p class="text-muted">Poder: {{estadisticasHeroe2.powerValue}}</p>
+                        <p class="text-muted">Velocidad: {{estadisticasHeroe2.speedValue}}</p>
+                        <p class="text-muted">Fuerza: {{estadisticasHeroe2.strengthValue}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+    <app-spinner *ngIf="loading"></app-spinner>
     <div class="container mt-xl-5">
-        <div class="table-responsive">
+        <div class="table-responsive" *ngIf="!loading">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -29,8 +90,9 @@
                         <td>{{heroe.name}}</td>
                         <td><img class="img-fluid rounded" src={{heroe.image.url}} style=" height: 100px; width: 95px;">
                         </td>
-                        <td><button class="btn btn-outline-primary" type="button" (click)="seleccionarHeroe(heroe.id)" >Elegir</button></td>
-                    </tr>   
+                        <td><button class="btn btn-outline-primary" type="button"
+                                (click)="seleccionarHeroe(heroe)">Elegir</button></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

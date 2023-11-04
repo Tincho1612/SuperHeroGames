@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, numberAttribute } from '@angular/core';
+import { EstadisticasHeroeService } from 'src/app/services/estadisticas-heroe.service';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 
 @Component({
@@ -12,8 +13,8 @@ export class ModalDetailsComponent implements OnInit {
   estadisticasHeroe: any;
   loading: boolean = false;
 
-  constructor(private _serviceHeroe: SuperHeroApiService) {
-  }
+  constructor(private _serviceHeroe: SuperHeroApiService,
+    private _serviceEstadisticas: EstadisticasHeroeService) { }
 
   @ViewChild('myModal')
   modalElement!: ElementRef;
@@ -35,32 +36,8 @@ export class ModalDetailsComponent implements OnInit {
     this.loading = true;
     this._serviceHeroe.getHeroe(this.id).subscribe((data) => {
       this.heroeActual = data;
-      this.estadisticasHeroe = this.getEstadisticasHeroe(this.heroeActual);
+      this.estadisticasHeroe = this._serviceEstadisticas.getEstadisticasHeroe(this.heroeActual);
       this.loading = false;
     });
-  }
-
-  getEstadisticasHeroe(heroe: any) {
-    const { combat, durability, intelligence, power, speed, strength } = heroe.powerstats;
-
-    const combatValue = parseInt(combat) || 10;
-    const durabilityValue = parseInt(durability) || 10;
-    const intelligenceValue = parseInt(intelligence) || 10;
-    const powerValue = parseInt(power) || 10;
-    const speedValue = parseInt(speed) || 10;
-    const strengthValue = parseInt(strength) || 10;
-
-    const totalPowerstats = combatValue + durabilityValue + intelligenceValue + powerValue + speedValue + strengthValue;
-    const promedio = totalPowerstats / 6;
-
-    return {
-      promedio: Math.round(promedio),
-      combatValue,
-      durabilityValue,
-      intelligenceValue,
-      powerValue,
-      speedValue,
-      strengthValue
-    }
   }
 }
