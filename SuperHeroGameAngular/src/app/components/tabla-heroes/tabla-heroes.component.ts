@@ -66,4 +66,7 @@ export class TablaHeroesComponent implements OnInit {
       this.toastr.error('El heroe ya se encuentra en la lista de favoritos', 'Error');
     }
   }
+  mostrarEquipos(){
+    
+  }
 }

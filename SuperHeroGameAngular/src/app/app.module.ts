@@ -20,6 +20,7 @@ import { FormRegisterComponent } from './components/form-register/form-register.
 import { FormLoginComponent } from './components/form-login/form-login.component';
 import { FavoritosComponent } from './components/favoritos/favoritos.component';
 import { RuletaComponent } from './components/ruleta/ruleta.component';
+import { EquipoComponent } from './components/equipo/equipo.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { RuletaComponent } from './components/ruleta/ruleta.component';
     FormLoginComponent,
     FavoritosComponent,
     RuletaComponent,
+    EquipoComponent,
   ],
   imports: [
     BrowserModule,
