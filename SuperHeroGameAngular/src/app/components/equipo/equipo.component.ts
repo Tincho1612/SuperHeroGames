@@ -14,7 +14,7 @@ import { NgModel } from '@angular/forms';
 export class EquipoComponent implements OnInit {
   equipos: Equipo[]
   accionesEquipos = [
-    { label: 'Eliminar de favoritos', funcion: (heroe: Heroe) => this.eliminarDelEquipo(heroe) }];
+    { label: 'Eliminar del Equipo', funcion: (heroe: Heroe) => this.eliminarDelEquipo(heroe) }];
   constructor(private _userData:UsersService,private _data:SuperHeroApiService,private toast:ToastrService){
       this.equipos= []
   }
