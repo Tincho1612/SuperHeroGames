@@ -17,6 +17,12 @@ export class TablaHeroesComponent implements OnInit {
   idHeroeActual = 0;
   loading = false;
 
+  //Acciones de la tabla
+  accionesTabla = [
+    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
+    { label: 'Agregar a equipo', funcion: (heroe: Heroe) => this.agregaraEquipo(heroe) },
+    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id)}];
+
   constructor(private _serviceHeroe: SuperHeroApiService,
     private aRouter: ActivatedRoute,
     private _serviceUser: UsersService,
@@ -54,7 +60,7 @@ export class TablaHeroesComponent implements OnInit {
     this.modal = !this.modal;
     this.idHeroeActual = Number(id);
   }
-  
+
   cargarFavorito(idHeroe: string) {
     const dato = Number(idHeroe);
     if (!this._serviceUser.currentUser.favoritos?.includes(dato)) {
