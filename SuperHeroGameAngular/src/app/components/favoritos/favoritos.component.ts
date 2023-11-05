@@ -11,7 +11,7 @@ import { forkJoin } from 'rxjs';
   styleUrls: ['./favoritos.component.css']
 })
 export class FavoritosComponent implements OnInit {
-  listHeroes: Heroe[] = [];
+
   modal: boolean = false;
   idHeroeActual: number = 0;
   loading: boolean = false;
@@ -43,7 +43,7 @@ export class FavoritosComponent implements OnInit {
       error: (error) => {
         console.log(error);
       },
-      complete: ()=>{
+      complete: () => {
         this.loading = false;
       }
     });
@@ -62,4 +62,5 @@ export class FavoritosComponent implements OnInit {
 
     this.toastr.error('El heroe fué eliminado de la lista de favoritos', 'Heroe eliminado');
   }
+
 }

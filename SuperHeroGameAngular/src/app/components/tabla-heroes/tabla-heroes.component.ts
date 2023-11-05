@@ -60,6 +60,7 @@ export class TablaHeroesComponent implements OnInit {
     if (!this._serviceUser.currentUser.favoritos?.includes(dato)) {
       // Si no existe, agrégalo al array
       this._serviceUser.currentUser.favoritos?.push(Number(idHeroe))
+      this._serviceUser.updateUserData(this._serviceUser.currentUser);
       this.toastr.success('Heroe agregado a favoritos correctamente', 'Favorito');
     } else {
       this.toastr.error('El heroe ya se encuentra en la lista de favoritos', 'Error');
@@ -73,6 +74,7 @@ export class TablaHeroesComponent implements OnInit {
     } else {
       const nuevoEquipo: Equipo = { nombre: 'Equipo1', heroes: [heroe] };
       this._serviceUser.currentUser.equipos.push(nuevoEquipo);
+      this._serviceUser.updateUserData(this._serviceUser.currentUser);
     }
   }
 
