@@ -1,0 +1,33 @@
+<div class="container mt-xl-5">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Imagen</th>
+            <th scope="col">Detalles</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let heroe of heroes" class="table-default">
+            <td>{{ heroe.id }}</td>
+            <td>{{ heroe.name }}</td>
+            <td><img class="img-fluid rounded" [src]="heroe.image.url" style="height: 100px; width: 95px;"></td>
+            <td class="dropdown-center">
+              <div class="btn-group">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Ver más
+                </button>
+                <ul class="dropdown-menu text-center">
+                    <li *ngFor="let accion of acciones">
+                      <a class="dropdown-item" type="button" (click)="realizarAccion(accion, heroe)">{{ accion.label }}</a>
+                    </li>
+                  </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

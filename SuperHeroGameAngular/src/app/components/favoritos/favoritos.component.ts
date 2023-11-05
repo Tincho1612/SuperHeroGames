@@ -24,6 +24,11 @@ export class FavoritosComponent implements OnInit {
 
   }
 
+  //Acciones para la tabla
+  accionesFavoritos = [
+    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
+    { label: 'Eliminar de favoritos', funcion: (heroe: Heroe) => this.eliminarFavorito(heroe.id) }];
+
   ngOnInit(): void {
     // Accede a la lista de favoritos del usuario desde el servicio
     this.favoritos = this._dataUsers.currentUser.favoritos || [];

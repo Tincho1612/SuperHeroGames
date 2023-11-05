@@ -3,6 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Heroe } from 'src/app/interfaces/Heroe';
 import { EstadisticasHeroeService } from 'src/app/services/estadisticas-heroe.service';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
+import { ListaHeroesComponent } from '../lista-heroes/lista-heroes.component';
 
 @Component({
   selector: 'app-ruleta',
@@ -43,6 +44,10 @@ export class RuletaComponent implements OnInit {
 
   //Search Bar
   searchHero: string = '';
+
+  //Acciones de la tabla
+  accionRuleta = [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe) }];
+
 
   constructor(
     private _serviceHeroe: SuperHeroApiService,

@@ -21,6 +21,7 @@ import { FormLoginComponent } from './components/form-login/form-login.component
 import { FavoritosComponent } from './components/favoritos/favoritos.component';
 import { RuletaComponent } from './components/ruleta/ruleta.component';
 import { EquipoComponent } from './components/equipo/equipo.component';
+import { ListaHeroesComponent } from './components/lista-heroes/lista-heroes.component';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { EquipoComponent } from './components/equipo/equipo.component';
     FavoritosComponent,
     RuletaComponent,
     EquipoComponent,
+    ListaHeroesComponent,
   ],
   imports: [
     BrowserModule,

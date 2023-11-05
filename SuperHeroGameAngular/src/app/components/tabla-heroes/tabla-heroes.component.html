@@ -6,41 +6,5 @@
   <h1 class="h1 text-bg-dark text-center mb-md-5 ">
     Tabla de Heroes
   </h1>
-
-  <div class="container mt-xl-5">
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Imagen</th>
-            <th scope="col">Detalles</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let heroe of listHeroes" class="table-default">
-            <td>{{heroe.id}}</td>
-            <td>{{heroe.name}}</td>
-            <td><img class="img-fluid rounded" src={{heroe.image.url}} style=" height: 100px; width: 95px;"></td>
-            <td class="dropdown-center">
-              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">Ver más</button>
-              <ul class="dropdown-menu text-center">
-            <td><button class="btn btn-outline-primary btn-sm"
-                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                (click)="abrirModal(heroe.id)">Información detallada</button></td>
-            <td><button class="btn btn-outline-primary btn-sm"
-                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                (click)="agregaraEquipo(heroe)">Agregar a Equipo</button></td>
-            <td><button class="btn btn-outline-primary btn-sm"
-                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                (click)="cargarFavorito(heroe.id)">Añadir Favorito</button></td>
-            </ul>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <app-lista-heroes *ngIf="!loading" [heroes]="listHeroes" [acciones]="accionesTabla"></app-lista-heroes>
 </div>
