@@ -78,9 +78,17 @@ export class TablaHeroesComponent implements OnInit {
     if (this.existeEnEquipo(heroe)) {
       this.toastr.error('El héroe ya existe en el equipo', 'No se pudo añadir');
     } else {
-      const nuevoEquipo: Equipo = { nombre: 'Equipo1', heroes: [heroe] };
-      this._serviceUser.currentUser.equipos.push(nuevoEquipo);
-      this._serviceUser.updateUserData(this._serviceUser.currentUser);
+      if (this._serviceUser.currentUser.equipos[0]){
+        this._serviceUser.currentUser.equipos[0].heroes.push(heroe)
+        this._serviceUser.updateUserData(this._serviceUser.currentUser);
+        this.toastr.success('Heroe agregado a el Equipo correctamente', 'Equipo');
+      }else{
+        const nuevoEquipo: Equipo = { nombre: 'Equipo1', heroes: [heroe] };
+        this._serviceUser.currentUser.equipos.push(nuevoEquipo);
+        this._serviceUser.updateUserData(this._serviceUser.currentUser);
+        this.toastr.success('Heroe agregado a el Equipo correctamente', 'Equipo');
+      }
+      
     }
   }
 
