@@ -23,9 +23,21 @@
             <td>{{heroe.id}}</td>
             <td>{{heroe.name}}</td>
             <td><img class="img-fluid rounded" src={{heroe.image.url}} style=" height: 100px; width: 95px;"></td>
-            <td><button class="btn btn-outline-primary" (click)="abrirModal(heroe.id)">Ver mas</button></td>
-            <td><button class="btn btn-outline-primary" (click)="cargarFavorito(heroe.id)">Añadir Favorito</button></td>
-            <td><button class="btn btn-outline-primary" (click)="agregaraEquipo(heroe)">Agregar a Equipo</button></td>
+            <td class="dropdown-center">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">Ver más</button>
+              <ul class="dropdown-menu text-center">
+            <td><button class="btn btn-outline-primary btn-sm"
+                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                (click)="abrirModal(heroe.id)">Información detallada</button></td>
+            <td><button class="btn btn-outline-primary btn-sm"
+                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                (click)="agregaraEquipo(heroe)">Agregar a Equipo</button></td>
+            <td><button class="btn btn-outline-primary btn-sm"
+                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                (click)="cargarFavorito(heroe.id)">Añadir Favorito</button></td>
+            </ul>
+            </td>
           </tr>
         </tbody>
       </table>
