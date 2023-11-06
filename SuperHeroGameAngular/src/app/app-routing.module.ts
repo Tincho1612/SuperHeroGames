@@ -14,10 +14,10 @@ const routes: Routes = [
   { path: 'lista/:heroe', component: TablaHeroesComponent, canActivate: [authGuard] },
   { path: 'lista', component: TablaHeroesComponent, canActivate: [authGuard] },
   { path: 'favoritos', component: FavoritosComponent, canActivate: [authGuard] },
-  { path: 'ruleta', component: RuletaComponent },
-  {path:'misEquipos',component:EquipoComponent},
+  { path: 'ruleta', component: RuletaComponent, canActivate: [authGuard] },
+  { path: 'misEquipos', component: EquipoComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'login', pathMatch: 'full' },
-  
+
 ];
 
 @NgModule({

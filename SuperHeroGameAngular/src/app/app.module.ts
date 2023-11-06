@@ -22,6 +22,7 @@ import { FavoritosComponent } from './components/favoritos/favoritos.component';
 import { RuletaComponent } from './components/ruleta/ruleta.component';
 import { EquipoComponent } from './components/equipo/equipo.component';
 import { ListaHeroesComponent } from './components/lista-heroes/lista-heroes.component';
+import {DragDropModule} from '@angular/cdk/drag-drop'
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { ListaHeroesComponent } from './components/lista-heroes/lista-heroes.com
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule, // required animations module
+    DragDropModule,
     ToastrModule.forRoot({
       timeOut: 2500,
       positionClass: 'toast-bottom-right',

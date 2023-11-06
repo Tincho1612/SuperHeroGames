@@ -3,15 +3,15 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th scope="col">ID</th>
+            
             <th scope="col">Nombre</th>
             <th scope="col">Imagen</th>
             <th scope="col">Detalles</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let heroe of heroes" class="table-default">
-            <td>{{ heroe.id }}</td>
+        <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+          <tr *ngFor="let heroe of heroes" class="table-default" cdkDrag>
+            
             <td>{{ heroe.name }}</td>
             <td><img class="img-fluid rounded" [src]="heroe.image.url" style="height: 100px; width: 95px;"></td>
             <td class="dropdown-center">

@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input } from '@angular/core';
 import { Heroe } from 'src/app/interfaces/Heroe';
 
@@ -13,5 +14,9 @@ export class ListaHeroesComponent {
 
   realizarAccion(accion: any, heroe: Heroe) {
     accion.funcion(heroe);
+  }
+
+  drop(event:CdkDragDrop<Heroe[]>){
+      moveItemInArray(this.heroes,event.previousIndex,event.currentIndex);
   }
 }
