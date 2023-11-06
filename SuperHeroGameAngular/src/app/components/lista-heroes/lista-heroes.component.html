@@ -9,8 +9,8 @@
             <th scope="col">Detalles</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let heroe of heroes" class="table-default">
+        <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+          <tr *ngFor="let heroe of heroes" class="table-default" cdkDrag>
             <td>{{ heroe.id }}</td>
             <td>{{ heroe.name }}</td>
             <td><img class="img-fluid rounded" [src]="heroe.image.url" style="height: 100px; width: 95px;"></td>
