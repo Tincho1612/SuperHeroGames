@@ -3,7 +3,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Heroe } from 'src/app/interfaces/Heroe';
 import { EstadisticasHeroeService } from 'src/app/services/estadisticas-heroe.service';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
-import { ListaHeroesComponent } from '../lista-heroes/lista-heroes.component';
+import { Equipo } from 'src/app/interfaces/Equipo';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-ruleta',
@@ -38,7 +39,7 @@ export class RuletaComponent implements OnInit {
 
   loading: boolean = false; //Para el spinner, se usa cuando la lista está cargando
 
-  //Variables de paginación
+  //Variables de paginación en tabla de todos los heroes
   currentPage: number = 1;
   itemsPerPage: number = 10;
 
@@ -48,15 +49,24 @@ export class RuletaComponent implements OnInit {
   //Acciones de la tabla
   accionRuleta = [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe) }];
 
+  //Para la tabla izquierda
+  equipos: Equipo[] = [];
+  currentPageForSecondTable: number = 1;
+  itemsPerPageForSecondTable: number = 10;
+  searchHeroForSecondTable: string = '';
+  listHeroesForSecondTable: Heroe[] = [];
 
   constructor(
     private _serviceHeroe: SuperHeroApiService,
     private _serviceEstadisticas: EstadisticasHeroeService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private _userData: UsersService
   ) { }
 
   ngOnInit() {
     this.getHeroesDefault(); //Obtiene los datos de la api
+    this.equipos = this._userData.currentUser.equipos || [];
+    this.searchHeroBtnForSecondTable()
   }
 
   ngAfterViewInit() {
@@ -249,9 +259,10 @@ export class RuletaComponent implements OnInit {
     this.agregarProbabilidades();
   }
 
-  paginateHeroes(heroes: Heroe[], page: number): Heroe[] {
-    const startIndex = (page - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
+  paginateHeroes(heroes: Heroe[], page: number, isForSecondTable: boolean = false): Heroe[] {
+    const itemsPerPage = isForSecondTable ? this.itemsPerPageForSecondTable : this.itemsPerPage;
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
     return heroes.slice(startIndex, endIndex);
   }
 
@@ -280,7 +291,7 @@ export class RuletaComponent implements OnInit {
             this.allHeroes = data.results;
             this.loading = false;
             this.currentPage = 1;
-            this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
+            this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage, false); // Usar itemsPerPage para la primera tabla
           } else {
             this.toastr.error('No se encontró ningún héroe con ese nombre o palabra clave', 'Error');
             this.searchHero = '';
@@ -292,6 +303,62 @@ export class RuletaComponent implements OnInit {
           this.loading = false;
         }
       });
+    }
+  }
+  
+
+  //Paginacion para tabla de equipos
+
+  // Función para la página anterior de la segunda tabla
+previousPageForSecondTable() {
+  if (this.currentPageForSecondTable > 1) {
+    this.currentPageForSecondTable--;
+    this.listHeroesForSecondTable = this.paginateHeroes(this.equipos[0].heroes, this.currentPageForSecondTable, true);
+  }
+}
+
+// Función para la página siguiente de la segunda tabla
+nextPageForSecondTable() {
+  const totalHeroes = this.equipos[0].heroes.length;
+  if (this.currentPageForSecondTable * this.itemsPerPageForSecondTable < totalHeroes) {
+    this.currentPageForSecondTable++;
+    this.listHeroesForSecondTable = this.paginateHeroes(this.equipos[0].heroes, this.currentPageForSecondTable, true);
+  }
+}
+
+  // Función para obtener los héroes de la segunda tabla basados en la página actual
+  getHeroesForSecondTable(): Heroe[] {
+    const startIndex = (this.currentPageForSecondTable - 1) * this.itemsPerPageForSecondTable;
+    const endIndex = startIndex + this.itemsPerPageForSecondTable;
+    return this.equipos[0].heroes.slice(startIndex, endIndex);
+  }
+
+  //Barra de busqueda para la tabla de equipos
+
+  // Función para buscar héroes en la segunda tabla
+  searchHeroesForSecondTable(searchTerm: string): Heroe[] {
+    if (searchTerm === '') {
+      return this.equipos[0].heroes;
+    } else {
+      return this.equipos[0].heroes.filter((heroe) => {
+        // Aquí debes definir la lógica de búsqueda, por ejemplo, por nombre o palabra clave.
+        return heroe.name.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+    }
+  }
+
+  // Modificar la función searchHeroBtn para la segunda tabla
+  searchHeroBtnForSecondTable() {
+    const searchTerm = this.searchHeroForSecondTable;
+    this.currentPageForSecondTable = 1; // Reiniciar la página al realizar una búsqueda
+
+    const filteredHeroes = this.searchHeroesForSecondTable(searchTerm);
+    if (filteredHeroes.length > 0) {
+      this.listHeroesForSecondTable = this.paginateHeroes(filteredHeroes, this.currentPageForSecondTable, true); // Usar itemsPerPageForSecondTable
+    } else {
+      this.toastr.error('No se encontró ningún héroe con ese nombre o palabra clave', 'Error');
+      this.searchHeroForSecondTable = ''; // Limpiar el campo de búsqueda
+      this.getHeroesForSecondTable(); // Recuperar los héroes originales si no se encuentra ningún resultado
     }
   }
 

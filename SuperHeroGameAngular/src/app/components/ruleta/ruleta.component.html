@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
     <div class="container">
         <div class="row">
             <div class="col">
@@ -70,26 +61,52 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="d-flex justify-content-center align-items-center mt-5">
 
         <div class="row">
-            <div class="container d-flex mb-5">
-                <input class="form-control me-sm-2" type="search" placeholder="Buscar héroe o palabra clave" [(ngModel)]="searchHero">
-                <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" (click)="searchHeroBtn()">Buscar</button>
+            <div class="col">
+                <div class="d-flex justify-content-center align-items-center mt-5">
+                    <div class="row">
+                        <div class="container d-flex mb-5">
+                            <input class="form-control me-sm-2" type="search" placeholder="Buscar héroe o palabra clave"
+                                [(ngModel)]="searchHeroForSecondTable">
+                            <button class="btn btn-outline-secondary my-2 my-sm-0" type="button"
+                                (click)="searchHeroBtnForSecondTable()">Buscar</button>
+                        </div>
+                        <div class="container d-flex justify-content-center btn-group">
+                            <button class="btn btn-outline-primary" (click)="previousPageForSecondTable()"
+                                [disabled]="currentPageForSecondTable === 1">Anterior</button>
+                            <button class="btn btn-outline-primary" (click)="nextPageForSecondTable()"
+                                [disabled]="currentPageForSecondTable * itemsPerPage >= equipos[0].heroes.length">Siguiente</button>
+                        </div>
+                    </div>
+                </div>
+
+                <app-spinner *ngIf="loading"></app-spinner>
+                <app-lista-heroes *ngIf="!loading" [heroes]="listHeroesForSecondTable"
+                    [acciones]="accionRuleta"></app-lista-heroes>
             </div>
-            <div class="container d-flex justify-content-center btn-group">
-                <button class="btn btn-outline-primary" (click)="previousPage()"
-                    [disabled]="currentPage === 1">Anterior</button>
-                <button class="btn btn-outline-primary" (click)="nextPage()"
-                    [disabled]="currentPage * itemsPerPage >= allHeroes.length">Siguiente</button>
+
+            <div class="col">
+                <div class="d-flex justify-content-center align-items-center mt-5">
+                    <div class="row">
+                        <div class="container d-flex mb-5">
+                            <input class="form-control me-sm-2" type="search" placeholder="Buscar héroe o palabra clave"
+                                [(ngModel)]="searchHero">
+                            <button class="btn btn-outline-secondary my-2 my-sm-0" type="button"
+                                (click)="searchHeroBtn()">Buscar</button>
+                        </div>
+                        <div class="container d-flex justify-content-center btn-group">
+                            <button class="btn btn-outline-primary" (click)="previousPage()"
+                                [disabled]="currentPage === 1">Anterior</button>
+                            <button class="btn btn-outline-primary" (click)="nextPage()"
+                                [disabled]="currentPage * itemsPerPage >= allHeroes.length">Siguiente</button>
+                        </div>
+                    </div>
+                </div>
+
+                <app-spinner *ngIf="loading"></app-spinner>
+                <app-lista-heroes *ngIf="!loading" [heroes]="listHeroes" [acciones]="accionRuleta"></app-lista-heroes>
             </div>
         </div>
     </div>
 
-    <app-spinner *ngIf="loading"></app-spinner>
-    <app-lista-heroes *ngIf="!loading" [heroes]="listHeroes" [acciones]="accionRuleta"></app-lista-heroes>
-</body>
-
-</html>

@@ -22,7 +22,7 @@ import { FavoritosComponent } from './components/favoritos/favoritos.component';
 import { RuletaComponent } from './components/ruleta/ruleta.component';
 import { EquipoComponent } from './components/equipo/equipo.component';
 import { ListaHeroesComponent } from './components/lista-heroes/lista-heroes.component';
-import {DragDropModule} from '@angular/cdk/drag-drop'
+import { DragDropModule } from '@angular/cdk/drag-drop'
 
 
 @NgModule({
