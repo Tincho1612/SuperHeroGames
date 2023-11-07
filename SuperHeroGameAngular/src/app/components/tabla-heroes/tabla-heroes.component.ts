@@ -74,13 +74,11 @@ export class TablaHeroesComponent implements OnInit {
   }
 
   agregaraEquipo(heroe: Heroe) {
-    console.log(this._serviceUser.currentUser.equipos);
     if (this.existeEnEquipo(heroe)) {
       this.toastr.error('El héroe ya existe en el equipo', 'No se pudo añadir');
     } else {
       if (this._serviceUser.currentUser.equipos[0]){
         this._serviceUser.currentUser.equipos[0].heroes.push(heroe)
-        
       }else{
         const nuevoEquipo: Equipo = { nombre: 'Equipo1', heroes: [heroe] };
         this._serviceUser.currentUser.equipos.push(nuevoEquipo);

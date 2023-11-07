@@ -47,7 +47,8 @@ export class RuletaComponent implements OnInit {
   searchHero: string = '';
 
   //Acciones de la tabla
-  accionRuleta = [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe) }];
+  accionRuletaEquipo = [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe, true) }];
+  accionRuletaLista = [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe, false) }];
 
   //Para la tabla izquierda
   equipos: Equipo[] = [];
@@ -166,7 +167,7 @@ export class RuletaComponent implements OnInit {
   }
 
   rotateWheel() {
-    this.spinTime += 30;
+    this.spinTime += 25;
     if (this.spinTime >= this.spinTimeTotal) {
       this.stopRotateWheel();
       return;
@@ -193,11 +194,34 @@ export class RuletaComponent implements OnInit {
   }
 
   textoGanador(letra: string): string | undefined {
-    if (letra == "A") {
-      return this.Heroe1?.name;
-    } else {
-      return this.Heroe2?.name;
+    if (letra == "A" && this.Heroe1) {
+      this.agregarHeroeGanado();
+      return this.Heroe1.name;
+    } else if (this.Heroe2) {
+      this.eliminarDelEquipo();
+      return this.Heroe2.name;
     }
+    return undefined;
+  }
+
+  agregarHeroeGanado(){
+    this.toastr.success('El heroe con el que jugaste, ganó! Se agregó un nuevo heroe a tu equipo', 'Heroe agregado');
+    this._userData.currentUser.equipos[0].heroes.push(this.Heroe2!);
+    this._userData.updateUserData(this._userData.currentUser);
+    this.Heroe2 = undefined;
+    this.searchHeroBtnForSecondTable()
+  }
+
+  eliminarDelEquipo() {
+    const heroeId = this.Heroe1!.id;
+    const heroeEncontrado = this.listHeroesForSecondTable.find((heroe) => heroe.id === heroeId);
+    if (heroeEncontrado) {
+      this._userData.currentUser.equipos[0].heroes.splice(this._userData.currentUser.equipos[0].heroes.indexOf(heroeEncontrado), 1);
+      this._userData.updateUserData(this._userData.currentUser);
+      this.toastr.error('El heroe con el qué jugaste fué eliminado de tu lista de equipo!', 'Heroe eliminado');
+    }
+    this.Heroe1 = undefined;
+    this.searchHeroBtnForSecondTable()
   }
 
   easeOut(t: number, b: number, c: number, d: number): number {
@@ -235,29 +259,27 @@ export class RuletaComponent implements OnInit {
     });
   }
 
-  seleccionarHeroe(heroe: Heroe) {
-    if (!this.Heroe1) {
-      if (heroe == this.Heroe2) {
-        this.toastr.error('Elige un héroe distinto al otro para jugar', 'Error');
-      } else {
+  seleccionarHeroe(heroe: Heroe, fromEquipo: boolean) {
+    if (fromEquipo) {
+      if (!this.Heroe1) {
         this.Heroe1 = heroe;
         this.estadisticasHeroe1 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe1);
         this.A = this.estadisticasHeroe1.promedio;
+      } else {
+        this.toastr.error('Elimina un héroe antes de elegir otro', 'Error');
       }
-    } else if (!this.Heroe2) {
-      if (heroe == this.Heroe1) {
+    } else {
+      if (this.Heroe1 && heroe.id === this.Heroe1.id) {
         this.toastr.error('Elige un héroe distinto al otro para jugar', 'Error');
       } else {
         this.Heroe2 = heroe;
         this.estadisticasHeroe2 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe2);
         this.B = this.estadisticasHeroe2.promedio;
       }
-    } else {
-      this.toastr.error('Elimina un héroe antes de elegir otro', 'Error');
     }
-
     this.agregarProbabilidades();
   }
+
 
   paginateHeroes(heroes: Heroe[], page: number, isForSecondTable: boolean = false): Heroe[] {
     const itemsPerPage = isForSecondTable ? this.itemsPerPageForSecondTable : this.itemsPerPage;
@@ -305,26 +327,26 @@ export class RuletaComponent implements OnInit {
       });
     }
   }
-  
+
 
   //Paginacion para tabla de equipos
 
   // Función para la página anterior de la segunda tabla
-previousPageForSecondTable() {
-  if (this.currentPageForSecondTable > 1) {
-    this.currentPageForSecondTable--;
-    this.listHeroesForSecondTable = this.paginateHeroes(this.equipos[0].heroes, this.currentPageForSecondTable, true);
+  previousPageForSecondTable() {
+    if (this.currentPageForSecondTable > 1) {
+      this.currentPageForSecondTable--;
+      this.listHeroesForSecondTable = this.paginateHeroes(this.equipos[0].heroes, this.currentPageForSecondTable, true);
+    }
   }
-}
 
-// Función para la página siguiente de la segunda tabla
-nextPageForSecondTable() {
-  const totalHeroes = this.equipos[0].heroes.length;
-  if (this.currentPageForSecondTable * this.itemsPerPageForSecondTable < totalHeroes) {
-    this.currentPageForSecondTable++;
-    this.listHeroesForSecondTable = this.paginateHeroes(this.equipos[0].heroes, this.currentPageForSecondTable, true);
+  // Función para la página siguiente de la segunda tabla
+  nextPageForSecondTable() {
+    const totalHeroes = this.equipos[0].heroes.length;
+    if (this.currentPageForSecondTable * this.itemsPerPageForSecondTable < totalHeroes) {
+      this.currentPageForSecondTable++;
+      this.listHeroesForSecondTable = this.paginateHeroes(this.equipos[0].heroes, this.currentPageForSecondTable, true);
+    }
   }
-}
 
   // Función para obtener los héroes de la segunda tabla basados en la página actual
   getHeroesForSecondTable(): Heroe[] {
