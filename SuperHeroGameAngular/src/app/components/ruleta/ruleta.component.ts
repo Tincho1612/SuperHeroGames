@@ -65,8 +65,8 @@ export class RuletaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getHeroesDefault(); //Obtiene los datos de la api
     this.equipos = this._userData.currentUser.equipos || [];
+    this.getHeroesDefault(); //Obtiene los datos de la api
     this.searchHeroBtnForSecondTable()
   }
 
@@ -187,13 +187,13 @@ export class RuletaComponent implements OnInit {
     const index = Math.floor((360 - degrees % 360) / arcd);
     this.ctx.save();
     this.ctx.font = 'bold 30px Helvetica, Arial';
-    const text = this.textoGanador(this.options[index]);
+    const text = this.elegirGanador(this.options[index]);
     this.ctx.fillText(text!, 250 - this.ctx.measureText(text!).width / 2, 250 + 10);
     this.ctx.restore();
     this.isSpinning = false;
   }
 
-  textoGanador(letra: string): string | undefined {
+  elegirGanador(letra: string): string | undefined {
     if (letra == "A" && this.Heroe1) {
       this.agregarHeroeGanado();
       return this.Heroe1.name;
@@ -210,6 +210,7 @@ export class RuletaComponent implements OnInit {
     this._userData.updateUserData(this._userData.currentUser);
     this.Heroe2 = undefined;
     this.searchHeroBtnForSecondTable()
+    this.getHeroesDefault();
   }
 
   eliminarDelEquipo() {
@@ -247,7 +248,8 @@ export class RuletaComponent implements OnInit {
     this.loading = true;
     this._serviceHeroe.getListHeroes().subscribe({
       next: (data) => {
-        this.allHeroes = data.results;
+        const equiposHeroes = this.equipos.reduce((heroes, equipo) => heroes.concat(equipo.heroes), [] as Heroe[]);
+        this.allHeroes = data.results.filter((heroe: Heroe) => !equiposHeroes.some((equipoHeroe) => heroe.id === equipoHeroe.id));
         this.loading = false;
         this.currentPage = 1;
         this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
