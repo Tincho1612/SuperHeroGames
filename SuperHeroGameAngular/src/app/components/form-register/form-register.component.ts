@@ -3,7 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs';
+import { Equipo } from 'src/app/interfaces/Equipo';
+import { Heroe } from 'src/app/interfaces/Heroe';
 import { User } from 'src/app/interfaces/User';
+import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -16,7 +19,8 @@ export class FormRegisterComponent {
   constructor(private _data: UsersService,
     private readonly fb: FormBuilder,
     private toastr: ToastrService,
-    private router: Router) {
+    private router: Router,
+    private _dataHeroes:SuperHeroApiService) {
 
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]],
@@ -24,6 +28,9 @@ export class FormRegisterComponent {
       email: ['', [Validators.email, Validators.min(5), Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]]
     })
+
+
+
   }
 
   sendData() {
@@ -33,7 +40,7 @@ export class FormRegisterComponent {
       email: this.form.value.email,
       password: this.form.value.password,
       favoritos:[],
-      equipos: [],
+      equipos: this.retornarHeroesRandom(),
       
       
     }
@@ -51,6 +58,22 @@ export class FormRegisterComponent {
 
   validarEmail(email: string): boolean {
     return !this._data.getusers().some(element => element.email === email);
+  }
+
+  retornarHeroesRandom():Equipo[]{
+    const heroes:Equipo[]=[]
+    const nuevoEquipo: Equipo = { nombre: 'EquipoRandom', heroes: [] };
+    heroes.push(nuevoEquipo)
+    for (let i = 0; i < 5; i++) {
+      
+      // Genera un número aleatorio en el rango [0, 1) y luego lo ajusta al rango [1, 200]
+      const numeroAleatorio = Math.floor(Math.random() * 200) + 1;
+      this._dataHeroes.getHeroe(numeroAleatorio).subscribe((data) => {
+        heroes[0].heroes.push(data)
+      });
+    }
+    return heroes
+    
   }
 
 }

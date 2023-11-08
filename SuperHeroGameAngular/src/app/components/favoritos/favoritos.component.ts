@@ -13,8 +13,8 @@ import { forkJoin } from 'rxjs';
 export class FavoritosComponent implements OnInit {
 
   modal: boolean = false;
-  idHeroeActual: number = 0;
   loading: boolean = false;
+  idHeroeActual: number = 0;
   favoritos: number[] = [];
   SuperheroesFav: Heroe[] = [];
 
