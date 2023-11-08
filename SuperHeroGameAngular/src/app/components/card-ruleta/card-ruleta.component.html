@@ -1,0 +1,22 @@
+<div class="card mt-5 border-success align-items-center text-center">
+    <h3 class="card-header">{{heroe!.name}}
+        <button [disabled]="isSpinning" (click)="eliminarHeroe()" class="btn btn-outline-primary"
+            style="position: absolute; left: 10px; --bs-btn-padding-y: .05rem; --bs-btn-padding-x: .5rem;">X
+        </button>
+    </h3>
+    <div class="card-body">
+        <h5 class="card-title">{{heroe!.biography["full-name"]}}</h5>
+        <h6 class="card-subtitle text-muted mt-2">{{heroe!.biography.publisher}}</h6>
+    </div>
+    <img [src]="heroe!.image.url" alt="Heroe seleccionado" class="card-img rounded" style="width: 125px;">
+    <div class="card-body">
+        <h4>Estadisticas</h4>
+        <h5>Promedio: {{estadisticas.promedio}}</h5>
+        <p class="text-muted">Combate: {{estadisticas.combatValue}}</p>
+        <p class="text-muted">Durabilidad: {{estadisticas.durabilityValue}}</p>
+        <p class="text-muted">Inteligencia: {{estadisticas.intelligenceValue}}</p>
+        <p class="text-muted">Poder: {{estadisticas.powerValue}}</p>
+        <p class="text-muted">Velocidad: {{estadisticas.speedValue}}</p>
+        <p class="text-muted">Fuerza: {{estadisticas.strengthValue}}</p>
+    </div>
+</div>

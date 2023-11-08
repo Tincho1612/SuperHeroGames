@@ -386,4 +386,16 @@ export class RuletaComponent implements OnInit {
     }
   }
 
+  eliminarCard(heroeKey: string){
+    if (heroeKey === 'Heroe1') {
+      this.Heroe1 = undefined;
+      this.A = 0;
+    } else if (heroeKey === 'Heroe2') {
+      this.Heroe2 = undefined;
+      this.B = 0;
+    }
+  
+    this.agregarProbabilidades();
+  }
+
 }

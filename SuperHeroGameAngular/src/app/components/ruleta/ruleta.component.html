@@ -1,30 +1,7 @@
 <div class="container-xxl">
     <div class="row">
         <div class="col">
-            <div class="card mt-5 border-success align-items-center text-center" *ngIf="Heroe1">
-                <h3 class="card-header">{{Heroe1.name}}
-                    <button (click)="this.A = 0; Heroe1 = undefined; agregarProbabilidades()"
-                        class="btn btn-outline-primary"
-                        style="position: absolute; left: 10px; --bs-btn-padding-y: .05rem; --bs-btn-padding-x: .5rem;"
-                        [disabled]="isSpinning">X
-                    </button>
-                </h3>
-                <div class="card-body">
-                    <h5 class="card-title">{{Heroe1.biography["full-name"]}}</h5>
-                    <h6 class="card-subtitle text-muted mt-2">{{Heroe1.biography.publisher}}</h6>
-                </div>
-                <img src={{Heroe1.image.url}} alt="Heroe seleccionado 1" class="card-img rounded" style="width: 125px;">
-                <div class="card-body">
-                    <h4>Estadisticas</h4>
-                    <h5>Promedio: {{estadisticasHeroe1.promedio}}</h5>
-                    <p class="text-muted">Combate: {{estadisticasHeroe1.combatValue}}</p>
-                    <p class="text-muted">Durabilidad: {{estadisticasHeroe1.durabilityValue}}</p>
-                    <p class="text-muted">Inteligencia: {{estadisticasHeroe1.intelligenceValue}}</p>
-                    <p class="text-muted">Poder: {{estadisticasHeroe1.powerValue}}</p>
-                    <p class="text-muted">Velocidad: {{estadisticasHeroe1.speedValue}}</p>
-                    <p class="text-muted">Fuerza: {{estadisticasHeroe1.strengthValue}}</p>
-                </div>
-            </div>
+            <app-card-ruleta *ngIf="this.Heroe1" [heroe]="Heroe1" [estadisticas]="estadisticasHeroe1" [isSpinning]="isSpinning" (eliminarHeroeEvent)="eliminarCard('Heroe1')"></app-card-ruleta>
         </div>
 
         <div class="col-6">
@@ -36,28 +13,7 @@
         </div>
 
         <div class="col">
-            <div class="card mt-5 border-danger align-items-center text-center" *ngIf="Heroe2">
-                <h3 class="card-header">{{Heroe2.name}}<button
-                        (click)="this.B = 0;Heroe2 = undefined; agregarProbabilidades()" class="btn btn-outline-primary"
-                        style="position: absolute; left: 10px; --bs-btn-padding-y: .05rem; --bs-btn-padding-x: .5rem;"
-                        [disabled]="isSpinning">X</button>
-                </h3>
-                <div class="card-body">
-                    <h5 class="card-title">{{Heroe2.biography["full-name"]}}</h5>
-                    <h6 class="card-subtitle text-muted mt-2">{{Heroe2.biography.publisher}}</h6>
-                </div>
-                <img src={{Heroe2.image.url}} alt="Heroe seleccionado 2" class="card-img rounded" style="width: 125px;">
-                <div class="card-body">
-                    <h4>Estadisticas</h4>
-                    <h5>Promedio: {{estadisticasHeroe2.promedio}}</h5>
-                    <p class="text-muted">Combate: {{estadisticasHeroe2.combatValue}}</p>
-                    <p class="text-muted">Durabilidad: {{estadisticasHeroe2.durabilityValue}}</p>
-                    <p class="text-muted">Inteligencia: {{estadisticasHeroe2.intelligenceValue}}</p>
-                    <p class="text-muted">Poder: {{estadisticasHeroe2.powerValue}}</p>
-                    <p class="text-muted">Velocidad: {{estadisticasHeroe2.speedValue}}</p>
-                    <p class="text-muted">Fuerza: {{estadisticasHeroe2.strengthValue}}</p>
-                </div>
-            </div>
+            <app-card-ruleta *ngIf="this.Heroe2" [heroe]="Heroe2" [estadisticas]="estadisticasHeroe2" [isSpinning]="isSpinning" (eliminarHeroeEvent)="eliminarCard('Heroe2')"></app-card-ruleta>
         </div>
     </div>
 
