@@ -20,7 +20,6 @@ export class TablaHeroesComponent implements OnInit {
   //Acciones de la tabla
   accionesTabla = [
     { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
-    { label: 'Agregar a equipo', funcion: (heroe: Heroe) => this.agregaraEquipo(heroe) },
     { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id)}];
 
   constructor(private _serviceHeroe: SuperHeroApiService,
@@ -73,21 +72,7 @@ export class TablaHeroesComponent implements OnInit {
     }
   }
 
-  agregaraEquipo(heroe: Heroe) {
-    if (this.existeEnEquipo(heroe)) {
-      this.toastr.error('El héroe ya existe en el equipo', 'No se pudo añadir');
-    } else {
-      if (this._serviceUser.currentUser.equipos[0]){
-        this._serviceUser.currentUser.equipos[0].heroes.push(heroe)
-      }else{
-        const nuevoEquipo: Equipo = { nombre: 'Equipo1', heroes: [heroe] };
-        this._serviceUser.currentUser.equipos.push(nuevoEquipo);
-      }
-      this._serviceUser.updateUserData(this._serviceUser.currentUser);
-      this.toastr.success('Heroe agregado a el Equipo correctamente', 'Equipo');
-      
-    }
-  }
+
 
   existeEnEquipo(heroe: Heroe): boolean {
     return !!this._serviceUser.currentUser.equipos?.some((equipo) => this.encontrarId(heroe, equipo.heroes));

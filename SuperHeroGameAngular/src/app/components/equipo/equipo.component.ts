@@ -14,22 +14,24 @@ import { NgModel } from '@angular/forms';
 export class EquipoComponent implements OnInit {
 
   equipos: Equipo[]
+  idHeroeActual: number = 0;
+  modal: boolean = false;
+  loading: boolean = false;
 
-  accionesEquipos = [
-    { label: 'Eliminar del Equipo', funcion: (heroe: Heroe) => this.eliminarDelEquipo(heroe) }];
 
   constructor(private _userData: UsersService,
     private toast: ToastrService) {
     this.equipos = []
   }
+  accionesEquipos = [
+    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id)}]
 
   ngOnInit(): void {
     this.equipos = this._userData.currentUser.equipos || [];
   }
 
-  eliminarDelEquipo(Heroe: Heroe) {
-    this._userData.currentUser.equipos[0].heroes.splice(this._userData.currentUser.equipos[0].heroes.indexOf(Heroe), 1);
-    this._userData.updateUserData(this._userData.currentUser);
-    this.toast.error('El heroe fué eliminado del Equipo', 'Heroe eliminado');
+  abrirModal(id: string) {
+    this.modal = !this.modal;
+    this.idHeroeActual = Number(id);
   }
 }
