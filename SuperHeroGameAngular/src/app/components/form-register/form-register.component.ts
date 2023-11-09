@@ -70,7 +70,9 @@ export class FormRegisterComponent {
       
       // Genera un número aleatorio en el rango [0, 1) y luego lo ajusta al rango [1, 500]
       let numeroAleatorio:number = Math.floor(Math.random() * 500) + 1;
+      
       while (this.isRepetido(repetidos,numeroAleatorio)){
+        repetidos.push(numeroAleatorio)
         numeroAleatorio = Math.floor(Math.random() * 500) + 1;
       }
       this._dataHeroes.getHeroe(numeroAleatorio).subscribe((data) => {
