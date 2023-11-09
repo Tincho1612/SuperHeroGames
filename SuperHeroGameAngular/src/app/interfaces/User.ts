@@ -7,4 +7,5 @@ export interface User{
     password:string
     favoritos?:number[]
     equipos: Equipo[]
+    primeraVez:boolean
 }

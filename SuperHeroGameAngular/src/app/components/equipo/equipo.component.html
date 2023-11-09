@@ -7,6 +7,6 @@
       <app-modal-details [id]="idHeroeActual" *ngIf="modal" (modalClosed)="modal = false"></app-modal-details>
 
       <app-spinner *ngIf="loading"></app-spinner>
-      <p class="text-center">Se cargaron 5 heroes aleatorios para que puedas comenzar a jugar en la Ruleta</p>
+      
     <app-lista-heroes  [heroes]="equipos[0].heroes" [acciones]="accionesEquipos"></app-lista-heroes>
 </body>

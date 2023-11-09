@@ -31,6 +31,7 @@ export class FormLoginComponent {
       const password = this.form.get('password')?.value;
       console.log(this._data.getusers())
       this.BuscarUsuario(this._data.getusers(), email, password);
+      
     }
   }
 
