@@ -22,12 +22,18 @@ export class EquipoComponent implements OnInit {
   constructor(private _userData: UsersService,
     private toast: ToastrService) {
     this.equipos = []
+    if (this._userData.currentUser.primeraVez==true){
+      this.toast.success('Bienvenido! se cargaron 5 heroes aleatorios por ser tu primera vez','Heroes')
+      this._userData.currentUser.primeraVez=false;
+      this._userData.updateUserData(this._userData.currentUser);
+    }
   }
   accionesEquipos = [
     { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id)}]
 
   ngOnInit(): void {
     this.equipos = this._userData.currentUser.equipos || [];
+    
   }
 
   abrirModal(id: string) {

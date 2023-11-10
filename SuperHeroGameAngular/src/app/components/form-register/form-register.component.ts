@@ -13,7 +13,9 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./form-register.component.css']
 })
 export class FormRegisterComponent {
+
   form: FormGroup;
+
   constructor(private _data: UsersService,
     private readonly fb: FormBuilder,
     private toastr: ToastrService,
@@ -36,6 +38,7 @@ export class FormRegisterComponent {
       password: this.form.value.password,
       favoritos: [],
       equipos: this.retornarHeroesRandom(),
+      primeraVez: true,
     }
 
     if (this.validarEmail(this.form.value.email)) {
@@ -54,17 +57,37 @@ export class FormRegisterComponent {
   }
 
   retornarHeroesRandom(): Equipo[] {
+    let repetidos: number[] = []
     const heroes: Equipo[] = []
     const nuevoEquipo: Equipo = { nombre: 'EquipoRandom', heroes: [] };
     heroes.push(nuevoEquipo)
     for (let i = 0; i < 5; i++) {
 
-      // Genera un número aleatorio en el rango [0, 1) y luego lo ajusta al rango [1, 200]
-      const numeroAleatorio = Math.floor(Math.random() * 200) + 1;
+      // Genera un número aleatorio en el rango [0, 1) y luego lo ajusta al rango [1, 500]
+      let numeroAleatorio: number = Math.floor(Math.random() * 500) + 1;
+
+      while (this.isRepetido(repetidos, numeroAleatorio)) {
+        repetidos.push(numeroAleatorio)
+        numeroAleatorio = Math.floor(Math.random() * 500) + 1;
+      }
       this._dataHeroes.getHeroe(numeroAleatorio).subscribe((data) => {
         heroes[0].heroes.push(data)
       });
     }
     return heroes
   }
+
+
+  isRepetido(datos: number[], dato: number) {
+    let encontrado = false;
+    datos.forEach((element => {
+      if (element === dato) {
+        encontrado = true;
+        return;
+      }
+    }))
+    return encontrado;
+  }
+
+
 }
