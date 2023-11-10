@@ -12,15 +12,19 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./tabla-heroes.component.css']
 })
 export class TablaHeroesComponent implements OnInit {
+  allHeroes: Heroe[] = [];
   listHeroes: Heroe[] = [];
   modal = false;
   idHeroeActual = 0;
   loading = false;
 
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+
   //Acciones de la tabla
   accionesTabla = [
     { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
-    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id)}];
+    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id) }];
 
   constructor(private _serviceHeroe: SuperHeroApiService,
     private aRouter: ActivatedRoute,
@@ -42,7 +46,9 @@ export class TablaHeroesComponent implements OnInit {
   getHeroesDefault() {
     this.loading = true;
     this._serviceHeroe.getListHeroes().subscribe((data) => {
-      this.listHeroes = data.results;
+      this.allHeroes = data.results;
+      this.currentPage = 1;
+      this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
       this.loading = false;
     });
   }
@@ -50,9 +56,36 @@ export class TablaHeroesComponent implements OnInit {
   getHeroesParam(heroe: string) {
     this.loading = true;
     this._serviceHeroe.getHeroesByWord(heroe).subscribe((data) => {
-      this.listHeroes = data.results;
-      this.loading = false;
+      if (data.results && data.results.length > 0) {
+        this.allHeroes = data.results;
+        this.currentPage = 1;
+        this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
+        this.loading = false;
+      } else {
+        this.toastr.error('No se encontró ningún héroe con ese nombre o palabra clave', 'Error');
+        this.getHeroesDefault();
+      }
     })
+  }
+
+  paginateHeroes(heroes: Heroe[], page: number): Heroe[] {
+    const startIndex = (page - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return heroes.slice(startIndex, endIndex);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage * this.itemsPerPage < this.allHeroes.length) {
+      this.currentPage++;
+      this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
+    }
   }
 
   abrirModal(id: string) {
@@ -72,14 +105,5 @@ export class TablaHeroesComponent implements OnInit {
     }
   }
 
-
-
-  existeEnEquipo(heroe: Heroe): boolean {
-    return !!this._serviceUser.currentUser.equipos?.some((equipo) => this.encontrarId(heroe, equipo.heroes));
-  }
-
-  encontrarId(heroe: Heroe, datos: Heroe[]): boolean {
-    return datos.some((dato) => dato.id === heroe.id);
-  }
 
 }

@@ -1,7 +1,7 @@
 <div class="container-xxl">
     <div class="row">
         <div class="col">
-            <app-card-ruleta *ngIf="this.Heroe1" [heroe]="Heroe1" [estadisticas]="estadisticasHeroe1" [isSpinning]="isSpinning" (eliminarHeroeEvent)="eliminarCard('Heroe1')"></app-card-ruleta>
+            <app-card-ruleta *ngIf="this.Heroe1" [heroeJugador]="true" [heroe]="Heroe1" [estadisticas]="estadisticasHeroe1" [isSpinning]="isSpinning" (eliminarHeroeEvent)="eliminarCard('Heroe1')"></app-card-ruleta>
         </div>
 
         <div class="col-6">

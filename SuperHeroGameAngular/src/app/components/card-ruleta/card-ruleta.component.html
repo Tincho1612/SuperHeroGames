@@ -1,4 +1,4 @@
-<div class="card mt-5 border-success align-items-center text-center">
+<div [ngClass]="heroeJugador ? 'border-success' : 'border-danger'" class="card mt-5 align-items-center text-center">
     <h3 class="card-header">{{heroe!.name}}
         <button [disabled]="isSpinning" (click)="eliminarHeroe()" class="btn btn-outline-primary"
             style="position: absolute; left: 10px; --bs-btn-padding-y: .05rem; --bs-btn-padding-x: .5rem;">X

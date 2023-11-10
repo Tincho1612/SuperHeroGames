@@ -32,6 +32,10 @@
                 <span *ngIf="form.get('password')?.hasError('required') && form.get('password')?.touched">
                     El campo password es <strong>REQUERIDO</strong>
                 </span>
+                <span *ngIf="form.get('password')?.hasError('minlength') && form.get('password')?.touched ||
+                             form.get('password')?.hasError('maxlength') && form.get('password')?.touched">          
+                    La contraseña debe contener entre <strong>8 y 24 caracteres</strong>
+                </span>
             </div>
 
             <div class="d-grid gap-2">

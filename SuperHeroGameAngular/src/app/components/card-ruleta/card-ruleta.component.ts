@@ -11,6 +11,7 @@ export class CardRuletaComponent {
   @Input({ required: true}) heroe?: Heroe; // Recibe el héroe como entrada desde el componente padre.
   @Input({ required: true}) estadisticas: any; // Recibe las estadísticas como entrada desde el componente padre.
   @Input() isSpinning: boolean = false;
+  @Input() heroeJugador: boolean = false;
   @Output() eliminarHeroeEvent = new EventEmitter<void>();
 
   eliminarHeroe() {

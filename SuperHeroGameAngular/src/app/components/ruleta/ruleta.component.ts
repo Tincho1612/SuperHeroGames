@@ -167,7 +167,7 @@ export class RuletaComponent implements OnInit {
   }
 
   rotateWheel() {
-    this.spinTime += 25;
+    this.spinTime += 22;
     if (this.spinTime >= this.spinTimeTotal) {
       this.stopRotateWheel();
       return;
@@ -204,16 +204,23 @@ export class RuletaComponent implements OnInit {
     return undefined;
   }
 
-  agregarHeroeGanado(){
+  agregarHeroeGanado(){  
     this.toastr.success('El heroe con el que jugaste, ganó! Se agregó un nuevo heroe a tu equipo', 'Heroe agregado');
+    
     this._userData.currentUser.equipos[0].heroes.push(this.Heroe2!);
     this._userData.updateUserData(this._userData.currentUser);
+    
     this.Heroe2 = undefined;
     this.searchHeroBtnForSecondTable()
     this.getHeroesDefault();
   }
 
   eliminarDelEquipo() {
+    if(this._userData.currentUser.equipos[0].heroes.length == 1){
+      this.toastr.warning('Tu último heroé perdió, pero lo vas a conservar para seguir jugando!', 'Cuidado!');
+      this.Heroe1 = undefined;
+      return;
+    }
     const heroeId = this.Heroe1!.id;
     const heroeEncontrado = this.listHeroesForSecondTable.find((heroe) => heroe.id === heroeId);
     if (heroeEncontrado) {
@@ -250,9 +257,9 @@ export class RuletaComponent implements OnInit {
       next: (data) => {
         const equiposHeroes = this.equipos.reduce((heroes, equipo) => heroes.concat(equipo.heroes), [] as Heroe[]);
         this.allHeroes = data.results.filter((heroe: Heroe) => !equiposHeroes.some((equipoHeroe) => heroe.id === equipoHeroe.id));
-        this.loading = false;
         this.currentPage = 1;
         this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage);
+        this.loading = false;
       },
       error: (error) => {
         this.toastr.error('Error al cargar los héroes', 'Error');
