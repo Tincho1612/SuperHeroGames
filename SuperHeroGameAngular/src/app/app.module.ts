@@ -23,7 +23,8 @@ import { RuletaComponent } from './components/ruleta/ruleta.component';
 import { EquipoComponent } from './components/equipo/equipo.component';
 import { ListaHeroesComponent } from './components/lista-heroes/lista-heroes.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { CardRuletaComponent } from './components/card-ruleta/card-ruleta.component'
+import { CardRuletaComponent } from './components/card-ruleta/card-ruleta.component';
+import { HistorialComponent } from './components/historial/historial.component'
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { CardRuletaComponent } from './components/card-ruleta/card-ruleta.compon
     EquipoComponent,
     ListaHeroesComponent,
     CardRuletaComponent,
+    HistorialComponent,
   ],
   imports: [
     BrowserModule,

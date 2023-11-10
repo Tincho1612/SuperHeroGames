@@ -38,6 +38,7 @@ export class FormRegisterComponent {
       password: this.form.value.password,
       favoritos: [],
       equipos: this.retornarHeroesRandom(),
+      historial:[],
       primeraVez: true,
     }
 

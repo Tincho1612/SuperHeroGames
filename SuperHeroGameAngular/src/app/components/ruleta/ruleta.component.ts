@@ -4,7 +4,9 @@ import { Heroe } from 'src/app/interfaces/Heroe';
 import { EstadisticasHeroeService } from 'src/app/services/estadisticas-heroe.service';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 import { Equipo } from 'src/app/interfaces/Equipo';
+import { Pelea } from 'src/app/interfaces/pelea';
 import { UsersService } from 'src/app/services/users.service';
+import { getLocaleDateFormat } from '@angular/common';
 
 @Component({
   selector: 'app-ruleta',
@@ -194,14 +196,37 @@ export class RuletaComponent implements OnInit {
   }
 
   elegirGanador(letra: string): string | undefined {
-    if (letra == "A" && this.Heroe1) {
+    if (letra == "A" && this.Heroe1 && this.Heroe2) {
+      this.crearPelea(this.Heroe1?.id,this.Heroe2?.id,this.Heroe1?.id);
       this.agregarHeroeGanado();
+      
+      
+
+      console.log("llega");
+
       return this.Heroe1.name;
-    } else if (this.Heroe2) {
+    } else if (this.Heroe2 && this.Heroe1) {
+      this.crearPelea(this.Heroe1?.id,this.Heroe2?.id,this.Heroe2?.id);
       this.eliminarDelEquipo();
+
+      
+
       return this.Heroe2.name;
     }
     return undefined;
+  }
+
+  crearPelea(id1:string,id2:string,id3:string){
+    console.log(id1,id2,id3);
+    let pelea: Pelea = {
+      idHeroe1 :+id1,
+      idHeroe2:+id2,
+      ganador:+id3,
+      fecha: new Date ()
+    }
+    console.log(pelea);
+    this._userData.currentUser.historial.push(pelea);
+    console.log(this._userData.currentUser.historial);
   }
 
   agregarHeroeGanado(){  
