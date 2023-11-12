@@ -199,10 +199,6 @@ export class RuletaComponent implements OnInit {
     if (letra == "A" && this.Heroe1 && this.Heroe2) {
       this.crearPelea(this.Heroe1?.id,this.Heroe2?.id,this.Heroe1?.id);
       this.agregarHeroeGanado();
-      
-      
-
-      console.log("llega");
 
       return this.Heroe1.name;
     } else if (this.Heroe2 && this.Heroe1) {
@@ -217,14 +213,17 @@ export class RuletaComponent implements OnInit {
   }
 
   crearPelea(id1:string,id2:string,id3:string){
-    console.log(id1,id2,id3);
     let pelea: Pelea = {
       idHeroe1 :+id1,
       idHeroe2:+id2,
       ganador:+id3,
       fecha: new Date ()
     }
-    console.log(pelea);
+    console.log(this._userData.currentUser.historial.length);
+    if (this._userData.currentUser.historial.length>=10){
+      
+      this._userData.currentUser.historial.splice(0,1);
+    }
     this._userData.currentUser.historial.push(pelea);
     console.log(this._userData.currentUser.historial);
   }

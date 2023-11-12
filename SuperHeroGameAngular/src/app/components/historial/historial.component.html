@@ -1,1 +1,33 @@
-<p>historial works!</p>
+<app-spinner *ngIf="loading"></app-spinner>
+
+<div *ngIf="!loading">
+<div class="container mt-xl-5">
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Heroe aliado</th>
+          <th scope="col">Heroe enemigo</th>
+          <th scope="col">Ganador</th>
+          <th scope="col">Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pelea of peleas; let i = index">
+            <td>
+                <img class="img-fluid rounded" [src]="detallesHeroes[i]?.heroe1?.image?.url" style="height: 100px; width: 95px;">
+                <span>{{ detallesHeroes[i]?.heroe1?.name }}</span>
+              </td>
+              <td>
+                <img class="img-fluid rounded" [src]="detallesHeroes[i]?.heroe2?.image?.url" style="height: 100px; width: 95px;">
+                <span>{{ detallesHeroes[i]?.heroe2?.name }}</span>
+              </td>
+              <td>{{ detallesHeroes[i]?.ganador?.name }}</td>
+              <td>{{ pelea.fecha | date: 'medium' }}</td>
+              
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
