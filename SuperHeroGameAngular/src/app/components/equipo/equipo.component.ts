@@ -33,7 +33,6 @@ export class EquipoComponent implements OnInit {
 
   ngOnInit(): void {
     this.equipos = this._userData.currentUser.equipos || [];
-    
   }
 
   abrirModal(id: string) {

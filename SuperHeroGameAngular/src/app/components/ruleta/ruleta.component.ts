@@ -202,45 +202,42 @@ export class RuletaComponent implements OnInit {
       return this.Heroe1.name;
     } else if (this.Heroe2 && this.Heroe1) {
       this.eliminarDelEquipo();
-
-      
-
       return this.Heroe2.name;
     }
     return undefined;
   }
 
-  crearPelea(id1:string,id2:string,id3:string){
+  crearPelea(id1: string, id2: string, id3: string) {
     let pelea: Pelea = {
-      idHeroe1 :+id1,
-      idHeroe2:+id2,
-      ganador:+id3,
-      fecha: new Date ()
+      idHeroe1: +id1,
+      idHeroe2: +id2,
+      ganador: +id3,
+      fecha: new Date()
     }
-    if (this._userData.currentUser.historial.length>=10){
-      
-      this._userData.currentUser.historial.splice(0,1);
+    if (this._userData.currentUser.historial.length >= 10) {
+
+      this._userData.currentUser.historial.splice(9, 1);
     }
     this._userData.currentUser.historial.unshift(pelea);
     this._userData.updateUserData(this._userData.currentUser)
-    
+
   }
 
-  agregarHeroeGanado(){  
+  agregarHeroeGanado() {
     this.toastr.success('El heroe con el que jugaste, ganó! Se agregó un nuevo heroe a tu equipo', 'Heroe agregado');
-    if (this.Heroe1 && this.Heroe2){
-      this.crearPelea(this.Heroe1?.id,this.Heroe2?.id,this.Heroe1?.id);
+    if (this.Heroe1 && this.Heroe2) {
+      this.crearPelea(this.Heroe1?.id, this.Heroe2?.id, this.Heroe1?.id);
     }
     this._userData.currentUser.equipos[0].heroes.push(this.Heroe2!);
     this._userData.updateUserData(this._userData.currentUser);
-    
+
     this.Heroe2 = undefined;
     this.searchHeroBtnForSecondTable()
     this.getHeroesDefault();
   }
 
   eliminarDelEquipo() {
-    if(this._userData.currentUser.equipos[0].heroes.length == 1){
+    if (this._userData.currentUser.equipos[0].heroes.length == 1) {
       this.toastr.warning('Tu último heroé perdió, pero lo vas a conservar para seguir jugando!', 'Cuidado!');
       this.Heroe1 = undefined;
       return;
@@ -251,11 +248,11 @@ export class RuletaComponent implements OnInit {
       this._userData.currentUser.equipos[0].heroes.splice(this._userData.currentUser.equipos[0].heroes.indexOf(heroeEncontrado), 1);
       this._userData.updateUserData(this._userData.currentUser);
       this.toastr.error('El heroe con el qué jugaste fué eliminado de tu lista de equipo!', 'Heroe eliminado');
-      
-      
+
     }
-    if (this.Heroe1 && this.Heroe2){
-      this.crearPelea(this.Heroe1?.id,this.Heroe2?.id,this.Heroe2?.id);
+
+    if (this.Heroe1 && this.Heroe2) {
+      this.crearPelea(this.Heroe1?.id, this.Heroe2?.id, this.Heroe2?.id);
     }
     this.Heroe1 = undefined;
     this.searchHeroBtnForSecondTable()
@@ -298,6 +295,10 @@ export class RuletaComponent implements OnInit {
   }
 
   seleccionarHeroe(heroe: Heroe, fromEquipo: boolean) {
+    if (this.isSpinning){
+      this.toastr.error('No podes elegir heroes durante el combante!', 'Error');
+      return;
+    }
     if (fromEquipo) {
       if (!this.Heroe1) {
         this.Heroe1 = heroe;
@@ -307,17 +308,16 @@ export class RuletaComponent implements OnInit {
         this.toastr.error('Elimina un héroe antes de elegir otro', 'Error');
       }
     } else {
-      if (this.Heroe1 && heroe.id === this.Heroe1.id) {
-        this.toastr.error('Elige un héroe distinto al otro para jugar', 'Error');
-      } else {
+      if (!this.Heroe2) {
         this.Heroe2 = heroe;
         this.estadisticasHeroe2 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe2);
         this.B = this.estadisticasHeroe2.promedio;
+      }else {
+        this.toastr.error('Elimina un héroe antes de elegir otro', 'Error');
       }
     }
     this.agregarProbabilidades();
   }
-
 
   paginateHeroes(heroes: Heroe[], page: number, isForSecondTable: boolean = false): Heroe[] {
     const itemsPerPage = isForSecondTable ? this.itemsPerPageForSecondTable : this.itemsPerPage;
@@ -348,10 +348,11 @@ export class RuletaComponent implements OnInit {
       this._serviceHeroe.getHeroesByWord(this.searchHero).subscribe({
         next: (data) => {
           if (data.results && data.results.length > 0) {
-            this.allHeroes = data.results;
-            this.loading = false;
+            const equiposHeroes = this.equipos.reduce((heroes, equipo) => heroes.concat(equipo.heroes), [] as Heroe[]);
+            this.allHeroes = data.results.filter((heroe: Heroe) => !equiposHeroes.some((equipoHeroe) => heroe.id === equipoHeroe.id));
             this.currentPage = 1;
             this.listHeroes = this.paginateHeroes(this.allHeroes, this.currentPage, false); // Usar itemsPerPage para la primera tabla
+            this.loading = false;
           } else {
             this.toastr.error('No se encontró ningún héroe con ese nombre o palabra clave', 'Error');
             this.searchHero = '';
@@ -422,7 +423,7 @@ export class RuletaComponent implements OnInit {
     }
   }
 
-  eliminarCard(heroeKey: string){
+  eliminarCard(heroeKey: string) {
     if (heroeKey === 'Heroe1') {
       this.Heroe1 = undefined;
       this.A = 0;
@@ -430,7 +431,7 @@ export class RuletaComponent implements OnInit {
       this.Heroe2 = undefined;
       this.B = 0;
     }
-  
+
     this.agregarProbabilidades();
   }
 

@@ -5,19 +5,21 @@
       <li class="nav-item">
         <a class="nav-link active" routerLink="lista">Lista</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="favoritos">Favoritos</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="misEquipos">Mis Equipos</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="ruleta">Ruleta</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="historial">Historial</a>
-      </li>
     </ul>
+    <div class="dropdown-center">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Heroes
+      </button>
+      <ul class="dropdown-menu text-center">
+        <a class="nav-link mb-2 dropdown-item" routerLink="favoritos">Favoritos<span></span></a>
+        <div class="dropdown-divider"></div>
+        <a class="nav-link mb-2 dropdown-item" routerLink="misEquipos">Mis Equipos<span></span></a>
+        <div class="dropdown-divider"></div>
+        <a class="nav-link mb-2 dropdown-item" routerLink="ruleta">Ruleta<span></span></a>
+        <div class="dropdown-divider"></div>
+        <a class="nav-link dropdown-item" routerLink="historial">Historial<span></span></a>    
+      </ul>
+    </div>
   </div>
 
   <div class="col-6 d-flex">
