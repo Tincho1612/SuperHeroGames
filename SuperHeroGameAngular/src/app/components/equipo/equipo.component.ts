@@ -29,11 +29,24 @@ export class EquipoComponent implements OnInit {
     }
   }
   accionesEquipos = [
-    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id)}]
+    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id)},
+    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id)}]
 
   ngOnInit(): void {
     this.equipos = this._userData.currentUser.equipos || [];
     
+  }
+
+  cargarFavorito(idHeroe: string) {
+    const dato = Number(idHeroe);
+    if (!this._userData.currentUser.favoritos?.includes(dato)) {
+      // Si no existe, agrégalo al array
+      this._userData.currentUser.favoritos?.push(Number(idHeroe))
+      this._userData.updateUserData(this._userData.currentUser);
+      this.toast.success('Heroe agregado a favoritos correctamente', 'Favorito');
+    } else {
+      this.toast.error('El heroe ya se encuentra en la lista de favoritos', 'Error');
+    }
   }
 
   abrirModal(id: string) {
