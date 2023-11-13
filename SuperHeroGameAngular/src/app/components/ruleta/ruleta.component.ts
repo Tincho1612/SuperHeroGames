@@ -197,12 +197,10 @@ export class RuletaComponent implements OnInit {
 
   elegirGanador(letra: string): string | undefined {
     if (letra == "A" && this.Heroe1 && this.Heroe2) {
-      this.crearPelea(this.Heroe1?.id,this.Heroe2?.id,this.Heroe1?.id);
       this.agregarHeroeGanado();
 
       return this.Heroe1.name;
     } else if (this.Heroe2 && this.Heroe1) {
-      this.crearPelea(this.Heroe1?.id,this.Heroe2?.id,this.Heroe2?.id);
       this.eliminarDelEquipo();
 
       
@@ -219,18 +217,20 @@ export class RuletaComponent implements OnInit {
       ganador:+id3,
       fecha: new Date ()
     }
-    console.log(this._userData.currentUser.historial.length);
     if (this._userData.currentUser.historial.length>=10){
       
       this._userData.currentUser.historial.splice(0,1);
     }
-    this._userData.currentUser.historial.push(pelea);
-    console.log(this._userData.currentUser.historial);
+    this._userData.currentUser.historial.unshift(pelea);
+    this._userData.updateUserData(this._userData.currentUser)
+    
   }
 
   agregarHeroeGanado(){  
     this.toastr.success('El heroe con el que jugaste, ganó! Se agregó un nuevo heroe a tu equipo', 'Heroe agregado');
-    
+    if (this.Heroe1 && this.Heroe2){
+      this.crearPelea(this.Heroe1?.id,this.Heroe2?.id,this.Heroe1?.id);
+    }
     this._userData.currentUser.equipos[0].heroes.push(this.Heroe2!);
     this._userData.updateUserData(this._userData.currentUser);
     
@@ -251,6 +251,11 @@ export class RuletaComponent implements OnInit {
       this._userData.currentUser.equipos[0].heroes.splice(this._userData.currentUser.equipos[0].heroes.indexOf(heroeEncontrado), 1);
       this._userData.updateUserData(this._userData.currentUser);
       this.toastr.error('El heroe con el qué jugaste fué eliminado de tu lista de equipo!', 'Heroe eliminado');
+      
+      
+    }
+    if (this.Heroe1 && this.Heroe2){
+      this.crearPelea(this.Heroe1?.id,this.Heroe2?.id,this.Heroe2?.id);
     }
     this.Heroe1 = undefined;
     this.searchHeroBtnForSecondTable()

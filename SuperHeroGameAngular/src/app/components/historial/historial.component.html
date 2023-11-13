@@ -1,5 +1,8 @@
-<app-spinner *ngIf="loading"></app-spinner>
+<app-spinner *ngIf="loading && peleas.length !==0"></app-spinner>
 
+<div *ngIf="peleas.length===0">
+    <h3 class="text-center mt-5">No tenes Peleas Realizadas, Dirigete a la ruleta para comenzar!!</h3>
+</div>
 <div *ngIf="!loading">
 <div class="container mt-xl-5">
   <div class="table-responsive">

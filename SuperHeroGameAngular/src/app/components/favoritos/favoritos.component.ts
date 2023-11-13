@@ -66,6 +66,7 @@ export class FavoritosComponent implements OnInit {
     this.recibirHeroesFav(this.favoritos);
 
     this.toastr.error('El heroe fué eliminado de la lista de favoritos', 'Heroe eliminado');
+    this._dataUsers.updateUserData(this._dataUsers.currentUser);
   }
 
 }
