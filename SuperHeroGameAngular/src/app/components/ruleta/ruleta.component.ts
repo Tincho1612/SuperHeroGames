@@ -7,6 +7,7 @@ import { Equipo } from 'src/app/interfaces/Equipo';
 import { Pelea } from 'src/app/interfaces/pelea';
 import { UsersService } from 'src/app/services/users.service';
 import { getLocaleDateFormat } from '@angular/common';
+import { ActiveNavbarService } from 'src/app/services/active-navbar.service';
 
 @Component({
   selector: 'app-ruleta',
@@ -63,7 +64,8 @@ export class RuletaComponent implements OnInit {
     private _serviceHeroe: SuperHeroApiService,
     private _serviceEstadisticas: EstadisticasHeroeService,
     private toastr: ToastrService,
-    private _userData: UsersService
+    private _userData: UsersService,
+    private _navbar: ActiveNavbarService
   ) { }
 
   ngOnInit() {
@@ -161,6 +163,8 @@ export class RuletaComponent implements OnInit {
       return;
     }
 
+    this._navbar.desactivarComponente(); //Para emitir un evento al servicio y desactivar la navbar
+
     this.isSpinning = true;
     this.spinArcStart = Math.random() * 10 + 10;
     this.spinTime = 0;
@@ -193,6 +197,7 @@ export class RuletaComponent implements OnInit {
     this.ctx.fillText(text!, 250 - this.ctx.measureText(text!).width / 2, 250 + 10);
     this.ctx.restore();
     this.isSpinning = false;
+    this._navbar.reactivarComponente();
   }
 
   elegirGanador(letra: string): string | undefined {

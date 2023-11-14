@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light" *ngIf="shouldShowNavbar">
+<nav [class.slide-up]="!activo" class="navbar navbar-expand-lg bg-light" data-bs-theme="light" *ngIf="shouldShowNavbar">
   <div class="col d-flex justify-content-center ms-5">
     <a class="navbar-brand">SHG</a>
     <ul class="navbar-nav">
