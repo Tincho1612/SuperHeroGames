@@ -19,4 +19,8 @@ export class ListaHeroesComponent {
   drop(event:CdkDragDrop<Heroe[]>){
       moveItemInArray(this.heroes,event.previousIndex,event.currentIndex);
   }
+
+  manejarImgError(heroe: Heroe) {
+    heroe.image.url = "/assets/img/imagen-no-disponible.jpeg";
+  }
 }

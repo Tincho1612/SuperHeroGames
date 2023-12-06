@@ -40,4 +40,8 @@ export class ModalDetailsComponent implements OnInit {
       this.loading = false;
     });
   }
+
+  manejarImgError(heroe: any) {
+    heroe.image.url = "/assets/img/imagen-no-disponible.jpeg";
+  }
 }

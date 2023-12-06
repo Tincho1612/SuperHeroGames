@@ -22,14 +22,12 @@ export class FormLoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
-    console.log(localStorage.getItem('usuarioActual'));
   }
 
   verifyLogin() {
     if (this.form.valid) {
       const email = this.form.get('email')?.value;
       const password = this.form.get('password')?.value;
-      console.log(this._data.getusers())
       this.BuscarUsuario(this._data.getusers(), email, password);
       
     }
@@ -40,7 +38,7 @@ export class FormLoginComponent {
 
     if (usuarioEncontrado === undefined) {
 
-      this.toastr.error('El usuario no fué encontrado', 'Error');
+      this.toastr.error('El mail o la contraseña son incorrectos', 'Error');
 
     } else {
 

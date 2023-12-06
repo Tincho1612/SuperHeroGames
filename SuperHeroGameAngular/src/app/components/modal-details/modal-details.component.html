@@ -3,7 +3,7 @@
         <app-spinner *ngIf="loading"></app-spinner>
         <div class="modal-content" *ngIf="!loading">
             <div class="modal-header" style="display: flex; align-items: center;">
-                <img src="{{heroeActual.image.url}}" alt="Imagen del superhéroe" class="img-fluid rounded"
+                <img src="{{heroeActual.image.url}}" (error)="manejarImgError(heroeActual)" alt="Imagen del superhéroe" class="img-fluid rounded"
                     style="max-width: 100px;">
                 <h2>{{heroeActual.name}}</h2>
                 <p>{{heroeActual.biography["full-name"]}}</p>
