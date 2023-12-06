@@ -1,1 +1,36 @@
-<p>update-user works!</p>
+<div class="updateUser">
+    <div class="container">
+        <form [formGroup]="formEmail" (ngSubmit)="changeEmail()">
+            <h2>Modifica tu cuenta</h2>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="emailActual" placeholder="emailActual" formControlName="emailActual">
+                <label for="emailActual">Correo Electrónico Actual</label>
+                <span *ngIf="formEmail.get('emailActual')?.hasError('required') && formEmail.get('emailActual')?.touched">
+                    El campo email es <strong>REQUERIDO</strong>
+                </span>
+                <div *ngIf="formEmail.get('emailActual')?.hasError('emailActual') && formEmail.get('emailActual')?.touched">
+                    El formato del correo electrónico no es válido.
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="emailNuevo" placeholder="emailNuevo" formControlName="emailNuevo">
+                <label for="emailNuevo">Correo Electrónico Actual</label>
+                <span *ngIf="formEmail.get('emailNuevo')?.hasError('required') && formEmail.get('emailNuevo')?.touched">
+                    El campo email es <strong>REQUERIDO</strong>
+                </span>
+                <div *ngIf="formEmail.get('emailNuevo')?.hasError('emailNuevo') && formEmail.get('emailNuevo')?.touched">
+                    El formato del correo electrónico no es válido.
+                </div>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" [disabled]="formEmail.invalid" class="btn btn-outline-primary">Cambiar Email</button>
+            </div>
+        </form>
+
+            
+        
+        
+    </div>
+</div>
