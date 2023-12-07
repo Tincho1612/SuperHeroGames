@@ -54,7 +54,7 @@ export class RuletaComponent implements OnInit {
   accionRuletaLista = [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe, false) }];
 
   //Para la tabla izquierda
-  equipos: Equipo[] = [];
+  equipos: number[] = [];
   currentPageForSecondTable: number = 1;
   itemsPerPageForSecondTable: number = 10;
   searchHeroForSecondTable: string = '';

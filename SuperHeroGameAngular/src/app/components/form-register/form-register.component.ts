@@ -57,11 +57,9 @@ export class FormRegisterComponent {
     return !this._data.getusers().some(element => element.email === email);
   }
 
-  retornarHeroesRandom(): Equipo[] {
+  retornarHeroesRandom(): number[] {
     let repetidos: number[] = []
-    const heroes: Equipo[] = []
-    const nuevoEquipo: Equipo = { nombre: 'EquipoRandom', heroes: [] };
-    heroes.push(nuevoEquipo)
+    const heroes: number[] = []
     for (let i = 0; i < 5; i++) {
 
       // Genera un número aleatorio en el rango [0, 1) y luego lo ajusta al rango [1, 500]
@@ -71,9 +69,6 @@ export class FormRegisterComponent {
         repetidos.push(numeroAleatorio)
         numeroAleatorio = Math.floor(Math.random() * 500) + 1;
       }
-      this._dataHeroes.getHeroe(numeroAleatorio).subscribe((data) => {
-        heroes[0].heroes.push(data)
-      });
     }
     return heroes
   }

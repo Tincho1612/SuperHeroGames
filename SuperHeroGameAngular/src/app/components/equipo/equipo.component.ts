@@ -5,6 +5,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { Equipo } from 'src/app/interfaces/Equipo';
 import { Heroe } from 'src/app/interfaces/Heroe';
 import { NgModel } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-equipo',
@@ -13,27 +14,49 @@ import { NgModel } from '@angular/forms';
 })
 export class EquipoComponent implements OnInit {
 
-  equipos: Equipo[]
+  equipos: number[];
+  equipoHeroes: Heroe[] = [];
   idHeroeActual: number = 0;
   modal: boolean = false;
   loading: boolean = false;
 
+  accionesEquipos = [
+    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
+    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id) }]
 
   constructor(private _userData: UsersService,
-    private toast: ToastrService) {
+    private toast: ToastrService,
+    private _serviceHeroe: SuperHeroApiService) {
     this.equipos = []
-    if (this._userData.currentUser.primeraVez==true){
-      this.toast.success('Bienvenido! se cargaron 5 heroes aleatorios por ser tu primera vez','Heroes')
-      this._userData.currentUser.primeraVez=false;
+    if (this._userData.currentUser.primeraVez == true) {
+      this.toast.success('Bienvenido! se cargaron 5 heroes aleatorios por ser tu primera vez', 'Heroes')
+      this._userData.currentUser.primeraVez = false;
       this._userData.updateUserData(this._userData.currentUser);
     }
   }
-  accionesEquipos = [
-    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id)},
-    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id)}]
 
   ngOnInit(): void {
     this.equipos = this._userData.currentUser.equipos || [];
+    this.recibirHeroesEquipo(this.equipos)
+  }
+
+  recibirHeroesEquipo(ids: number[]) {
+    this.equipoHeroes = []; // Vacía el arreglo, así cuando elimino se sale del array y recargo todo
+
+    const observables = ids.map(id => this._serviceHeroe.getHeroe(id)); //Se maneja similar al Promise.All de js, es basicamente para que maneje todas las request en una
+
+    this.loading = true;
+    forkJoin(observables).subscribe({
+      next: (heroes) => {
+        this.equipoHeroes = heroes;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
   }
 
   cargarFavorito(idHeroe: string) {
