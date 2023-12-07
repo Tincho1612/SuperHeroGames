@@ -24,7 +24,8 @@ import { EquipoComponent } from './components/equipo/equipo.component';
 import { ListaHeroesComponent } from './components/lista-heroes/lista-heroes.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CardRuletaComponent } from './components/card-ruleta/card-ruleta.component';
-import { HistorialComponent } from './components/historial/historial.component'
+import { HistorialComponent } from './components/historial/historial.component';
+import { UpdateUserComponent } from './components/update-user/update-user.component'
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { HistorialComponent } from './components/historial/historial.component'
     ListaHeroesComponent,
     CardRuletaComponent,
     HistorialComponent,
+    UpdateUserComponent,
   ],
   imports: [
     BrowserModule,

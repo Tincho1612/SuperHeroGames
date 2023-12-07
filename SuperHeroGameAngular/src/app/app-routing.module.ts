@@ -8,6 +8,7 @@ import { authGuard } from './utils/auth.guard';
 import { RuletaComponent } from './components/ruleta/ruleta.component';
 import { EquipoComponent } from './components/equipo/equipo.component';
 import {HistorialComponent} from './components/historial/historial.component';
+import { UpdateUserComponent } from './components/update-user/update-user.component';
 
 const routes: Routes = [
   { path: 'register', component: FormRegisterComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'ruleta', component: RuletaComponent, canActivate: [authGuard] },
   { path: 'misEquipos', component: EquipoComponent, canActivate: [authGuard] },
   { path: 'historial', component: HistorialComponent, canActivate: [authGuard] },
+  {path:'updateUser', component:UpdateUserComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'login', pathMatch: 'full' },
 
 ];

@@ -1,0 +1,61 @@
+<div class="updateUser">
+    <div class="container">
+        <form [formGroup]="formEmail" (ngSubmit)="changeEmail()" class="mb-4">
+            <h2>Modifica tu Email</h2>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="emailActual" placeholder="emailActual" formControlName="emailActual">
+                <label for="emailActual">Correo Electrónico Actual</label>
+                <span *ngIf="formEmail.get('emailActual')?.hasError('required') && formEmail.get('emailActual')?.touched">
+                    El campo email es <strong>REQUERIDO</strong>
+                </span>
+                <div *ngIf="formEmail.get('emailActual')?.hasError('emailActual') && formEmail.get('emailActual')?.touched">
+                    El formato del correo electrónico no es válido.
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="emailNuevo" placeholder="emailNuevo" formControlName="emailNuevo">
+                <label for="emailNuevo">Correo Electrónico Nuevo</label>
+                <span *ngIf="formEmail.get('emailNuevo')?.hasError('required') && formEmail.get('emailNuevo')?.touched">
+                    El campo email es <strong>REQUERIDO</strong>
+                </span>
+                <div *ngIf="formEmail.get('emailNuevo')?.hasError('emailNuevo') && formEmail.get('emailNuevo')?.touched">
+                    El formato del correo electrónico no es válido.
+                </div>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" [disabled]="formEmail.invalid" class="btn btn-outline-primary">Cambiar Email</button>
+            </div>
+        </form>
+
+        <form [formGroup]="formPassword" (ngSubmit)="changePassword()">
+            <h2>Modifica tu contraseña</h2>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="passwordActual" placeholder="password Actual"
+                    formControlName="passwordActual" required>
+                <label for="passwordActual">Contraseña actual</label>
+                <span *ngIf="formPassword.get('passwordActual')?.hasError('required') && formPassword.get('passwordActual')?.touched">
+                    El campo password es <strong>REQUERIDO</strong>
+                </span>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="passwordNueva" placeholder="password Nueva"
+                formControlName="passwordNueva" required>
+                <label for="passwordNueva">Contraseña nueva</label>
+                <span *ngIf="formPassword.get('passwordNueva')?.hasError('required') && formPassword.get('passwordNueva')?.touched">
+                El campo password es <strong>REQUERIDO</strong>
+                </span>
+
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" [disabled]="formPassword.invalid" class="btn btn-outline-primary">Cambiar contraseña</button>
+            </div>
+            
+        </form>
+
+            
+        
+        
+    </div>
+</div>
