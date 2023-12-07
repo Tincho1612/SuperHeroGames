@@ -28,18 +28,24 @@ export class UpdateUserComponent {
     if (this.formEmail.valid){
       const actual = this.formEmail.get('emailActual')?.value;
       const nuevo = this.formEmail.get('emailNuevo')?.value;
-      this.users_.listusers.forEach(element => {
-        if (element.email==actual){
-          element.email= nuevo
-          this.users_.currentUser.email=nuevo
-          this.users_.updateUserData(this.users_.currentUser)
-          console.log(this.users_.currentUser)
-          this.toastr.success('Se cambio el email correctamente','updateUser')
-        }else{
-          this.toastr.error('Hubo un error al cambiar el email','updateUser')
-        }
-      });
-    }
+      if (this.validarEmail(nuevo)){
+        this.users_.listusers.forEach(element => {
+          if (element.email==actual){
+            element.email= nuevo
+            this.users_.currentUser.email=nuevo
+            this.users_.updateUserData(this.users_.currentUser)
+            console.log(this.users_.currentUser)
+            this.toastr.success('Se cambio el email correctamente','updateUser')
+          }else{
+            this.toastr.error('Hubo un error al cambiar el email','updateUser')
+          }
+        });
+      }
+      else{
+        this.toastr.error('Este email ya esta en uso','updateUser')
+      }
+      }
+      
     
   }
 
@@ -59,5 +65,8 @@ export class UpdateUserComponent {
         }
       });
     }
+  }
+  validarEmail(email: string): boolean {
+    return !this.users_.getusers().some(element => element.email === email);
   }
 }

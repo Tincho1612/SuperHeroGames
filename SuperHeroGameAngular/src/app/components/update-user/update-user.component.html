@@ -16,7 +16,7 @@
 
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="emailNuevo" placeholder="emailNuevo" formControlName="emailNuevo">
-                <label for="emailNuevo">Correo Electrónico Actual</label>
+                <label for="emailNuevo">Correo Electrónico Nuevo</label>
                 <span *ngIf="formEmail.get('emailNuevo')?.hasError('required') && formEmail.get('emailNuevo')?.touched">
                     El campo email es <strong>REQUERIDO</strong>
                 </span>
