@@ -22,13 +22,13 @@ export const signIn = async (req, res) => {
     const userFound = await User.findOne({ email: req.body.email });
 
     if(!userFound) {
-        return res.status(400).json({message:"Usuario no encontrado"});
+        return res.status(400).json({token: null, message:"Usuario no encontrado"});
     }
 
     const matchPassword = await User.comparePassword(req.body.password, userFound.password);
 
     if(!matchPassword) {
-        return res.status(401).json({ token: null, message: "Invalid password" });
+        return res.status(401).json({ token: null, message: "Contraseña incorrecta" });
     }
 
     const token = jwt.sign({ id: userFound._id }, SECRET_KEY, {
