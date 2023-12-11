@@ -4,7 +4,7 @@ const peleaSchema = new Schema({
     idHeroe1: Number,
     idHeroe2: Number,
     idGanador: Number,
-    fechaPelea: Date
+    fechaPelea: String
 },
 {
     versionKey: false
