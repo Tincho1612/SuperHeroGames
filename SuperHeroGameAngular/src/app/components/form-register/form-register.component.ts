@@ -45,7 +45,6 @@ export class FormRegisterComponent {
     if (this.validarEmail(this.form.value.email)) {
       this.toastr.success('Usuario creado con éxito', 'Registro exitoso');
       this._data.postUser(usuario)
-      console.log(this._data.getusers())
       this.router.navigate(['login']);
     } else {
       this.toastr.error('Ese email ya está en uso, probá utilizando otro', 'Error');

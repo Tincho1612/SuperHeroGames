@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+#Variables de entorno
+.env
+
 # Compiled output
 /dist
 /tmp
