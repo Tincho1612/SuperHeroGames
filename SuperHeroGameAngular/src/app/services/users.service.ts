@@ -10,14 +10,23 @@ export class UsersService {
   listusers: User[] = [];
   currentUser!: User;
 
-  token: String = ""
+  token: string = ""
 
-  private url: String = "https://servidor-superherogame.vercel.app/";
+  private url: string = "https://servidor-superherogame.vercel.app";
 
   constructor(private http: HttpClient) {
     const lsToken = localStorage.getItem('token');
     if(lsToken !== null){
       this.token = lsToken;
+    }
+
+    const storeData = localStorage.getItem('usuariosData');
+    if(storeData){
+      this.listusers = JSON.parse(storeData);
+    }
+    const storedUser = localStorage.getItem('usuarioActual');
+    if(storedUser){
+      this.currentUser = JSON.parse(storedUser);
     }
   }
 
@@ -39,15 +48,15 @@ export class UsersService {
   //FUNCIONES PARA OBTENCION/MODIFICACIÓN DEL USUARIO
 
   getUsersTest(): Observable<any>{
-    return this.http.get(`${this.url}/api/user/getUsers`, this.getHeaders());
+    return this.http.get<any>(`${this.url}/api/user/getUsers`, this.getHeaders());
   }
 
   getFavoritosTest(): Observable<any>{
-    return this.http.get(`${this.url}/api/user/favoritos`, this.getHeaders());
+    return this.http.get<any>(`${this.url}/api/user/favoritos`, this.getHeaders());
   }
 
   getEquipoTest(): Observable<any>{
-    return this.http.get(`${this.url}/api/user/equipo`, this.getHeaders());
+    return this.http.get<any>(`${this.url}/api/user/equipo`, this.getHeaders());
   }
 
   agregarFavoritoUser(idHeroe: number): Observable<any> {
@@ -59,29 +68,29 @@ export class UsersService {
   }
 
   updateUser(body: object): Observable<any> {
-    return this.http.put(`${this.url}/api/user/update`, body, this.getHeaders());
+    return this.http.put<any>(`${this.url}/api/user/update`, body, this.getHeaders());
   }
 
   //////////////////////////////////////////////////////////
   //FUNCIONES DE AUTENTICACIÓN
 
   signUp(body: object): Observable<any> {
-    return this.http.post(`${this.url}/api/auth/signup`, body);
+    return this.http.post<any>(`${this.url}/api/auth/signup`, body);
   }
 
   signIn(body: object): Observable<any> {
-    return this.http.post(`${this.url}/api/auth/signin`, body);
+    return this.http.post<any>(`${this.url}/api/auth/signin`, body);
   }
 
   //////////////////////////////////////////////////////////
   //FUNCIONES PARA LAS PELEAS
 
   getPeleasUser(): Observable<any>{
-    return this.http.get(`${this.url}/api/pelea/getPeleas`, this.getHeaders());
+    return this.http.get<any>(`${this.url}/api/pelea/getPeleas`, this.getHeaders());
   }
 
   agregarPelea(body: object): Observable<any> {
-    return this.http.post(`${this.url}/api/pelea/agregar`, body, this.getHeaders());
+    return this.http.post<any>(`${this.url}/api/pelea/agregar`, body, this.getHeaders());
   }
 
   //////////////////////////////////////////////////////////

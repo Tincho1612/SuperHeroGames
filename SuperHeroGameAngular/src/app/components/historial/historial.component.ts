@@ -45,10 +45,10 @@ export class HistorialComponent implements OnInit, OnDestroy {
     const heroesDetailsObservables = this.peleas.map(pelea => {
       const observable1 = this.superHeroApiService.getHeroe(pelea.idHeroe1);
       const observable2 = this.superHeroApiService.getHeroe(pelea.idHeroe2);
-      const observable3 = this.superHeroApiService.getHeroe(pelea.ganador);
+      const observable3 = this.superHeroApiService.getHeroe(pelea.idGanador);
 
       return forkJoin([observable1, observable2, observable3]).pipe(
-        map(([heroe1, heroe2, ganador]: [Heroe, Heroe, Heroe]) => ({ heroe1, heroe2, ganador, fecha: pelea.fecha }))
+        map(([heroe1, heroe2, ganador]: [Heroe, Heroe, Heroe]) => ({ heroe1, heroe2, ganador, fecha: pelea.fechaPelea }))
       );
     });
 

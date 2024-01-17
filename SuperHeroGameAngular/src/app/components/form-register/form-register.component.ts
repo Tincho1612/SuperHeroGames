@@ -16,16 +16,20 @@ export class FormRegisterComponent {
 
   form: FormGroup;
 
+
+
   constructor(private _data: UsersService,
     private readonly fb: FormBuilder,
     private toastr: ToastrService,
     private router: Router,
     private _dataHeroes: SuperHeroApiService) {
 
+    const emailRegex: RegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]],
       apellido: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]],
-      email: ['', [Validators.email, Validators.min(5), Validators.required]],
+      email: ['', [Validators.email, Validators.min(5), Validators.required, Validators.pattern(emailRegex)]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]]
     })
   }
@@ -38,9 +42,19 @@ export class FormRegisterComponent {
       password: this.form.value.password,
       favoritos: [],
       equipos: this.retornarHeroesRandom(),
-      historial:[],
+      historial: [],
       primeraVez: true,
     }
+
+    this._data.signUp(usuario).subscribe({
+      next: (data) => {
+        this.toastr.success(data.message, 'Registro exitoso');
+        console.log(data.token);
+      },
+      error: (e) => {
+        this.toastr.error(e.error.message, 'Error');
+      }
+    })
 
     if (this.validarEmail(this.form.value.email)) {
       this.toastr.success('Usuario creado con éxito', 'Registro exitoso');

@@ -18,15 +18,18 @@
       <tbody>
         <tr *ngFor="let pelea of peleas; let i = index">
             <td>
-                <img class="img-fluid rounded" [src]="detallesHeroes[i]?.heroe1?.image?.url" style="height: 100px; width: 95px;">
+                <img class="img-fluid rounded me-3" [src]="detallesHeroes[i]?.heroe1?.image?.url">
                 <span>{{ detallesHeroes[i]?.heroe1?.name }}</span>
               </td>
               <td>
-                <img class="img-fluid rounded" [src]="detallesHeroes[i]?.heroe2?.image?.url" style="height: 100px; width: 95px;">
+                <img class="img-fluid rounded me-3" [src]="detallesHeroes[i]?.heroe2?.image?.url">
                 <span>{{ detallesHeroes[i]?.heroe2?.name }}</span>
               </td>
-              <td>{{ detallesHeroes[i]?.ganador?.name }}</td>
-              <td>{{ pelea.fecha | date: 'medium' }}</td>
+              <td>
+                <img class="img-fluid rounded me-3" [src]="detallesHeroes[i]?.ganador?.image?.url" alt="Imagen del ganador">
+                <span>{{ detallesHeroes[i]?.ganador?.name }}</span>
+              </td>
+              <td>{{ pelea.fechaPelea }}</td>
         </tr>
       </tbody>
     </table>

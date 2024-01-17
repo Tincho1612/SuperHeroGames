@@ -22,7 +22,7 @@
                 <span *ngIf="form.get('email')?.hasError('required') && form.get('email')?.touched">
                     El campo email es <strong>REQUERIDO</strong>
                 </span>
-                <div *ngIf="form.get('email')?.hasError('email') && form.get('email')?.touched">
+                <div *ngIf="form.get('email')?.hasError('pattern') && form.get('email')?.touched">
                     El formato del correo electrónico no es válido.
                   </div>
             </div>

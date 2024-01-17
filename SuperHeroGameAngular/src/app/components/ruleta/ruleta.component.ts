@@ -216,8 +216,8 @@ export class RuletaComponent implements OnInit {
     let pelea: Pelea = {
       idHeroe1: +id1,
       idHeroe2: +id2,
-      ganador: +id3,
-      fecha: new Date()
+      idGanador: +id3,
+      fechaPelea: new Date().toDateString()
     }
     if (this._userData.currentUser.historial.length >= 10) {
 
@@ -225,6 +225,10 @@ export class RuletaComponent implements OnInit {
     }
     this._userData.currentUser.historial.unshift(pelea);
     this._userData.updateUserData(this._userData.currentUser)
+
+    this._userData.agregarPelea(pelea).subscribe({
+      next: (data) => console.log(data)
+    })
 
   }
 
@@ -300,7 +304,7 @@ export class RuletaComponent implements OnInit {
   }
 
   seleccionarHeroe(heroe: Heroe, fromEquipo: boolean) {
-    if (this.isSpinning){
+    if (this.isSpinning) {
       this.toastr.error('No podes elegir heroes durante el combante!', 'Error');
       return;
     }
@@ -317,7 +321,7 @@ export class RuletaComponent implements OnInit {
         this.Heroe2 = heroe;
         this.estadisticasHeroe2 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe2);
         this.B = this.estadisticasHeroe2.promedio;
-      }else {
+      } else {
         this.toastr.error('Elimina un héroe antes de elegir otro', 'Error');
       }
     }

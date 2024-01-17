@@ -25,17 +25,25 @@ export class FormLoginComponent {
   }
 
   verifyLogin() {
-    if (this.form.valid) {
-      const email = this.form.get('email')?.value;
-      const password = this.form.get('password')?.value;
-      this.BuscarUsuario(this._data.getusers(), email, password);
-      
-    }
+
+    const email = this.form.get('email')?.value;
+    const password = this.form.get('password')?.value;
+
+    this.BuscarUsuario(this._data.getusers(), email, password);
+    
+    this._data.signIn({email, password}).subscribe({
+      next: (data) => {
+        this.toastr.success(data.message, 'Ingresando');
+        localStorage.setItem('token', data.token);
+      },
+      error: (e) => {
+        this.toastr.error(e.error.message, 'Error');
+      }
+    })
   }
 
   BuscarUsuario(usuarios: User[], email: string, password: string) {
     let usuarioEncontrado = usuarios.find(user => user.email === email && user.password === password);
-
     if (usuarioEncontrado === undefined) {
 
       this.toastr.error('El mail o la contraseña son incorrectos', 'Error');
