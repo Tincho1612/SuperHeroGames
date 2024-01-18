@@ -49,7 +49,6 @@ export class FormRegisterComponent {
     this._data.signUp(usuario).subscribe({
       next: (data) => {
         this.toastr.success(data.message, 'Registro exitoso');
-        console.log(data.token);
       },
       error: (e) => {
         this.toastr.error(e.error.message, 'Error');
