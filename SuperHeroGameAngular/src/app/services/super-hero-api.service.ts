@@ -12,7 +12,7 @@ export class SuperHeroApiService {
   apiUrl: string;
   apiKey: string;
   favoritos: Observable<Heroe>[] = [];
-
+  
   constructor(private http: HttpClient) {
     this.apiUrl = "https://superheroapi.com/api.php/";
     this.apiKey = "/3715170588728325/"
@@ -29,6 +29,4 @@ export class SuperHeroApiService {
   getHeroesByWord(word: string): Observable<any>{
     return this.http.get<any>(`${this.apiUrl}${this.apiKey}search/${word}`);
   }
-
-
 }

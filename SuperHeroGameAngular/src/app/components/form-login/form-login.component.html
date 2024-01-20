@@ -24,7 +24,10 @@
             </div>
 
             <div class="d-grid gap-2">
-                <button type="submit" [disabled]="form.invalid" class="btn btn-outline-primary">Iniciar sesion</button>
+                <button type="submit" [disabled]="form.invalid" class="btn btn-outline-primary">
+                    <span *ngIf="!loading">Iniciar sesion</span>
+                    <app-spinner *ngIf="loading" [showMargin]="false"></app-spinner>
+                </button>
             </div>
             <p class="mt-3">
                 No tenés cuenta? <a routerLink="/register">Registrate</a>

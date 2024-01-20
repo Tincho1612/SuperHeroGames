@@ -4,11 +4,8 @@ import { Heroe } from 'src/app/interfaces/Heroe';
 import { EstadisticasHeroeService } from 'src/app/services/estadisticas-heroe.service';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 import { Equipo } from 'src/app/interfaces/Equipo';
-import { Pelea } from 'src/app/interfaces/pelea';
 import { UsersService } from 'src/app/services/users.service';
-import { getLocaleDateFormat } from '@angular/common';
 import { ActiveNavbarService } from 'src/app/services/active-navbar.service';
-import { UrlSerializer } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -82,7 +79,7 @@ export class RuletaComponent implements OnInit {
         forkJoin(observables).subscribe({
           next: (heroesApi) => {
             this.equipos = [{ nombre: 'Ruleta', heroes: heroesApi }]
-            this.getHeroesDefault(); //Obtiene los datos de la API
+            this.getHeroesDefault(); //Obtiene los datos de la API de superheroes
             this.searchHeroBtnForSecondTable();
           },
           error: (error) => {
@@ -90,8 +87,9 @@ export class RuletaComponent implements OnInit {
           }
         });
       },
-      error: (error) => {
-        console.log(error);
+      error: (e) => {
+        console.log(e);
+        this.toastr.error(e.error.message + '. Inicie sesión nuevamente', 'Error');
       }
     });
   }
@@ -226,7 +224,6 @@ export class RuletaComponent implements OnInit {
   elegirGanador(letra: string): string | undefined {
     if (letra == "A" && this.Heroe1 && this.Heroe2) {
       this.agregarHeroeGanado();
-
       return this.Heroe1.name;
     } else if (this.Heroe2 && this.Heroe1) {
       this.eliminarDelEquipo();
@@ -241,7 +238,7 @@ export class RuletaComponent implements OnInit {
       idHeroe2: +id2,
       idGanador: +id3,
       fechaPelea: new Date().toDateString(),
-      isLast: iL
+      isLast: iL //Se setea en true solamente en caso de que quede un solo heroe en el equipo, se utiliza unicamente en el servidor
     }
 
     this._userData.agregarPelea(body).subscribe({
@@ -250,7 +247,6 @@ export class RuletaComponent implements OnInit {
         this.getHeroesDefault();
       }
     })
-
   }
 
   agregarHeroeGanado() {

@@ -82,6 +82,10 @@ export class UsersService {
     return this.http.post<any>(`${this.url}/api/auth/signin`, body);
   }
 
+  validarUsuario(): Observable<any>{
+    return this.http.post<any>(`${this.url}/api/user/validarUsuario`, null, this.getHeaders());
+  }
+
   //////////////////////////////////////////////////////////
   //FUNCIONES PARA LAS PELEAS
 

@@ -15,8 +15,7 @@ import { UsersService } from 'src/app/services/users.service';
 export class FormRegisterComponent {
 
   form: FormGroup;
-
-
+  loading: boolean = false;
 
   constructor(private _data: UsersService,
     private readonly fb: FormBuilder,
@@ -27,21 +26,22 @@ export class FormRegisterComponent {
     const emailRegex: RegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
     this.form = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]],
-      apellido: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]],
+      name: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern(/^[a-zA-Z]+$/)]],
+      apellido: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern(/^[a-zA-Z]+$/)]],
       email: ['', [Validators.email, Validators.min(5), Validators.required, Validators.pattern(emailRegex)]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]]
     })
   }
 
   sendData() {
+    this.loading = true;
     let usuario: User = {
       nombre: this.form.value.name,
       apellido: this.form.value.apellido,
       email: this.form.value.email,
       password: this.form.value.password,
       favoritos: [],
-      equipos: this.retornarHeroesRandom(),
+      equipos: [],
       historial: [],
       primeraVez: true,
     }
@@ -49,58 +49,14 @@ export class FormRegisterComponent {
     this._data.signUp(usuario).subscribe({
       next: (data) => {
         this.toastr.success(data.message, 'Registro exitoso');
+        this.router.navigate(['login']);  
       },
       error: (e) => {
+        console.log(e);
         this.toastr.error(e.error.message, 'Error');
-      }
+      },
+      complete: () => this.loading = false
     })
-
-    if (this.validarEmail(this.form.value.email)) {
-      this.toastr.success('Usuario creado con éxito', 'Registro exitoso');
-      this._data.postUser(usuario)
-      this.router.navigate(['login']);
-    } else {
-      this.toastr.error('Ese email ya está en uso, probá utilizando otro', 'Error');
-    }
-
   }
-
-  validarEmail(email: string): boolean {
-    return !this._data.getusers().some(element => element.email === email);
-  }
-
-  retornarHeroesRandom(): Equipo[] {
-    let repetidos: number[] = []
-    const heroes: Equipo[] = []
-    const nuevoEquipo: Equipo = { nombre: 'EquipoRandom', heroes: [] };
-    heroes.push(nuevoEquipo)
-    for (let i = 0; i < 5; i++) {
-
-      // Genera un número aleatorio en el rango [0, 1) y luego lo ajusta al rango [1, 500]
-      let numeroAleatorio: number = Math.floor(Math.random() * 500) + 1;
-
-      while (this.isRepetido(repetidos, numeroAleatorio)) {
-        repetidos.push(numeroAleatorio)
-        numeroAleatorio = Math.floor(Math.random() * 500) + 1;
-      }
-      this._dataHeroes.getHeroe(numeroAleatorio).subscribe((data) => {
-        heroes[0].heroes.push(data)
-      });
-    }
-    return heroes
-  }
-
-
-  isRepetido(datos: number[], dato: number) {
-    let encontrado = false;
-    datos.forEach((element => {
-      if (element === dato) {
-        encontrado = true;
-        return;
-      }
-    }))
-    return encontrado;
-  }
-
 
 }
