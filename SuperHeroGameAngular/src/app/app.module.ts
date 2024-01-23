@@ -25,7 +25,9 @@ import { ListaHeroesComponent } from './components/lista-heroes/lista-heroes.com
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CardRuletaComponent } from './components/card-ruleta/card-ruleta.component';
 import { HistorialComponent } from './components/historial/historial.component';
-import { UpdateUserComponent } from './components/update-user/update-user.component'
+import { UpdateUserComponent } from './components/update-user/update-user.component';
+import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component'
 
 
 @NgModule({
@@ -44,6 +46,8 @@ import { UpdateUserComponent } from './components/update-user/update-user.compon
     CardRuletaComponent,
     HistorialComponent,
     UpdateUserComponent,
+    RecoverPasswordComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,

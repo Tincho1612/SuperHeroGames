@@ -16,21 +16,21 @@ export class UsersService {
 
   constructor(private http: HttpClient) {
     const lsToken = localStorage.getItem('token');
-    if(lsToken !== null){
+    if (lsToken !== null) {
       this.token = lsToken;
     }
 
     const storeData = localStorage.getItem('usuariosData');
-    if(storeData){
+    if (storeData) {
       this.listusers = JSON.parse(storeData);
     }
     const storedUser = localStorage.getItem('usuarioActual');
-    if(storedUser){
+    if (storedUser) {
       this.currentUser = JSON.parse(storedUser);
     }
   }
 
-  getHeaders(){
+  getHeaders() {
     const tokenAsString = String(this.token); // Convertir a string si es necesario
 
     const headers = new HttpHeaders({
@@ -47,15 +47,15 @@ export class UsersService {
   //////////////////////////////////////////////////////////
   //FUNCIONES PARA OBTENCION/MODIFICACIÓN DEL USUARIO
 
-  getUsersTest(): Observable<any>{
+  getUsersTest(): Observable<any> {
     return this.http.get<any>(`${this.url}/api/user/getUsers`, this.getHeaders());
   }
 
-  getFavoritosTest(): Observable<any>{
+  getFavoritosTest(): Observable<any> {
     return this.http.get<any>(`${this.url}/api/user/favoritos`, this.getHeaders());
   }
 
-  getEquipoTest(): Observable<any>{
+  getEquipoTest(): Observable<any> {
     return this.http.get<any>(`${this.url}/api/user/equipo`, this.getHeaders());
   }
 
@@ -82,14 +82,22 @@ export class UsersService {
     return this.http.post<any>(`${this.url}/api/auth/signin`, body);
   }
 
-  validarUsuario(): Observable<any>{
+  validarUsuario(): Observable<any> {
     return this.http.post<any>(`${this.url}/api/user/validarUsuario`, null, this.getHeaders());
+  }
+
+  recuperarPassword(email: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/api/auth/recoverPassword`, { email });
+  }
+
+  resetPassword(newPassword: string, token: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/api/auth/resetPassword/${token}`, { newPassword });
   }
 
   //////////////////////////////////////////////////////////
   //FUNCIONES PARA LAS PELEAS
 
-  getPeleasUser(): Observable<any>{
+  getPeleasUser(): Observable<any> {
     return this.http.get<any>(`${this.url}/api/pelea/getPeleas`, this.getHeaders());
   }
 
