@@ -52,10 +52,10 @@ export class FormRegisterComponent {
         this.router.navigate(['login']);  
       },
       error: (e) => {
+        this.loading = false
         console.log(e);
         this.toastr.error(e.error.message, 'Error');
-      },
-      complete: () => this.loading = false
+      }
     })
   }
 

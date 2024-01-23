@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -19,7 +19,8 @@ export class ResetPasswordComponent implements OnInit {
     private fb: FormBuilder,
     private toastr: ToastrService,
     private route: ActivatedRoute,
-    private _userService: UsersService
+    private _userService: UsersService,
+    private navigate: Router
   ) {
     this.form = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]],
@@ -35,6 +36,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   sendData() {
+    this.loading = true;
     if (this.form.invalid) {
       this.toastr.error('Por favor, complete correctamente el formulario', 'Error');
       return;
@@ -43,8 +45,10 @@ export class ResetPasswordComponent implements OnInit {
     this._userService.resetPassword(this.form.value.password, this.token).subscribe({
       next: (data) => {
         this.toastr.success(data.message, 'Contraseña cambiada!');
+        this.navigate.navigate(['/login']);
       },
       error: (e) => {
+        this.loading = false;
         console.log(e);
         this.toastr.error(e.error.message, 'Error');
       }

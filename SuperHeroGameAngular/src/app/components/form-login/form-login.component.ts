@@ -35,13 +35,12 @@ export class FormLoginComponent {
       next: (data) => {
         this.toastr.success(data.message, 'Ingresando');
         localStorage.setItem('token', data.token);
-        console.log(data.token);
         this.router.navigate(['/lista']);
       },
       error: (e) => {
+        this.loading = false
         this.toastr.error(e.error.message, 'Error');
-      },
-      complete: ()=> this.loading = false
+      }
     })
   }
 }

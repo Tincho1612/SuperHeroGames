@@ -26,12 +26,13 @@ export class RecoverPasswordComponent {
 
       this._userService.recuperarPassword(this.email).subscribe({
         next: (data) => {
+          this.loading = false;
           this.toastr.success(data.message, 'Correo enviado!');
         },
         error: (e) => {
+          this.loading = false;
           this.toastr.error(e.error.message, 'Error');
-        },
-        complete: ()=> this.loading = false
+        }
       })
     } else {
       this.toastr.error('Asegurese de ingresar un mail válido', 'Formato erroneo');
