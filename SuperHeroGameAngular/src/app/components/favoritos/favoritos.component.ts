@@ -21,18 +21,20 @@ export class FavoritosComponent implements OnInit {
   constructor(private _data: SuperHeroApiService,
     private _dataUsers: UsersService,
     private toastr: ToastrService) {
+      
 
   }
 
   //Acciones para la tabla
   accionesFavoritos = [
     { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
-    { label: 'Eliminar de favoritos', funcion: (heroe: Heroe) => this.eliminarFavorito(heroe.id) }];
+    { label: 'Eliminar de favoritos', funcion: (heroe: Heroe) => this.eliminarFavTest(heroe.id) }];
 
   ngOnInit(): void {
     // Accede a la lista de favoritos del usuario desde el servicio
-    this.favoritos = this._dataUsers.currentUser.favoritos || [];
-    this.recibirHeroesFav(this.favoritos);
+    
+    this.recibirHeroesTest()
+  
   }
 
   recibirHeroesFav(ids: number[]) {
@@ -54,6 +56,19 @@ export class FavoritosComponent implements OnInit {
     });
   }
 
+  recibirHeroesTest():any{
+    this._dataUsers.getFavoritosTest().subscribe((data)=>{
+      const heroesid=data.listaFavoritos
+      console.log(heroesid)
+      heroesid.forEach((element: number) => {
+        this._data.getHeroe(element).subscribe((data)=>{
+          this.SuperheroesFav.push(data)
+          console.log(this.SuperheroesFav)
+        })
+      });
+    })
+  }
+
   abrirModal(id: string) {
     this.modal = !this.modal;
     this.idHeroeActual = Number(id);
@@ -68,5 +83,20 @@ export class FavoritosComponent implements OnInit {
     this.toastr.error('El heroe fué eliminado de la lista de favoritos', 'Heroe eliminado');
     this._dataUsers.updateUserData(this._dataUsers.currentUser);
   }
+
+  eliminarFavTest(id:string){
+    this._dataUsers.eliminarFavoritoUser(Number(id)).subscribe((data)=>{
+      this.SuperheroesFav.forEach((element)=>{
+        if (element.id==id){
+          const indice = this.SuperheroesFav.indexOf(element)
+          if (indice !== -1) {
+            this.SuperheroesFav.splice(indice, 1);
+        }
+        }
+      })
+    })
+  }
+
+  
 
 }

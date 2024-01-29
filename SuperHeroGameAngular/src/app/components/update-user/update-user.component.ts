@@ -49,6 +49,26 @@ export class UpdateUserComponent {
     
   }
 
+  changeEmailTest(){
+    if (this.formEmail.valid){
+      const actual = this.formEmail.get('emailActual')?.value;
+      const nuevo = this.formEmail.get('emailNuevo')?.value;
+      if (actual && nuevo){
+        this.users_.updateUser({email:nuevo}).subscribe({
+          next: (data) => {
+             this.toastr.success("ChangeEmail","Se cambio el Email correctamente")
+          },
+          error: (e) => {
+            this.toastr.error("ChangeEmail","El email ya esta en uso")
+          }
+        })
+      }
+      else{
+        this.toastr.error('No coinciden los email','updateUser')
+      }
+      }
+  }
+
   changePassword(){
     if (this.formPassword.valid){
       const actual = this.formPassword.get('passwordActual')?.value;

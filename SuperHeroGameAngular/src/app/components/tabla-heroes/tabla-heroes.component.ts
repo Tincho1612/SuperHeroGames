@@ -24,7 +24,7 @@ export class TablaHeroesComponent implements OnInit {
   //Acciones de la tabla
   accionesTabla = [
     { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
-    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id) }];
+    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavoritoTest(heroe.id) }];
 
   constructor(private _serviceHeroe: SuperHeroApiService,
     private aRouter: ActivatedRoute,
@@ -103,6 +103,12 @@ export class TablaHeroesComponent implements OnInit {
     } else {
       this.toastr.error('El heroe ya se encuentra en la lista de favoritos', 'Error');
     }
+  }
+
+  cargarFavoritoTest(id:String){
+    this._serviceUser.agregarFavoritoUser(Number(id)).subscribe((data)=>{
+      
+    })
   }
 
 

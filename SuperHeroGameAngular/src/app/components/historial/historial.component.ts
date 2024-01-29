@@ -30,7 +30,7 @@ export class HistorialComponent implements OnInit, OnDestroy {
   constructor(private superHeroApiService: SuperHeroApiService, private usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.cargarHistorial();
+    this.cargarHistorialTest();
   }
 
   ngOnDestroy(): void {
@@ -66,6 +66,38 @@ export class HistorialComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.historialActualizado.emit(this.detallesHeroes);
       });
+  }
+
+  cargarHistorialTest(){
+    this.usersService.getPeleasUser().subscribe((data)=>{
+      console.log(data.historialCompleto)
+      this.peleas = data.historialCompleto
+
+    const heroesDetailsObservables = this.peleas.map(pelea => {
+      const observable1 = this.superHeroApiService.getHeroe(pelea.idHeroe1);
+      const observable2 = this.superHeroApiService.getHeroe(pelea.idHeroe2);
+      const observable3 = this.superHeroApiService.getHeroe(pelea.idGanador);
+
+      return forkJoin([observable1, observable2, observable3]).pipe(
+        map(([heroe1, heroe2, ganador]: [Heroe, Heroe, Heroe]) => ({ heroe1, heroe2, ganador, fecha: pelea.fechaPelea }))
+      );
+    });
+
+    forkJoin(heroesDetailsObservables)
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        catchError(error => {
+          // Manejar errores aquí
+          console.error('Error fetching heroes details:', error);
+          return [];
+        })
+      )
+      .subscribe(detallesHeroes => {
+        this.detallesHeroes = detallesHeroes;
+        this.loading = false;
+        this.historialActualizado.emit(this.detallesHeroes);
+      });
+    })
   }
 
 }
