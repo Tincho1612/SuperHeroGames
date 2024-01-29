@@ -1,6 +1,6 @@
 <div class="updateUser">
     <div class="container">
-        <form [formGroup]="formEmail" (ngSubmit)="changeEmail()" class="mb-4">
+        <form [formGroup]="formEmail" (ngSubmit)="changeEmailTest()" class="mb-4">
             <h2>Modifica tu Email</h2>
 
             <div class="form-floating mb-3">
@@ -25,11 +25,11 @@
                 </div>
             </div>
             <div class="d-grid gap-2">
-                <button type="submit" [disabled]="formEmail.invalid" class="btn btn-outline-primary" (click)="changeEmailTest()">Cambiar Email</button>
+                <button type="submit" [disabled]="formEmail.invalid" class="btn btn-outline-primary" >Cambiar Email</button>
             </div>
         </form>
 
-        <form [formGroup]="formPassword" (ngSubmit)="changePassword()">
+        <form [formGroup]="formPassword" (ngSubmit)="changePasswordTest()">
             <h2>Modifica tu contraseña</h2>
             <div class="form-floating mb-3">
                 <input type="password" class="form-control" id="passwordActual" placeholder="password Actual"
@@ -49,7 +49,7 @@
 
             </div>
             <div class="d-grid gap-2">
-                <button type="submit" [disabled]="formPassword.invalid" class="btn btn-outline-primary">Cambiar contraseña</button>
+                <button type="submit" [disabled]="formPassword.invalid" class="btn btn-outline-primary" (click)="changePasswordTest">Cambiar contraseña</button>
             </div>
             
         </form>

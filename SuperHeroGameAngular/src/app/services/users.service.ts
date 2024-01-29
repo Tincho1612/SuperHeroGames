@@ -46,7 +46,9 @@ export class UsersService {
 
   //////////////////////////////////////////////////////////
   //FUNCIONES PARA OBTENCION/MODIFICACIÓN DEL USUARIO
-
+  getActualUser(): Observable<any> {
+    return this.http.get<any>(`${this.url}/api/user/getActualUser`, this.getHeaders());
+  }
   getUsersTest(): Observable<any> {
     return this.http.get<any>(`${this.url}/api/user/getUsers`, this.getHeaders());
   }

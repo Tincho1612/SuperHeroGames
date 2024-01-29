@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { User } from 'src/app/interfaces/User';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -11,9 +12,15 @@ import { UsersService } from 'src/app/services/users.service';
 export class UpdateUserComponent {
   formEmail: FormGroup;
   formPassword: FormGroup;
+  actualUser!: User;
   textoLogueo: string = "";
   constructor(private fb: FormBuilder,
     private toastr: ToastrService,private users_:UsersService){
+
+      this.users_.getActualUser().subscribe((data)=>{
+        this.actualUser=data.userResponse
+      })
+      
       this.formEmail = this.fb.group({
         emailActual: ['', [Validators.required, Validators.email]],
         emailNuevo: ['', [Validators.required, Validators.email]]
@@ -22,6 +29,8 @@ export class UpdateUserComponent {
         passwordActual:['', [Validators.required,Validators.minLength(8), Validators.maxLength(24)]],
         passwordNueva:['', [Validators.required,Validators.minLength(8), Validators.maxLength(24)]]
       })
+
+      
   }
 
   changeEmail(){
@@ -53,7 +62,8 @@ export class UpdateUserComponent {
     if (this.formEmail.valid){
       const actual = this.formEmail.get('emailActual')?.value;
       const nuevo = this.formEmail.get('emailNuevo')?.value;
-      if (actual && nuevo){
+      console.log(actual +this.actualUser.email )
+      if (actual==this.actualUser.email && nuevo){
         this.users_.updateUser({email:nuevo}).subscribe({
           next: (data) => {
              this.toastr.success("ChangeEmail","Se cambio el Email correctamente")
@@ -62,10 +72,10 @@ export class UpdateUserComponent {
             this.toastr.error("ChangeEmail","El email ya esta en uso")
           }
         })
+      }else{
+        this.toastr.error("ChangeEmail","El email actual no es correcto")
       }
-      else{
-        this.toastr.error('No coinciden los email','updateUser')
-      }
+      
       }
   }
 
@@ -86,6 +96,29 @@ export class UpdateUserComponent {
       });
     }
   }
+
+  changePasswordTest(){
+    
+      if (this.formPassword.valid) {
+        const actual = this.formPassword.get('passwordActual')?.value;
+        const nuevo= this.formPassword.get('passwordNueva')?.value;
+    
+        if (nuevo) {
+          console.log(nuevo)
+          // Asegúrate de proporcionar los datos correctos al servicio
+          this.users_.updateUser({ password: nuevo }).subscribe({
+            next: (data) => {
+              this.toastr.success("Change Password", "Se cambió la contraseña correctamente");
+            },
+            error: (e) => {
+              this.toastr.error("Change Password", "Hubo un error");
+            }
+          });
+        }
+      }
+  
+}
+
   validarEmail(email: string): boolean {
     return !this.users_.getusers().some(element => element.email === email);
   }
