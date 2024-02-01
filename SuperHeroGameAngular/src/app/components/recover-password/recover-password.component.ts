@@ -32,11 +32,7 @@ export class RecoverPasswordComponent {
         error: (e) => {
           this.loading = false;
           console.log(e);
-          if(e.status === 429){
-            this.toastr.error(e.error, 'Error');
-          } else {
-            this.toastr.error(e.error.message, 'Error');
-          }
+          e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
         }
       })
     } else {

@@ -89,7 +89,7 @@ export class RuletaComponent implements OnInit {
       },
       error: (e) => {
         console.log(e);
-        this.toastr.error(e.error.message + '. Inicie sesión nuevamente', 'Error');
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
       }
     });
   }
@@ -245,6 +245,10 @@ export class RuletaComponent implements OnInit {
       next: () => {
         this.searchHeroBtnForSecondTable()
         this.getHeroesDefault();
+      },
+      error: (e) => {
+        console.log(e);
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
       }
     })
   }

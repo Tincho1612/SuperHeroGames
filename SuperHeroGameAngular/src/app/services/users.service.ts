@@ -19,6 +19,7 @@ export class UsersService {
     if (lsToken !== null) {
       this.token = lsToken;
     }
+    console.log(localStorage.getItem('token'));
   }
 
   getHeaders() {

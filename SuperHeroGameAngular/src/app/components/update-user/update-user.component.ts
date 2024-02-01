@@ -43,7 +43,7 @@ export class UpdateUserComponent {
             this.toastr.success(data.message, "Actualización de email");
           },
           error: (e) => {
-            this.toastr.error(e.error.message, "Actualización de email");
+            e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
           }
         })
       } else {
@@ -63,7 +63,7 @@ export class UpdateUserComponent {
           this.toastr.success(data.message, "Actualización de contraseña");
         },
         error: (e) => {
-          this.toastr.error(e.error.message, "Actualización de contraseña");
+          e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
         }
       });
     }

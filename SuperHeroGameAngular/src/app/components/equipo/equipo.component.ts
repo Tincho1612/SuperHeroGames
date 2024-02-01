@@ -39,11 +39,7 @@ export class EquipoComponent implements OnInit {
       },
       error: (e) => {
         console.log(e);
-        if (e.status === 429) {
-          this.toastr.error(e.error, 'Error');
-        } else {
-          this.toastr.error(e.error.message, 'Error');
-        }
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
       }
     })
   }
@@ -55,11 +51,17 @@ export class EquipoComponent implements OnInit {
 
   cargarEquipos() {
     this.loading = true;
-    this._serviceUser.getEquipoTest().subscribe((data) => {
-      data.listaEquipo.forEach((heroeId: Number) => {
-        this.cargarheroe(heroeId);
-      })
-      this.loading = false;
+    this._serviceUser.getEquipoTest().subscribe({
+      next: (data) => {
+        data.listaEquipo.forEach((heroeId: Number) => {
+          this.cargarheroe(heroeId);
+        })
+        this.loading = false;
+      },
+      error: (e) => {
+        this.loading = false;
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
     })
   }
 

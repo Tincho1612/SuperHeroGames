@@ -50,7 +50,7 @@ export class ResetPasswordComponent implements OnInit {
       error: (e) => {
         this.loading = false;
         console.log(e);
-        this.toastr.error(e.error.message, 'Error');
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
       }
     });
   }

@@ -35,16 +35,50 @@ export class FavoritosComponent implements OnInit {
 
   recibirHeroes(): any {
     this.loading = true;
-  
-    this._serviceUser.getFavoritosTest().subscribe((data) => {
-      const heroesid = data.listaFavoritos;
-  
-      const observables = heroesid.map((heroeId: number) => this._serviceHeroe.getHeroe(heroeId));
-  
-      forkJoin<Heroe[]>(observables).subscribe((heroesData: Heroe[]) => {
-        this.SuperheroesFav = heroesData;
+
+    this._serviceUser.getFavoritosTest().subscribe({
+      next: (data) => {
+        {
+          if (data && data.listaFavoritos) {
+            const heroesid = data.listaFavoritos;
+
+            const observables = heroesid.map((heroeId: number) => this._serviceHeroe.getHeroe(heroeId));
+
+            forkJoin<Heroe[]>(observables).subscribe((heroesData: Heroe[]) => {
+              this.SuperheroesFav = heroesData;
+              this.loading = false;
+            });
+          } else {
+            this.loading = false;
+          }
+        }
+      },
+      error: (e) => {
         this.loading = false;
-      });
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
+    });
+  }
+
+  eliminarFav(id: string) {
+    this._serviceUser.eliminarFavoritoUser(Number(id)).subscribe({
+      next: (data) => {
+        {
+          this.SuperheroesFav.forEach((heroe) => {
+            if (heroe.id == id) {
+              const indice = this.SuperheroesFav.indexOf(heroe);
+              if (indice !== -1) {
+                this.SuperheroesFav.splice(indice, 1);
+                this.toastr.error('El heroe fué eliminado de la lista de favoritos', 'Heroe eliminado');
+              }
+            }
+          });
+        }
+      },
+      error: (e) => {
+        console.log(e);
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
     });
   }
 
@@ -52,19 +86,4 @@ export class FavoritosComponent implements OnInit {
     this.modal = !this.modal;
     this.idHeroeActual = Number(id);
   }
-
-  eliminarFav(id: string) {
-    this._serviceUser.eliminarFavoritoUser(Number(id)).subscribe((data) => {
-      this.SuperheroesFav.forEach((heroe) => {
-        if (heroe.id == id) {
-          const indice = this.SuperheroesFav.indexOf(heroe);
-          if (indice !== -1) {
-            this.SuperheroesFav.splice(indice, 1);
-            this.toastr.error('El heroe fué eliminado de la lista de favoritos', 'Heroe eliminado');
-          }
-        }
-      });
-    });
-  }
-
 }
