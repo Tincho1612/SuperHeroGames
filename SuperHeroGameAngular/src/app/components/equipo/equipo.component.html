@@ -1,13 +1,13 @@
+<app-spinner *ngIf="loading"></app-spinner>
 
-<body>
+<div *ngIf="!loading">
+  <h1 class="h1 text-bg-dark text-center mb-md-5 ">
+    Tu Equipo de super heroes!
+  </h1>
+  <app-modal-details [id]="idHeroeActual" *ngIf="modal" (modalClosed)="modal = false"></app-modal-details>
 
-    <h1 class="h1 text-bg-dark text-center mb-md-5 ">
-        Tu Equipo de super heroes!
-      </h1>
-      <app-modal-details [id]="idHeroeActual" *ngIf="modal" (modalClosed)="modal = false"></app-modal-details>
+  <app-spinner *ngIf="loading"></app-spinner>
 
-      <app-spinner *ngIf="loading"></app-spinner>
-      
-      
-    <app-lista-heroes  [heroes]="equipo" [acciones]="accionesEquipos"></app-lista-heroes>
-</body>
+
+  <app-lista-heroes [heroes]="equipo" [acciones]="accionesEquipos"></app-lista-heroes>
+</div>

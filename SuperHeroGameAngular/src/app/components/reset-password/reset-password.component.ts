@@ -19,7 +19,7 @@ export class ResetPasswordComponent implements OnInit {
     private fb: FormBuilder,
     private toastr: ToastrService,
     private route: ActivatedRoute,
-    private _userService: UsersService,
+    private _serviceUser: UsersService,
     private navigate: Router
   ) {
     this.form = this.fb.group({
@@ -42,7 +42,7 @@ export class ResetPasswordComponent implements OnInit {
       return;
     }
 
-    this._userService.resetPassword(this.form.value.password, this.token).subscribe({
+    this._serviceUser.resetPassword(this.form.value.password, this.token).subscribe({
       next: (data) => {
         this.toastr.success(data.message, 'Contraseña cambiada!');
         this.navigate.navigate(['/login']);

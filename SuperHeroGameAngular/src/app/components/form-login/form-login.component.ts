@@ -16,7 +16,7 @@ export class FormLoginComponent {
   textoLogueo: string = "";
   loading: boolean = false;
 
-  constructor(private _data: UsersService,
+  constructor(private _serviceUser: UsersService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private router: Router) {
@@ -31,7 +31,7 @@ export class FormLoginComponent {
     const email = this.form.get('email')?.value;
     const password = this.form.get('password')?.value;
     
-    this._data.signIn({email, password}).subscribe({
+    this._serviceUser.signIn({email, password}).subscribe({
       next: (data) => {
         this.toastr.success(data.message, 'Ingresando');
         localStorage.setItem('token', data.token);

@@ -15,7 +15,6 @@ export class CardRuletaComponent {
   @Output() eliminarHeroeEvent = new EventEmitter<void>();
 
   eliminarHeroe() {
-    // Coloca aquí la lógica para eliminar el héroe si es necesario.
     this.eliminarHeroeEvent.emit();
   }
 

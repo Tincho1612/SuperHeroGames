@@ -24,7 +24,7 @@ export class TablaHeroesComponent implements OnInit {
   //Acciones de la tabla
   accionesTabla = [
     { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
-    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavoritoTest(heroe.id) }];
+    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id) }];
 
   constructor(private _serviceHeroe: SuperHeroApiService,
     private aRouter: ActivatedRoute,
@@ -93,23 +93,20 @@ export class TablaHeroesComponent implements OnInit {
     this.idHeroeActual = Number(id);
   }
 
-  cargarFavorito(idHeroe: string) {
-    const dato = Number(idHeroe);
-    if (!this._serviceUser.currentUser.favoritos?.includes(dato)) {
-      // Si no existe, agrégalo al array
-      this._serviceUser.currentUser.favoritos?.push(Number(idHeroe))
-      this._serviceUser.updateUserData(this._serviceUser.currentUser);
-      this.toastr.success('Heroe agregado a favoritos correctamente', 'Favorito');
-    } else {
-      this.toastr.error('El heroe ya se encuentra en la lista de favoritos', 'Error');
-    }
-  }
-
-  cargarFavoritoTest(id:String){
-    this._serviceUser.agregarFavoritoUser(Number(id)).subscribe((data)=>{
-      
+  cargarFavorito(id: String) {
+    this._serviceUser.agregarFavoritoUser(Number(id)).subscribe({
+      next: (data) => {
+        this.toastr.success(data.message, "Favoritos");
+      },
+      error: (e) => {
+        console.log(e);
+        if (e.status === 429) {
+          this.toastr.error(e.error, 'Error');
+        } else {
+          this.toastr.error(e.error.message, 'Error');
+        }
+      }
     })
   }
-
 
 }

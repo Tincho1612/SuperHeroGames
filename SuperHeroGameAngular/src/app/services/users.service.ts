@@ -19,15 +19,6 @@ export class UsersService {
     if (lsToken !== null) {
       this.token = lsToken;
     }
-
-    const storeData = localStorage.getItem('usuariosData');
-    if (storeData) {
-      this.listusers = JSON.parse(storeData);
-    }
-    const storedUser = localStorage.getItem('usuarioActual');
-    if (storedUser) {
-      this.currentUser = JSON.parse(storedUser);
-    }
   }
 
   getHeaders() {
@@ -73,6 +64,10 @@ export class UsersService {
     return this.http.put<any>(`${this.url}/api/user/update`, body, this.getHeaders());
   }
 
+  updatePassword(body: object): Observable<any> {
+    return this.http.put<any>(`${this.url}/api/user/updatePassword`, body, this.getHeaders());
+  }
+
   //////////////////////////////////////////////////////////
   //FUNCIONES DE AUTENTICACIÓN
 
@@ -105,30 +100,5 @@ export class UsersService {
 
   agregarPelea(body: object): Observable<any> {
     return this.http.post<any>(`${this.url}/api/pelea/agregar`, body, this.getHeaders());
-  }
-
-  //////////////////////////////////////////////////////////
-
-  // Función para actualizar tanto la lista de usuarios como el usuario actual en el servicio y el almacenamiento local
-  updateUserData(updatedUser: User) {
-    // Actualiza el usuario actual
-    this.currentUser = updatedUser;
-    localStorage.setItem('usuarioActual', JSON.stringify(updatedUser));
-
-    // Busca y actualiza el usuario en la lista de usuarios
-    const userIndex = this.listusers.findIndex((user) => user.email === updatedUser.email);
-    if (userIndex !== -1) {
-      this.listusers[userIndex] = updatedUser;
-      localStorage.setItem('usuariosData', JSON.stringify(this.listusers));
-    }
-  }
-
-  postUser(user: User) { //Lo mismo que arriba, se tiene que adaptar solo en el register
-    this.listusers.push(user);
-    localStorage.setItem('usuariosData', JSON.stringify(this.listusers));
-  }
-
-  getusers(): User[] { //Ya no se usa, hay que adaptarlo en el login, register, y uptade-user components con las funciones nuevas
-    return this.listusers;
   }
 }

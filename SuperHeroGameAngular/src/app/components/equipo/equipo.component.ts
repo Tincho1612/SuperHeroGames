@@ -13,30 +13,38 @@ import { NgModel } from '@angular/forms';
 })
 export class EquipoComponent implements OnInit {
 
-  equipo: Heroe[]
+  equipo: Heroe[] = [];
   idHeroeActual: number = 0;
   modal: boolean = false;
   loading: boolean = false;
 
-
-  constructor(private _userData: UsersService,private _data:SuperHeroApiService,
-    private toast: ToastrService) {
-    this.equipo = []
-    
-    
+  constructor(
+    private _serviceUser: UsersService,
+    private _data: SuperHeroApiService,
+    private toastr: ToastrService) {
   }
+
   accionesEquipos = [
-    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id)},
-    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id)}]
+    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
+    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id) }]
 
   ngOnInit(): void {
     this.cargarEquipos()
   }
 
-  cargarFavorito(idHeroe: string) {
-    const dato = Number(idHeroe);
-    this._userData.agregarFavoritoUser(dato).subscribe((data)=>{
-      this.toast.success("favoritos","Se añadio a favoritos correctamente")
+  cargarFavorito(id: String) {
+    this._serviceUser.agregarFavoritoUser(Number(id)).subscribe({
+      next: (data) => {
+        this.toastr.success(data.message, "Favoritos");
+      },
+      error: (e) => {
+        console.log(e);
+        if (e.status === 429) {
+          this.toastr.error(e.error, 'Error');
+        } else {
+          this.toastr.error(e.error.message, 'Error');
+        }
+      }
     })
   }
 
@@ -45,19 +53,20 @@ export class EquipoComponent implements OnInit {
     this.idHeroeActual = Number(id);
   }
 
-  cargarEquipos(){
-    this._userData.getEquipoTest().subscribe((data)=>{
-      data.listaEquipo.forEach((Element: Number)=>{
-        this.cargarheroe(Element)
+  cargarEquipos() {
+    this.loading = true;
+    this._serviceUser.getEquipoTest().subscribe((data) => {
+      data.listaEquipo.forEach((heroeId: Number) => {
+        this.cargarheroe(heroeId);
       })
-      
+      this.loading = false;
     })
   }
 
-  cargarheroe(id:Number){
-    this._data.getHeroe(Number(id)).subscribe((data)=>{
-      this.equipo.push(data)
-      
+  cargarheroe(id: Number) {
+    this._data.getHeroe(Number(id)).subscribe((data) => {
+      this.equipo.push(data);
     })
   }
 }
+

@@ -63,14 +63,14 @@ export class RuletaComponent implements OnInit {
     private _serviceHeroe: SuperHeroApiService,
     private _serviceEstadisticas: EstadisticasHeroeService,
     private toastr: ToastrService,
-    private _userData: UsersService,
+    private _serviceUser: UsersService,
     private _navbar: ActiveNavbarService
   ) { }
 
   ngOnInit() {
     //Obtiene los datos de la api en base a los que están presentes en la base de datos
     //Un arreglo queda en memoria mientras esté en el componente ruleta para asegurar la cantidad correcta en el arreglo sin tener que hacer llamados constantes al servidor
-    this._userData.getEquipoTest().subscribe({
+    this._serviceUser.getEquipoTest().subscribe({
       next: (data) => {
         const idsEquipo: number[] = data.listaEquipo;
 
@@ -241,7 +241,7 @@ export class RuletaComponent implements OnInit {
       isLast: iL //Se setea en true solamente en caso de que quede un solo heroe en el equipo, se utiliza unicamente en el servidor
     }
 
-    this._userData.agregarPelea(body).subscribe({
+    this._serviceUser.agregarPelea(body).subscribe({
       next: () => {
         this.searchHeroBtnForSecondTable()
         this.getHeroesDefault();

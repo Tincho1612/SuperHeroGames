@@ -1,6 +1,6 @@
 <div class="updateUser">
     <div class="container">
-        <form [formGroup]="formEmail" (ngSubmit)="changeEmailTest()" class="mb-4">
+        <form [formGroup]="formEmail" (ngSubmit)="changeEmail()" class="mb-4">
             <h2>Modifica tu Email</h2>
 
             <div class="form-floating mb-3">
@@ -29,7 +29,7 @@
             </div>
         </form>
 
-        <form [formGroup]="formPassword" (ngSubmit)="changePasswordTest()">
+        <form [formGroup]="formPassword" (ngSubmit)="changePassword()">
             <h2>Modifica tu contraseña</h2>
             <div class="form-floating mb-3">
                 <input type="password" class="form-control" id="passwordActual" placeholder="password Actual"
@@ -46,16 +46,10 @@
                 <span *ngIf="formPassword.get('passwordNueva')?.hasError('required') && formPassword.get('passwordNueva')?.touched">
                 El campo password es <strong>REQUERIDO</strong>
                 </span>
-
             </div>
             <div class="d-grid gap-2">
-                <button type="submit" [disabled]="formPassword.invalid" class="btn btn-outline-primary" (click)="changePasswordTest">Cambiar contraseña</button>
+                <button type="submit" [disabled]="formPassword.invalid" class="btn btn-outline-primary" (click)="changePassword()">Cambiar contraseña</button>
             </div>
-            
         </form>
-
-            
-        
-        
     </div>
 </div>

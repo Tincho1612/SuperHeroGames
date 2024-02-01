@@ -13,7 +13,7 @@ export class RecoverPasswordComponent {
 
   constructor(
     private toastr: ToastrService,
-    private _userService: UsersService
+    private _serviceUser: UsersService
   ) {
 
   }
@@ -24,14 +24,19 @@ export class RecoverPasswordComponent {
 
     if (this.email.match(emailRegex)) {
 
-      this._userService.recuperarPassword(this.email).subscribe({
+      this._serviceUser.recuperarPassword(this.email).subscribe({
         next: (data) => {
           this.loading = false;
           this.toastr.success(data.message, 'Correo enviado!');
         },
         error: (e) => {
           this.loading = false;
-          this.toastr.error(e.error.message, 'Error');
+          console.log(e);
+          if(e.status === 429){
+            this.toastr.error(e.error, 'Error');
+          } else {
+            this.toastr.error(e.error.message, 'Error');
+          }
         }
       })
     } else {

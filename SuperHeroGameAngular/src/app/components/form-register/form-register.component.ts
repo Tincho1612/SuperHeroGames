@@ -17,11 +17,10 @@ export class FormRegisterComponent {
   form: FormGroup;
   loading: boolean = false;
 
-  constructor(private _data: UsersService,
+  constructor(private _serviceUser: UsersService,
     private readonly fb: FormBuilder,
     private toastr: ToastrService,
-    private router: Router,
-    private _dataHeroes: SuperHeroApiService) {
+    private router: Router) {
 
     const emailRegex: RegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -46,7 +45,7 @@ export class FormRegisterComponent {
       primeraVez: true,
     }
 
-    this._data.signUp(usuario).subscribe({
+    this._serviceUser.signUp(usuario).subscribe({
       next: (data) => {
         this.toastr.success(data.message, 'Registro exitoso');
         this.router.navigate(['login']);  
