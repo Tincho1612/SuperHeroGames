@@ -41,6 +41,7 @@ export class UpdateUserComponent {
         this._serviceUser.updateUser({ email: newEmail }).subscribe({
           next: (data) => {
             this.toastr.success(data.message, "Actualización de email");
+            this.actualUser.email = newEmail;
           },
           error: (e) => {
             e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
@@ -49,6 +50,8 @@ export class UpdateUserComponent {
       } else {
         this.toastr.error("El mail actual es incorrecto", "Actualización de email");
       }
+
+      this.formEmail.reset();
     }
   }
 
@@ -66,6 +69,8 @@ export class UpdateUserComponent {
           e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
         }
       });
+
+      this.formPassword.reset();
     }
   }
 }

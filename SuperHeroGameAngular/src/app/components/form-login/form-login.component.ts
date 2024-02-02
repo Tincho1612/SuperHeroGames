@@ -35,6 +35,7 @@ export class FormLoginComponent {
       next: (data) => {
         this.toastr.success(data.message, 'Ingresando');
         localStorage.setItem('token', data.token);
+        this._serviceUser.actualizarToken(data.token);
         this.router.navigate(['/lista']);
       },
       error: (e) => {
