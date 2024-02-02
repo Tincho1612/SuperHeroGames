@@ -11,8 +11,10 @@ import { HistorialComponent } from './components/historial/historial.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { InicioComponent } from './components/inicio/inicio.component';
 
 const routes: Routes = [
+  { path: '', component: InicioComponent },
   { path: 'register', component: FormRegisterComponent },
   { path: 'login', component: FormLoginComponent },
   { path: 'recuperarpassword', component: RecoverPasswordComponent },

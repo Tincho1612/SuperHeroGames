@@ -25,7 +25,7 @@ export class NavbarComponent {
       if (event instanceof NavigationEnd) {
         this.shouldShowNavbar = true;
         const currentRoute = this.router.routerState.snapshot.url;
-        const routes = ['/login', '/register', '/recuperarpassword', '/resetpassword'];
+        const routes = ['/login', '/register', '/recuperarpassword', '/resetpassword', '/inicio'];
         for(const route of routes){
           if(currentRoute.startsWith(route)){
             this.shouldShowNavbar = false;

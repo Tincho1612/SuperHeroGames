@@ -1,0 +1,68 @@
+<div class="background">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+<div class="bienvenida-container text-center">
+    <h1 class="text-light">Bienvenido a SHG</h1>
+    <button *ngIf="!mostrarOpciones" (click)="mostrarColumnas()" class="btn btn-primary mt-xl-5">Comenzar</button>
+</div>
+
+<div class="opciones-container" [ngClass]="{'active': mostrarOpciones}">
+    <div class="columna d-flex flex-column align-items-center">
+        <h3 class="mt-xl-5 mb-3 text-light">CREÁ TU CUENTA</h3>
+        <button class="btn btn-primary" (click)="irARegistro()">Registro</button>
+    </div>
+
+    <div class="columna d-flex flex-column align-items-center">
+        <h3 class="mt-xl-5 mb-3 text-light">SI YA TENÉS CUENTA, INICIÁ SESIÓN</h3>
+        <button class="btn btn-primary" (click)="irALogin()">Login</button>
+    </div>
+</div>
