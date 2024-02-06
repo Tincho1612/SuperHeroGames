@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class UsersService {
   listusers: User[] = [];
-  currentUser!: User;
+  isConfirmed: boolean = false;
 
   token: string = ""
 
@@ -21,8 +21,19 @@ export class UsersService {
     }
   }
 
-  actualizarToken(token: string){
+  updateTokenAndGetConfirmed(token: string) {
     this.token = token;
+    this.updateConfirmed();
+  }
+
+  updateConfirmed() {
+    this.getActualUser().subscribe((user) => {
+      this.isConfirmed = user.userResponse.confirmado;
+    })
+  }
+
+  getConfirmed(){
+    return this.isConfirmed;
   }
 
   getHeaders() {
@@ -72,6 +83,10 @@ export class UsersService {
     return this.http.put<any>(`${this.url}/api/user/updatePassword`, body, this.getHeaders());
   }
 
+  validarUsuario(): Observable<any> {
+    return this.http.post<any>(`${this.url}/api/user/validarUsuario`, null, this.getHeaders());
+  }
+
   //////////////////////////////////////////////////////////
   //FUNCIONES DE AUTENTICACIÓN
 
@@ -83,8 +98,12 @@ export class UsersService {
     return this.http.post<any>(`${this.url}/api/auth/signin`, body);
   }
 
-  validarUsuario(): Observable<any> {
-    return this.http.post<any>(`${this.url}/api/user/validarUsuario`, null, this.getHeaders());
+  confirmarEmail(token: string): Observable<any> {
+    return this.http.get<any>(`${this.url}/api/auth/confirmemail/${token}`);
+  }
+
+  requestConfirmationEmail(email: string): Observable<any> {
+    return this.http.post<any>(`${this.url}/api/auth/requestConfirmationEmail`, { email }, this.getHeaders());
   }
 
   recuperarPassword(email: string): Observable<any> {

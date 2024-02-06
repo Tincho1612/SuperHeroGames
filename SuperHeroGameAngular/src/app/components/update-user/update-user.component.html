@@ -1,3 +1,4 @@
+<button class="btn btn-danger" *ngIf="!isConfirmed" (click)="enviarEmail()">Enviar confirmación de mail</button>
 <div class="updateUser">
     <div class="container">
         <form [formGroup]="formEmail" (ngSubmit)="changeEmail()" class="mb-4">

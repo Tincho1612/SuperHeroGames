@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Equipo } from 'src/app/interfaces/Equipo';
 import { User } from 'src/app/interfaces/User';
-import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -19,8 +16,7 @@ export class FormRegisterComponent {
 
   constructor(private _serviceUser: UsersService,
     private readonly fb: FormBuilder,
-    private toastr: ToastrService,
-    private router: Router) {
+    private toastr: ToastrService,) {
 
     const emailRegex: RegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -41,14 +37,13 @@ export class FormRegisterComponent {
       password: this.form.value.password,
       favoritos: [],
       equipos: [],
-      historial: [],
-      primeraVez: true,
+      historial: []
     }
 
     this._serviceUser.signUp(usuario).subscribe({
       next: (data) => {
         this.toastr.success(data.message, 'Registro exitoso');
-        this.router.navigate(['login']);  
+        this.loading = false;
       },
       error: (e) => {
         this.loading = false

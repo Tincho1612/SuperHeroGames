@@ -14,6 +14,7 @@ export class UpdateUserComponent {
   formPassword: FormGroup;
   actualUser!: User;
   textoLogueo: string = "";
+  isConfirmed: boolean;
 
   constructor(private fb: FormBuilder,
     private toastr: ToastrService,
@@ -30,6 +31,9 @@ export class UpdateUserComponent {
       passwordActual: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]],
       passwordNueva: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]]
     })
+
+    this.isConfirmed = this._serviceUser.getConfirmed();
+    console.log(this._serviceUser.getConfirmed());
   }
 
   changeEmail() {
@@ -44,7 +48,7 @@ export class UpdateUserComponent {
             this.actualUser.email = newEmail;
           },
           error: (e) => {
-            e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+            e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de email');
           }
         })
       } else {
@@ -66,11 +70,23 @@ export class UpdateUserComponent {
           this.toastr.success(data.message, "Actualización de contraseña");
         },
         error: (e) => {
-          e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+          e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de contraseña');
         }
       });
 
       this.formPassword.reset();
     }
+  }
+
+  enviarEmail(){
+    this._serviceUser.requestConfirmationEmail(this.actualUser.email).subscribe({
+      next: (data) => {
+        this.toastr.success(data.message + ". Recordá que tenés una hora para aceptarlo.", "Confirmación de mail");
+      },
+      error: (e) => {
+        console.log(e);
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Confirmación de mail');
+      }
+    })
   }
 }

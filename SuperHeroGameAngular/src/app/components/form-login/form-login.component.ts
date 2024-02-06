@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/interfaces/User';
+import { ActiveNavbarService } from 'src/app/services/active-navbar.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -19,7 +20,8 @@ export class FormLoginComponent {
   constructor(private _serviceUser: UsersService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private router: Router) {
+    private router: Router,
+    private _navbar: ActiveNavbarService,) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -35,13 +37,20 @@ export class FormLoginComponent {
       next: (data) => {
         this.toastr.success(data.message, 'Ingresando');
         localStorage.setItem('token', data.token);
-        this._serviceUser.actualizarToken(data.token);
+        this._serviceUser.updateTokenAndGetConfirmed(data.token);
+        this.cambiarMensajeNavbar();
         this.router.navigate(['/lista']);
       },
       error: (e) => {
         this.loading = false
         e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
       }
+    })
+  }
+
+  cambiarMensajeNavbar(){
+    this._serviceUser.getActualUser().subscribe((user) => {
+      this._navbar.cambiarEstadoComponente(user.userResponse.confirmado);
     })
   }
 }

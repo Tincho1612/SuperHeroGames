@@ -46,7 +46,8 @@
             </div>
 
             <div class="d-grid gap-2">
-                <button type="submit" [disabled]="form.invalid" class="btn btn-outline-primary">
+                <button type="submit" [disabled]="form.invalid" class="btn btn-outline-primary" data-bs-toggle="modal"
+                    data-bs-target="#registerModal">
                     <span *ngIf="!loading">Registrarse</span>
                     <app-spinner *ngIf="loading" [showMargin]="false"></app-spinner>
                 </button>
@@ -55,5 +56,30 @@
                 Ya tenés una cuenta? <a routerLink="/login">Ingresá</a>
             </p>
         </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="registerModalLabel">Información sobre el Registro</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Recordá que podes confirmar tu email para que tu cuenta siga existiendo en un futuro! De igual manera
+                    te
+                    vamos a enviar recordatorios periodicamente, podes solicitar un envio de confirmación desde el
+                    apartado
+                    del usuario!</p>
+                <p>Tu cuenta tambien va a tener <strong>5 heroes disponibles</strong> para que los puedas utilizar en la
+                    ruleta!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" routerLink="login" data-bs-dismiss="modal">Redireccionar
+                    al Login</button>
+            </div>
+        </div>
     </div>
 </div>

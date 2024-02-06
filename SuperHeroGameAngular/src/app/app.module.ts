@@ -28,7 +28,8 @@ import { HistorialComponent } from './components/historial/historial.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
-import { InicioComponent } from './components/inicio/inicio.component'
+import { InicioComponent } from './components/inicio/inicio.component';
+import { ConfirmEmailComponent } from './components/confirm-email/confirm-email.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { InicioComponent } from './components/inicio/inicio.component'
     RecoverPasswordComponent,
     ResetPasswordComponent,
     InicioComponent,
+    ConfirmEmailComponent,
   ],
   imports: [
     BrowserModule,
