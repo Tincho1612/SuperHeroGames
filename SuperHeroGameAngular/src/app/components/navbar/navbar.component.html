@@ -13,11 +13,11 @@
       <ul class="dropdown-menu text-center">
         <a class="nav-link mb-2 dropdown-item" routerLink="favoritos">Favoritos<span></span></a>
         <div class="dropdown-divider"></div>
-        <a class="nav-link mb-2 dropdown-item" routerLink="misEquipos">Mis Equipos<span></span></a>
+        <a class="nav-link mb-2 dropdown-item" routerLink="misEquipos">Mi Equipo<span></span></a>
         <div class="dropdown-divider"></div>
         <a class="nav-link mb-2 dropdown-item" routerLink="ruleta">Ruleta<span></span></a>
         <div class="dropdown-divider"></div>
-        <a class="nav-link dropdown-item" routerLink="historial">Historial<span></span></a>    
+        <a class="nav-link dropdown-item" routerLink="historial">Historial<span></span></a>
       </ul>
     </div>
   </div>
@@ -28,7 +28,7 @@
     <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" (click)="search()">Buscar</button>
   </div>
 
-  <div class="col d-flex justify-content-center">
+  <div class="col d-flex justify-content-center align-items-center">
     <div class="dropdown-center">
       <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         Opciones
@@ -41,5 +41,7 @@
           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Logout</button>
       </ul>
     </div>
+    <span class="badge rounded-pill bg-danger" *ngIf="!isConfirmed">Actualización necesaria</span>
   </div>
+
 </nav>

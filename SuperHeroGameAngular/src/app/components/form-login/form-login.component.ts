@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/interfaces/User';
+import { ActiveNavbarService } from 'src/app/services/active-navbar.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -11,13 +12,16 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./form-login.component.css']
 })
 export class FormLoginComponent {
+
   form: FormGroup;
   textoLogueo: string = "";
+  loading: boolean = false;
 
-  constructor(private _data: UsersService,
+  constructor(private _serviceUser: UsersService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private router: Router) {
+    private router: Router,
+    private _navbar: ActiveNavbarService,) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -25,28 +29,28 @@ export class FormLoginComponent {
   }
 
   verifyLogin() {
-    if (this.form.valid) {
-      const email = this.form.get('email')?.value;
-      const password = this.form.get('password')?.value;
-      this.BuscarUsuario(this._data.getusers(), email, password);
-      
-    }
+    this.loading = true;
+    const email = this.form.get('email')?.value;
+    const password = this.form.get('password')?.value;
+    
+    this._serviceUser.signIn({email, password}).subscribe({
+      next: (data) => {
+        this.toastr.success(data.message, 'Ingresando');
+        localStorage.setItem('token', data.token);
+        this._serviceUser.updateTokenAndGetConfirmed(data.token);
+        this.cambiarMensajeNavbar();
+        this.router.navigate(['/lista']);
+      },
+      error: (e) => {
+        this.loading = false
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
+    })
   }
 
-  BuscarUsuario(usuarios: User[], email: string, password: string) {
-    let usuarioEncontrado = usuarios.find(user => user.email === email && user.password === password);
-
-    if (usuarioEncontrado === undefined) {
-
-      this.toastr.error('El mail o la contraseña son incorrectos', 'Error');
-
-    } else {
-
-      this.toastr.success('Inicio de sesión exitoso!', 'Ingresando');
-      this._data.currentUser = usuarioEncontrado;
-      localStorage.setItem('usuarioActual', JSON.stringify(usuarioEncontrado));
-      this.router.navigate(['lista']);
-
-    }
+  cambiarMensajeNavbar(){
+    this._serviceUser.getActualUser().subscribe((user) => {
+      this._navbar.cambiarEstadoComponente(user.userResponse.confirmado);
+    })
   }
 }

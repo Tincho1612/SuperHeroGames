@@ -9,5 +9,4 @@ export interface User{
     favoritos?:number[]
     equipos: Equipo[]
     historial: Pelea[]
-    primeraVez:boolean
 }

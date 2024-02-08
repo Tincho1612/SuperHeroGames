@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 import { UsersService } from 'src/app/services/users.service';
-import { forkJoin, Subject } from 'rxjs';
+import { forkJoin, Observable, Subject } from 'rxjs';
 import { map, catchError, takeUntil } from 'rxjs/operators';
 import { Heroe } from 'src/app/interfaces/Heroe';
 import { Pelea } from 'src/app/interfaces/pelea';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-historial',
@@ -27,7 +28,10 @@ export class HistorialComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe = new Subject<void>();
 
-  constructor(private superHeroApiService: SuperHeroApiService, private usersService: UsersService) { }
+  constructor(
+    private _serviceHeroe: SuperHeroApiService,
+    private _serviceUser: UsersService,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.cargarHistorial();
@@ -38,34 +42,47 @@ export class HistorialComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  cargarHistorial(): void {
+  cargarHistorial() {
     this.loading = true;
-    this.peleas = this.usersService.currentUser.historial;
+    this._serviceUser.getPeleasUser().subscribe({
+      next: (data) => {
+        if (data && data.historialCompleto) {
+          this.peleas = data.historialCompleto;
 
-    const heroesDetailsObservables = this.peleas.map(pelea => {
-      const observable1 = this.superHeroApiService.getHeroe(pelea.idHeroe1);
-      const observable2 = this.superHeroApiService.getHeroe(pelea.idHeroe2);
-      const observable3 = this.superHeroApiService.getHeroe(pelea.ganador);
+          const heroesDetailsObservables = this.peleas.map(pelea => this.obtenerDetallesHeroes(pelea));
 
-      return forkJoin([observable1, observable2, observable3]).pipe(
-        map(([heroe1, heroe2, ganador]: [Heroe, Heroe, Heroe]) => ({ heroe1, heroe2, ganador, fecha: pelea.fecha }))
-      );
-    });
-
-    forkJoin(heroesDetailsObservables)
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        catchError(error => {
-          // Manejar errores aquí
-          console.error('Error fetching heroes details:', error);
-          return [];
-        })
-      )
-      .subscribe(detallesHeroes => {
-        this.detallesHeroes = detallesHeroes;
+          forkJoin(heroesDetailsObservables)
+            .pipe(
+              takeUntil(this.ngUnsubscribe),
+              catchError(error => {
+                console.error(error);
+                return [];
+              })
+            )
+            .subscribe(detallesHeroes => {
+              this.detallesHeroes = detallesHeroes;
+              this.historialActualizado.emit(this.detallesHeroes);
+              this.loading = false;
+            });
+        } else {
+          this.loading = false;
+        }
+      },
+      error: (e) => {
         this.loading = false;
-        this.historialActualizado.emit(this.detallesHeroes);
-      });
+        console.log(e);
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
+    });
   }
 
+  private obtenerDetallesHeroes(pelea: Pelea): Observable<any> {
+    const heroe1 = this._serviceHeroe.getHeroe(pelea.idHeroe1);
+    const heroe2 = this._serviceHeroe.getHeroe(pelea.idHeroe2);
+    const ganador = this._serviceHeroe.getHeroe(pelea.idGanador);
+
+    return forkJoin([heroe1, heroe2, ganador]).pipe(
+      map(([heroe1, heroe2, ganador]: [Heroe, Heroe, Heroe]) => ({ heroe1, heroe2, ganador, fecha: pelea.fechaPelea }))
+    );
+  }
 }

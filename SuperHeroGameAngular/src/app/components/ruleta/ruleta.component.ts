@@ -4,10 +4,9 @@ import { Heroe } from 'src/app/interfaces/Heroe';
 import { EstadisticasHeroeService } from 'src/app/services/estadisticas-heroe.service';
 import { SuperHeroApiService } from 'src/app/services/super-hero-api.service';
 import { Equipo } from 'src/app/interfaces/Equipo';
-import { Pelea } from 'src/app/interfaces/pelea';
 import { UsersService } from 'src/app/services/users.service';
-import { getLocaleDateFormat } from '@angular/common';
 import { ActiveNavbarService } from 'src/app/services/active-navbar.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-ruleta',
@@ -54,7 +53,7 @@ export class RuletaComponent implements OnInit {
   accionRuletaLista = [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe, false) }];
 
   //Para la tabla izquierda
-  equipos: Equipo[] = [];
+  equipos: Equipo[] = [{ nombre: '', heroes: [] }];
   currentPageForSecondTable: number = 1;
   itemsPerPageForSecondTable: number = 10;
   searchHeroForSecondTable: string = '';
@@ -64,15 +63,37 @@ export class RuletaComponent implements OnInit {
     private _serviceHeroe: SuperHeroApiService,
     private _serviceEstadisticas: EstadisticasHeroeService,
     private toastr: ToastrService,
-    private _userData: UsersService,
+    private _serviceUser: UsersService,
     private _navbar: ActiveNavbarService
   ) { }
 
   ngOnInit() {
-    this.equipos = this._userData.currentUser.equipos || [];
-    this.getHeroesDefault(); //Obtiene los datos de la api
-    this.searchHeroBtnForSecondTable()
+    //Obtiene los datos de la api en base a los que están presentes en la base de datos
+    //Un arreglo queda en memoria mientras esté en el componente ruleta para asegurar la cantidad correcta en el arreglo sin tener que hacer llamados constantes al servidor
+    this._serviceUser.getEquipoTest().subscribe({
+      next: (data) => {
+        const idsEquipo: number[] = data.listaEquipo;
+
+        const observables = idsEquipo.map(id => this._serviceHeroe.getHeroe(id));
+
+        forkJoin(observables).subscribe({
+          next: (heroesApi) => {
+            this.equipos = [{ nombre: 'Ruleta', heroes: heroesApi }]
+            this.getHeroesDefault(); //Obtiene los datos de la API de superheroes
+            this.searchHeroBtnForSecondTable();
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        });
+      },
+      error: (e) => {
+        console.log(e);
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
+    });
   }
+
 
   ngAfterViewInit() {
     this.drawRouletteWheel();
@@ -203,7 +224,6 @@ export class RuletaComponent implements OnInit {
   elegirGanador(letra: string): string | undefined {
     if (letra == "A" && this.Heroe1 && this.Heroe2) {
       this.agregarHeroeGanado();
-
       return this.Heroe1.name;
     } else if (this.Heroe2 && this.Heroe1) {
       this.eliminarDelEquipo();
@@ -212,20 +232,25 @@ export class RuletaComponent implements OnInit {
     return undefined;
   }
 
-  crearPelea(id1: string, id2: string, id3: string) {
-    let pelea: Pelea = {
+  crearPelea(id1: string, id2: string, id3: string, iL: boolean = false) {
+    let body = {
       idHeroe1: +id1,
       idHeroe2: +id2,
-      ganador: +id3,
-      fecha: new Date()
+      idGanador: +id3,
+      fechaPelea: new Date().toDateString(),
+      isLast: iL //Se setea en true solamente en caso de que quede un solo heroe en el equipo, se utiliza unicamente en el servidor
     }
-    if (this._userData.currentUser.historial.length >= 10) {
 
-      this._userData.currentUser.historial.splice(9, 1);
-    }
-    this._userData.currentUser.historial.unshift(pelea);
-    this._userData.updateUserData(this._userData.currentUser)
-
+    this._serviceUser.agregarPelea(body).subscribe({
+      next: () => {
+        this.searchHeroBtnForSecondTable()
+        this.getHeroesDefault();
+      },
+      error: (e) => {
+        console.log(e);
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
+    })
   }
 
   agregarHeroeGanado() {
@@ -233,34 +258,28 @@ export class RuletaComponent implements OnInit {
     if (this.Heroe1 && this.Heroe2) {
       this.crearPelea(this.Heroe1?.id, this.Heroe2?.id, this.Heroe1?.id);
     }
-    this._userData.currentUser.equipos[0].heroes.push(this.Heroe2!);
-    this._userData.updateUserData(this._userData.currentUser);
+    this.equipos[0].heroes.push(this.Heroe2!);
 
     this.Heroe2 = undefined;
-    this.searchHeroBtnForSecondTable()
-    this.getHeroesDefault();
   }
 
   eliminarDelEquipo() {
-    if (this._userData.currentUser.equipos[0].heroes.length == 1) {
+    if (this.equipos[0].heroes.length == 1 && this.Heroe1 && this.Heroe2) {
       this.toastr.warning('Tu último heroé perdió, pero lo vas a conservar para seguir jugando!', 'Cuidado!');
+      this.crearPelea(this.Heroe1?.id, this.Heroe2?.id, this.Heroe2?.id, true);
       this.Heroe1 = undefined;
       return;
     }
     const heroeId = this.Heroe1!.id;
     const heroeEncontrado = this.listHeroesForSecondTable.find((heroe) => heroe.id === heroeId);
     if (heroeEncontrado) {
-      this._userData.currentUser.equipos[0].heroes.splice(this._userData.currentUser.equipos[0].heroes.indexOf(heroeEncontrado), 1);
-      this._userData.updateUserData(this._userData.currentUser);
+      this.equipos[0].heroes.splice(this.equipos[0].heroes.indexOf(heroeEncontrado), 1);
       this.toastr.error('El heroe con el qué jugaste fué eliminado de tu lista de equipo!', 'Heroe eliminado');
-
     }
-
     if (this.Heroe1 && this.Heroe2) {
       this.crearPelea(this.Heroe1?.id, this.Heroe2?.id, this.Heroe2?.id);
     }
     this.Heroe1 = undefined;
-    this.searchHeroBtnForSecondTable()
   }
 
   easeOut(t: number, b: number, c: number, d: number): number {
@@ -294,14 +313,15 @@ export class RuletaComponent implements OnInit {
       },
       error: (error) => {
         this.toastr.error('Error al cargar los héroes', 'Error');
+        console.log(error);
         this.loading = false;
       }
     });
   }
 
   seleccionarHeroe(heroe: Heroe, fromEquipo: boolean) {
-    if (this.isSpinning){
-      this.toastr.error('No podes elegir heroes durante el combante!', 'Error');
+    if (this.isSpinning) {
+      this.toastr.error('No podes elegir heroes durante el combate!', 'Error');
       return;
     }
     if (fromEquipo) {
@@ -317,7 +337,7 @@ export class RuletaComponent implements OnInit {
         this.Heroe2 = heroe;
         this.estadisticasHeroe2 = this._serviceEstadisticas.getEstadisticasHeroe(this.Heroe2);
         this.B = this.estadisticasHeroe2.promedio;
-      }else {
+      } else {
         this.toastr.error('Elimina un héroe antes de elegir otro', 'Error');
       }
     }
@@ -371,7 +391,6 @@ export class RuletaComponent implements OnInit {
       });
     }
   }
-
 
   //Paginacion para tabla de equipos
 

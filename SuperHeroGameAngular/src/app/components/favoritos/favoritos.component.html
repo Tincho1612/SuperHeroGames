@@ -8,6 +8,7 @@
   </h1>
   <div *ngIf="SuperheroesFav.length===0">
     <h3 class="text-center mt-5">No tenes Favoritos, añadelos desde la lista!!!</h3>
-</div>
-  <app-lista-heroes *ngIf="!loading && SuperheroesFav.length!==0" [heroes]="SuperheroesFav" [acciones]="accionesFavoritos"></app-lista-heroes>
+  </div>
+  <app-lista-heroes *ngIf="SuperheroesFav.length!==0" [heroes]="SuperheroesFav"
+    [acciones]="accionesFavoritos"></app-lista-heroes>
 </div>

@@ -10,46 +10,74 @@ import { forkJoin } from 'rxjs';
   templateUrl: './favoritos.component.html',
   styleUrls: ['./favoritos.component.css']
 })
+
 export class FavoritosComponent implements OnInit {
 
   modal: boolean = false;
   loading: boolean = false;
   idHeroeActual: number = 0;
-  favoritos: number[] = [];
   SuperheroesFav: Heroe[] = [];
 
-  constructor(private _data: SuperHeroApiService,
-    private _dataUsers: UsersService,
+  constructor(private _serviceHeroe: SuperHeroApiService,
+    private _serviceUser: UsersService,
     private toastr: ToastrService) {
-
   }
 
   //Acciones para la tabla
   accionesFavoritos = [
     { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
-    { label: 'Eliminar de favoritos', funcion: (heroe: Heroe) => this.eliminarFavorito(heroe.id) }];
+    { label: 'Eliminar de favoritos', funcion: (heroe: Heroe) => this.eliminarFav(heroe.id) }];
 
   ngOnInit(): void {
     // Accede a la lista de favoritos del usuario desde el servicio
-    this.favoritos = this._dataUsers.currentUser.favoritos || [];
-    this.recibirHeroesFav(this.favoritos);
+    this.recibirHeroes()
   }
 
-  recibirHeroesFav(ids: number[]) {
-    this.SuperheroesFav = []; // Vacía el arreglo, así cuando elimino se sale del array y recargo todo
-
-    const observables = ids.map(id => this._data.getHeroe(id)); //Se maneja similar al Promise.All de js, es basicamente para que maneje todas las request en una
-
+  recibirHeroes(): any {
     this.loading = true;
-    forkJoin(observables).subscribe({
-      next: (heroes) => {
-        this.SuperheroesFav = heroes;
+
+    this._serviceUser.getFavoritosTest().subscribe({
+      next: (data) => {
+        {
+          if (data && data.listaFavoritos) {
+            const heroesid = data.listaFavoritos;
+
+            const observables = heroesid.map((heroeId: number) => this._serviceHeroe.getHeroe(heroeId));
+
+            forkJoin<Heroe[]>(observables).subscribe((heroesData: Heroe[]) => {
+              this.SuperheroesFav = heroesData;
+              this.loading = false;
+            });
+          } else {
+            this.loading = false;
+          }
+        }
       },
-      error: (error) => {
-        console.log(error);
-      },
-      complete: () => {
+      error: (e) => {
         this.loading = false;
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
+    });
+  }
+
+  eliminarFav(id: string) {
+    this._serviceUser.eliminarFavoritoUser(Number(id)).subscribe({
+      next: (data) => {
+        {
+          this.SuperheroesFav.forEach((heroe) => {
+            if (heroe.id == id) {
+              const indice = this.SuperheroesFav.indexOf(heroe);
+              if (indice !== -1) {
+                this.SuperheroesFav.splice(indice, 1);
+                this.toastr.error('El heroe fué eliminado de la lista de favoritos', 'Heroe eliminado');
+              }
+            }
+          });
+        }
+      },
+      error: (e) => {
+        console.log(e);
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
       }
     });
   }
@@ -58,15 +86,4 @@ export class FavoritosComponent implements OnInit {
     this.modal = !this.modal;
     this.idHeroeActual = Number(id);
   }
-
-  eliminarFavorito(idHeroe: string) {
-    const idNumero = Number(idHeroe);
-
-    this.favoritos.splice(this.favoritos.indexOf(idNumero), 1); ///elimino el dato basandome en la posicion que lo tomo con index
-    this.recibirHeroesFav(this.favoritos);
-
-    this.toastr.error('El heroe fué eliminado de la lista de favoritos', 'Heroe eliminado');
-    this._dataUsers.updateUserData(this._dataUsers.currentUser);
-  }
-
 }

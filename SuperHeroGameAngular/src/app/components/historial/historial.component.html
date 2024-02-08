@@ -1,10 +1,9 @@
-<app-spinner *ngIf="loading && peleas.length !==0"></app-spinner>
+<app-spinner *ngIf="loading && peleas.length !== 0"></app-spinner>
 
-<div *ngIf="peleas.length===0">
-    <h3 class="text-center mt-5">No tenes Peleas Realizadas, Dirigete a la ruleta para comenzar!!</h3>
+<div *ngIf="!loading && peleas.length === 0">
+  <h3 class="text-center mt-5">No tenes Peleas Realizadas, Dirigete a la ruleta para comenzar!!</h3>
 </div>
-<div *ngIf="!loading">
-<div class="container mt-xl-5">
+<div class="container mt-xl-5" *ngIf="!loading && peleas.length !== 0">
   <div class="table-responsive">
     <table class="table table-hover">
       <thead>
@@ -17,19 +16,21 @@
       </thead>
       <tbody>
         <tr *ngFor="let pelea of peleas; let i = index">
-            <td>
-                <img class="img-fluid rounded" [src]="detallesHeroes[i]?.heroe1?.image?.url" style="height: 100px; width: 95px;">
-                <span>{{ detallesHeroes[i]?.heroe1?.name }}</span>
-              </td>
-              <td>
-                <img class="img-fluid rounded" [src]="detallesHeroes[i]?.heroe2?.image?.url" style="height: 100px; width: 95px;">
-                <span>{{ detallesHeroes[i]?.heroe2?.name }}</span>
-              </td>
-              <td>{{ detallesHeroes[i]?.ganador?.name }}</td>
-              <td>{{ pelea.fecha | date: 'medium' }}</td>
+          <td>
+            <img class="img-fluid rounded me-3" [src]="detallesHeroes[i]?.heroe1?.image?.url">
+            <span>{{ detallesHeroes[i]?.heroe1?.name }}</span>
+          </td>
+          <td>
+            <img class="img-fluid rounded me-3" [src]="detallesHeroes[i]?.heroe2?.image?.url">
+            <span>{{ detallesHeroes[i]?.heroe2?.name }}</span>
+          </td>
+          <td>
+            <img class="img-fluid rounded me-3" [src]="detallesHeroes[i]?.ganador?.image?.url" alt="Imagen del ganador">
+            <span>{{ detallesHeroes[i]?.ganador?.name }}</span>
+          </td>
+          <td>{{ pelea.fechaPelea }}</td>
         </tr>
       </tbody>
     </table>
   </div>
-</div>
 </div>

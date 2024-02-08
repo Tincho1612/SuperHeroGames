@@ -93,17 +93,16 @@ export class TablaHeroesComponent implements OnInit {
     this.idHeroeActual = Number(id);
   }
 
-  cargarFavorito(idHeroe: string) {
-    const dato = Number(idHeroe);
-    if (!this._serviceUser.currentUser.favoritos?.includes(dato)) {
-      // Si no existe, agrégalo al array
-      this._serviceUser.currentUser.favoritos?.push(Number(idHeroe))
-      this._serviceUser.updateUserData(this._serviceUser.currentUser);
-      this.toastr.success('Heroe agregado a favoritos correctamente', 'Favorito');
-    } else {
-      this.toastr.error('El heroe ya se encuentra en la lista de favoritos', 'Error');
-    }
+  cargarFavorito(id: String) {
+    this._serviceUser.agregarFavoritoUser(Number(id)).subscribe({
+      next: (data) => {
+        this.toastr.success(data.message, "Favoritos");
+      },
+      error: (e) => {
+        console.log(e);
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
+    })
   }
-
 
 }

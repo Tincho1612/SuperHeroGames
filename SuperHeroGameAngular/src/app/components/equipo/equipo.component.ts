@@ -13,43 +13,62 @@ import { NgModel } from '@angular/forms';
 })
 export class EquipoComponent implements OnInit {
 
-  equipos: Equipo[]
+  equipo: Heroe[] = [];
   idHeroeActual: number = 0;
   modal: boolean = false;
   loading: boolean = false;
 
-
-  constructor(private _userData: UsersService,
-    private toast: ToastrService) {
-    this.equipos = []
-    if (this._userData.currentUser.primeraVez==true){
-      this.toast.success('Bienvenido! se cargaron 5 heroes aleatorios por ser tu primera vez','Heroes')
-      this._userData.currentUser.primeraVez=false;
-      this._userData.updateUserData(this._userData.currentUser);
-    }
+  constructor(
+    private _serviceUser: UsersService,
+    private _data: SuperHeroApiService,
+    private toastr: ToastrService) {
   }
+
   accionesEquipos = [
-    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id)},
-    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id)}]
+    { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) },
+    { label: 'Agregar a favoritos', funcion: (heroe: Heroe) => this.cargarFavorito(heroe.id) }]
 
   ngOnInit(): void {
-    this.equipos = this._userData.currentUser.equipos || [];
+    this.cargarEquipos()
   }
 
-  cargarFavorito(idHeroe: string) {
-    const dato = Number(idHeroe);
-    if (!this._userData.currentUser.favoritos?.includes(dato)) {
-      // Si no existe, agrégalo al array
-      this._userData.currentUser.favoritos?.push(Number(idHeroe))
-      this._userData.updateUserData(this._userData.currentUser);
-      this.toast.success('Heroe agregado a favoritos correctamente', 'Favorito');
-    } else {
-      this.toast.error('El heroe ya se encuentra en la lista de favoritos', 'Error');
-    }
+  cargarFavorito(id: String) {
+    this._serviceUser.agregarFavoritoUser(Number(id)).subscribe({
+      next: (data) => {
+        this.toastr.success(data.message, "Favoritos");
+      },
+      error: (e) => {
+        console.log(e);
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
+    })
   }
 
   abrirModal(id: string) {
     this.modal = !this.modal;
     this.idHeroeActual = Number(id);
   }
+
+  cargarEquipos() {
+    this.loading = true;
+    this._serviceUser.getEquipoTest().subscribe({
+      next: (data) => {
+        data.listaEquipo.forEach((heroeId: Number) => {
+          this.cargarheroe(heroeId);
+        })
+        this.loading = false;
+      },
+      error: (e) => {
+        this.loading = false;
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+      }
+    })
+  }
+
+  cargarheroe(id: Number) {
+    this._data.getHeroe(Number(id)).subscribe((data) => {
+      this.equipo.push(data);
+    })
+  }
 }
+

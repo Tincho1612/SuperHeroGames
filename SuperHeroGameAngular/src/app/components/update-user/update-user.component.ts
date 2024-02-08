@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { User } from 'src/app/interfaces/User';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -11,9 +12,18 @@ import { UsersService } from 'src/app/services/users.service';
 export class UpdateUserComponent {
   formEmail: FormGroup;
   formPassword: FormGroup;
+  actualUser!: User;
   textoLogueo: string = "";
+  isConfirmed: boolean;
+
   constructor(private fb: FormBuilder,
+    private toastr: ToastrService,
+    private _serviceUser: UsersService) {
+    this._serviceUser.getActualUser().subscribe((data) => {
+      this.actualUser = data.userResponse
+    })
     private toastr: ToastrService, private users_: UsersService) {
+
     this.formEmail = this.fb.group({
       emailActual: ['', [Validators.required, Validators.email]],
       emailNuevo: ['', [Validators.required, Validators.email]]
@@ -22,58 +32,61 @@ export class UpdateUserComponent {
       passwordActual: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]],
       passwordNueva: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]]
     })
+
+    this.isConfirmed = this._serviceUser.getConfirmed();
   }
 
   changeEmail() {
     if (this.formEmail.valid) {
-      const actual = this.formEmail.get('emailActual')?.value;
-      const nuevo = this.formEmail.get('emailNuevo')?.value;
-      if (this.validarEmail(nuevo)) {
-        if (this.users_.currentUser.email == actual) {
-          this.users_.listusers.forEach(element => {
-            if (element.email == this.users_.currentUser.email) {
-              element.email = nuevo
-              this.users_.currentUser.email = nuevo
-              this.users_.updateUserData(this.users_.currentUser)
-              console.log(this.users_.currentUser)
-              this.toastr.success('Se cambio el email correctamente', 'updateUser')
-            }
-          });
-        } else {
-          this.toastr.error('El Email actual ingresado no es correcto', 'updateuser')
-        }
+      const actualEmail = this.formEmail.get('emailActual')?.value;
+      const newEmail = this.formEmail.get('emailNuevo')?.value;
+
+      if (actualEmail == this.actualUser.email) {
+        this._serviceUser.updateUser({ email: newEmail }).subscribe({
+          next: (data) => {
+            this.toastr.success(data.message, "Actualización de email");
+            this.actualUser.email = newEmail;
+          },
+          error: (e) => {
+            e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de email');
+          }
+        })
+      } else {
+        this.toastr.error("El mail actual es incorrecto", "Actualización de email");
       }
-      else {
-        this.toastr.error('Este email ya esta en uso', 'updateUser')
-      }
+
+      this.formEmail.reset();
     }
-
-
   }
 
   changePassword() {
-    if (this.formPassword.valid) {
-      const actual = this.formPassword.get('passwordActual')?.value;
-      const nuevo = this.formPassword.get('passwordNueva')?.value;
-      if (this.users_.currentUser.password == actual) {
 
-        this.users_.listusers.forEach(element => {
-          if (element.password == actual) {
-            element.password = nuevo
-            this.users_.currentUser.password = nuevo
-            this.users_.updateUserData(this.users_.currentUser)
-            console.log(this.users_.currentUser)
-            this.toastr.success('Se cambio la contraseña correctamente', 'updateUser')
-          }
-        });
-      }else{
-        this.toastr.error('La contraseña actual es incorrecta','updateUser')
-      }
+    if (this.formPassword.valid) {
+      const actualPassword = this.formPassword.get('passwordActual')?.value;
+      const newPassword = this.formPassword.get('passwordNueva')?.value;
+
+      this._serviceUser.updatePassword({ actualPassword: actualPassword, newPassword: newPassword }).subscribe({
+        next: (data) => {
+          this.toastr.success(data.message, "Actualización de contraseña");
+        },
+        error: (e) => {
+          e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de contraseña');
+        }
+      });
+
+      this.formPassword.reset();
     }
   }
 
-
-  validarEmail(email: string): boolean {
-    return !this.users_.getusers().some(element => element.email === email);
+  enviarEmail(){
+    this._serviceUser.requestConfirmationEmail(this.actualUser.email).subscribe({
+      next: (data) => {
+        this.toastr.success(data.message + ". Recordá que tenés una hora para aceptarlo.", "Confirmación de mail");
+      },
+      error: (e) => {
+        console.log(e);
+        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Confirmación de mail');
+      }
+    })
   }
 }
