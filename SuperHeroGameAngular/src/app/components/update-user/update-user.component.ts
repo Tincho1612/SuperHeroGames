@@ -22,6 +22,7 @@ export class UpdateUserComponent {
     this._serviceUser.getActualUser().subscribe((data) => {
       this.actualUser = data.userResponse
     })
+    private toastr: ToastrService, private users_: UsersService) {
 
     this.formEmail = this.fb.group({
       emailActual: ['', [Validators.required, Validators.email]],
@@ -33,7 +34,6 @@ export class UpdateUserComponent {
     })
 
     this.isConfirmed = this._serviceUser.getConfirmed();
-    console.log(this._serviceUser.getConfirmed());
   }
 
   changeEmail() {
