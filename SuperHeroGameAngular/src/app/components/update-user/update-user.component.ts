@@ -22,7 +22,6 @@ export class UpdateUserComponent {
     this._serviceUser.getActualUser().subscribe((data) => {
       this.actualUser = data.userResponse
     })
-    private toastr: ToastrService, private users_: UsersService) {
 
     this.formEmail = this.fb.group({
       emailActual: ['', [Validators.required, Validators.email]],
@@ -31,7 +30,7 @@ export class UpdateUserComponent {
     this.formPassword = this.fb.group({
       passwordActual: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]],
       passwordNueva: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]]
-    })
+    });
 
     this.isConfirmed = this._serviceUser.getConfirmed();
   }
@@ -78,7 +77,7 @@ export class UpdateUserComponent {
     }
   }
 
-  enviarEmail(){
+  enviarEmail() {
     this._serviceUser.requestConfirmationEmail(this.actualUser.email).subscribe({
       next: (data) => {
         this.toastr.success(data.message + ". Recordá que tenés una hora para aceptarlo.", "Confirmación de mail");
