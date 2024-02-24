@@ -2,8 +2,8 @@
     display: flex;
     justify-content: center; 
     align-items: center;     
-    height: 70vh;    
-    text-align: center;     
+    text-align: center;   
+    margin-top: 3rem;  
 }
 
 .container {

@@ -60,7 +60,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" *ngIf="registerError" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -77,8 +77,10 @@
                     ruleta!</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" routerLink="login" data-bs-dismiss="modal">Redireccionar
-                    al Login</button>
+                <button type="button" class="btn btn-primary" routerLink="/login" data-bs-dismiss="modal">
+                    <span *ngIf="!loading">Redireccionar al login</span>
+                    <app-spinner *ngIf="loading" [showMargin]="false"></app-spinner>
+                </button>
             </div>
         </div>
     </div>

@@ -13,6 +13,7 @@ export class FormRegisterComponent {
 
   form: FormGroup;
   loading: boolean = false;
+  registerError: boolean = false;
 
   constructor(private _serviceUser: UsersService,
     private readonly fb: FormBuilder,
@@ -44,10 +45,10 @@ export class FormRegisterComponent {
       next: (data) => {
         this.toastr.success(data.message, 'Registro exitoso');
         this.loading = false;
+        this.registerError = true;
       },
       error: (e) => {
         this.loading = false
-        console.log(e);
         e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
       }
     })

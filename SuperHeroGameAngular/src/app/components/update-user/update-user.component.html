@@ -1,4 +1,3 @@
-<button class="btn btn-danger" *ngIf="!isConfirmed" (click)="enviarEmail()">Enviar confirmación de mail</button>
 <div class="updateUser">
     <div class="container">
         <form [formGroup]="formEmail" (ngSubmit)="changeEmail()" class="mb-4">
@@ -52,5 +51,7 @@
                 <button type="submit" [disabled]="formPassword.invalid" class="btn btn-outline-primary" (click)="changePassword()">Cambiar contraseña</button>
             </div>
         </form>
+
+        <button class="btn btn-danger mt-5" *ngIf="!isConfirmed" (click)="enviarEmail()">Enviar confirmación de mail</button>
     </div>
 </div>

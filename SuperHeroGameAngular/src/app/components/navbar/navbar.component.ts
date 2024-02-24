@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ActiveNavbarService } from 'src/app/services/active-navbar.service';
-import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-navbar',
@@ -46,6 +45,7 @@ export class NavbarComponent implements OnInit{
       this.slideTransition(true);
     }));
   }
+
   ngOnInit(): void {
     this._navbar.componenteActivo$.subscribe((estado: boolean) => {
       this.isConfirmed = estado;
@@ -62,7 +62,7 @@ export class NavbarComponent implements OnInit{
 
   logout() {
     localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/inicio']);
   }
 
   private slideTransition(isActive: boolean) {
