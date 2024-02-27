@@ -11,6 +11,10 @@
                 <div *ngIf="form.get('name')?.hasError('pattern') && form.get('name')?.touched">
                     El nombre no puede contener numeros ni caracteres especiales.
                 </div>
+                <span *ngIf="form.get('name')?.hasError('minlength') && form.get('name')?.touched ||
+                             form.get('name')?.hasError('maxlength') && form.get('name')?.touched">
+                    El name debe contener entre <strong>4 y 15 caracteres</strong>
+                </span>
             </div>
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="apellido" placeholder="apellido" formControlName="apellido">
@@ -21,6 +25,10 @@
                 <div *ngIf="form.get('apellido')?.hasError('pattern') && form.get('apellido')?.touched">
                     El apellido no puede contener numeros ni caracteres especiales.
                 </div>
+                <span *ngIf="form.get('apellido')?.hasError('minlength') && form.get('apellido')?.touched ||
+                             form.get('apellido')?.hasError('maxlength') && form.get('apellido')?.touched">
+                    El apellido debe contener entre <strong>4 y 15 caracteres</strong>
+                </span>
             </div>
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="email" placeholder="email" formControlName="email">

@@ -49,8 +49,12 @@ export class RuletaComponent implements OnInit {
   searchHero: string = '';
 
   //Acciones de la tabla
-  accionRuletaEquipo = [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe, true) }];
-  accionRuletaLista = [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe, false) }];
+  accionRuletaEquipo = 
+  [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe, true) },
+  { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) }];
+  accionRuletaLista = 
+  [{ label: 'Elegir', funcion: (heroe: Heroe) => this.seleccionarHeroe(heroe, false) },
+  { label: 'Información detallada', funcion: (heroe: Heroe) => this.abrirModal(heroe.id) }];
 
   //Para la tabla izquierda
   equipos: Equipo[] = [{ nombre: '', heroes: [] }];
@@ -58,6 +62,10 @@ export class RuletaComponent implements OnInit {
   itemsPerPageForSecondTable: number = 10;
   searchHeroForSecondTable: string = '';
   listHeroesForSecondTable: Heroe[] = [];
+
+  //Variables para el modal
+  modal = false;
+  idHeroeActual = 0;
 
   constructor(
     private _serviceHeroe: SuperHeroApiService,
@@ -457,6 +465,11 @@ export class RuletaComponent implements OnInit {
     }
 
     this.agregarProbabilidades();
+  }
+
+  abrirModal(id: string) {
+    this.modal = !this.modal;
+    this.idHeroeActual = Number(id);
   }
 
 }
