@@ -64,6 +64,9 @@ export class UpdateUserComponent {
       const actualPassword = this.formPassword.get('passwordActual')?.value;
       const newPassword = this.formPassword.get('passwordNueva')?.value;
 
+      if (actualPassword === newPassword) {
+        this.toastr.error("La nueva contraseña no puede ser igual a la actual", "Actualización de contraseña");
+      }else{
       this._serviceUser.updatePassword({ actualPassword: actualPassword, newPassword: newPassword }).subscribe({
         next: (data) => {
           this.toastr.success(data.message, "Actualización de contraseña");
@@ -72,7 +75,7 @@ export class UpdateUserComponent {
           e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de contraseña');
         }
       });
-
+    }
       this.formPassword.reset();
     }
   }
