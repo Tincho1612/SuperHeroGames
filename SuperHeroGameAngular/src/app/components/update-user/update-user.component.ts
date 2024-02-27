@@ -16,6 +16,8 @@ export class UpdateUserComponent {
   textoLogueo: string = "";
   isConfirmed: boolean;
 
+  loading: boolean = false;
+
   constructor(private fb: FormBuilder,
     private toastr: ToastrService,
     private _serviceUser: UsersService) {
@@ -24,8 +26,8 @@ export class UpdateUserComponent {
     })
 
     this.formEmail = this.fb.group({
-      emailActual: ['', [Validators.required, Validators.email]],
-      emailNuevo: ['', [Validators.required, Validators.email]]
+      emailNuevo: ['', [Validators.required, Validators.email]],
+      confirmarEmailNuevo: ['', [Validators.required, Validators.email]]
     });
     this.formPassword = this.fb.group({
       passwordActual: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(24)]],
@@ -36,22 +38,29 @@ export class UpdateUserComponent {
   }
 
   changeEmail() {
+    this.loading = true;
     if (this.formEmail.valid) {
-      const actualEmail = this.formEmail.get('emailActual')?.value;
       const newEmail = this.formEmail.get('emailNuevo')?.value;
+      const confirmNewEmail = this.formEmail.get('confirmarEmailNuevo')?.value;
 
-      if (actualEmail == this.actualUser.email) {
-        this._serviceUser.updateUser({ email: newEmail }).subscribe({
+      if (newEmail == confirmNewEmail) {
+        this._serviceUser.updateUser({ email: newEmail, confirmado: false }).subscribe({
           next: (data) => {
-            this.toastr.success(data.message, "Actualización de email");
+            this.toastr.success(data.message + 
+              ". Recuerda que al cambiar el mail, es necesario volver a confirmarlo, inicie sesión nuevamente para que aparezca la opción correspondiente"
+              , "Actualización de contraseña", {
+                timeOut: 8500
+              });
             this.actualUser.email = newEmail;
+            this.loading = false;
           },
           error: (e) => {
+            this.loading = false;
             e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de email');
           }
         })
       } else {
-        this.toastr.error("El mail actual es incorrecto", "Actualización de email");
+        this.toastr.error("El nuevo mail debe coincidir en ambos campos", "Actualización de email");
       }
 
       this.formEmail.reset();
@@ -59,7 +68,7 @@ export class UpdateUserComponent {
   }
 
   changePassword() {
-
+    this.loading = true;
     if (this.formPassword.valid) {
       const actualPassword = this.formPassword.get('passwordActual')?.value;
       const newPassword = this.formPassword.get('passwordNueva')?.value;
@@ -70,8 +79,10 @@ export class UpdateUserComponent {
       this._serviceUser.updatePassword({ actualPassword: actualPassword, newPassword: newPassword }).subscribe({
         next: (data) => {
           this.toastr.success(data.message, "Actualización de contraseña");
+          this.loading = false;
         },
         error: (e) => {
+          this.loading = false;
           e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de contraseña');
         }
       });

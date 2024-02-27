@@ -4,17 +4,6 @@
             <h2>Modifica tu Email</h2>
 
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="emailActual" placeholder="emailActual" formControlName="emailActual">
-                <label for="emailActual">Correo Electrónico Actual</label>
-                <span *ngIf="formEmail.get('emailActual')?.hasError('required') && formEmail.get('emailActual')?.touched">
-                    El campo email es <strong>REQUERIDO</strong>
-                </span>
-                <div *ngIf="formEmail.get('emailActual')?.hasError('emailActual') && formEmail.get('emailActual')?.touched">
-                    El formato del correo electrónico no es válido.
-                </div>
-            </div>
-
-            <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="emailNuevo" placeholder="emailNuevo" formControlName="emailNuevo">
                 <label for="emailNuevo">Correo Electrónico Nuevo</label>
                 <span *ngIf="formEmail.get('emailNuevo')?.hasError('required') && formEmail.get('emailNuevo')?.touched">
@@ -24,8 +13,23 @@
                     El formato del correo electrónico no es válido.
                 </div>
             </div>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="confirmarEmailNuevo" placeholder="confirmarEmailNuevo" formControlName="confirmarEmailNuevo">
+                <label for="confirmarEmailNuevo">Confirmar Correo Electrónico Nuevo</label>
+                <span *ngIf="formEmail.get('confirmarEmailNuevo')?.hasError('required') && formEmail.get('confirmarEmailNuevo')?.touched">
+                    El campo email es <strong>REQUERIDO</strong>
+                </span>
+                <div *ngIf="formEmail.get('confirmarEmailNuevo')?.hasError('confirmarEmailNuevo') && formEmail.get('confirmarEmailNuevo')?.touched">
+                    El formato del correo electrónico no es válido.
+                </div>
+            </div>
             <div class="d-grid gap-2">
-                <button type="submit" [disabled]="formEmail.invalid" class="btn btn-outline-primary" >Cambiar Email</button>
+                <button type="submit" [disabled]="formEmail.invalid" class="btn btn-outline-primary" data-bs-toggle="modal"
+                    data-bs-target="#registerModal">
+                    <span *ngIf="!loading">Cambiar mail</span>
+                    <app-spinner *ngIf="loading" [showMargin]="false"></app-spinner>
+                </button>
             </div>
         </form>
 
