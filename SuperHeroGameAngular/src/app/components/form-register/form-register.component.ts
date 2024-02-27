@@ -13,7 +13,7 @@ export class FormRegisterComponent {
 
   form: FormGroup;
   loading: boolean = false;
-  registerError: boolean = false;
+  modalMessage: string = ``;
 
   constructor(private _serviceUser: UsersService,
     private readonly fb: FormBuilder,
@@ -31,6 +31,7 @@ export class FormRegisterComponent {
 
   sendData() {
     this.loading = true;
+    this.modalMessage = "";
     let usuario: User = {
       nombre: this.form.value.name,
       apellido: this.form.value.apellido,
@@ -45,10 +46,17 @@ export class FormRegisterComponent {
       next: (data) => {
         this.toastr.success(data.message, 'Registro exitoso');
         this.loading = false;
-        this.registerError = true;
+        this.modalMessage = `Recordá que podes confirmar tu email para que tu cuenta siga existiendo en un futuro! De igual manera
+        te
+        vamos a enviar recordatorios periodicamente, podes solicitar un envio de confirmación desde el
+        apartado
+        del usuario!
+          <p>Tu cuenta tambien va a tener <strong>5 heroes disponibles</strong> para que los puedas utilizar en la
+        ruleta!</p>`
       },
       error: (e) => {
         this.loading = false
+        this.modalMessage = `<p>Ha ocurrido un error en el registro. ${e.error.message}</p>`
         e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
       }
     })
