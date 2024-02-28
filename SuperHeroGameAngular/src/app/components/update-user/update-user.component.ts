@@ -38,19 +38,19 @@ export class UpdateUserComponent {
   }
 
   changeEmail() {
-    this.loading = true;
     if (this.formEmail.valid) {
       const newEmail = this.formEmail.get('emailNuevo')?.value;
       const confirmNewEmail = this.formEmail.get('confirmarEmailNuevo')?.value;
 
       if (newEmail == confirmNewEmail) {
+        this.loading = true;
         this._serviceUser.updateUser({ email: newEmail, confirmado: false }).subscribe({
           next: (data) => {
-            this.toastr.success(data.message + 
+            this.toastr.success(data.message +
               ". Recuerda que al cambiar el mail, es necesario volver a confirmarlo, inicie sesión nuevamente para que aparezca la opción correspondiente"
               , "Actualización de contraseña", {
-                timeOut: 8500
-              });
+              timeOut: 8500
+            });
             this.actualUser.email = newEmail;
             this.loading = false;
           },
@@ -68,25 +68,25 @@ export class UpdateUserComponent {
   }
 
   changePassword() {
-    this.loading = true;
     if (this.formPassword.valid) {
       const actualPassword = this.formPassword.get('passwordActual')?.value;
       const newPassword = this.formPassword.get('passwordNueva')?.value;
 
       if (actualPassword === newPassword) {
         this.toastr.error("La nueva contraseña no puede ser igual a la actual", "Actualización de contraseña");
-      }else{
-      this._serviceUser.updatePassword({ actualPassword: actualPassword, newPassword: newPassword }).subscribe({
-        next: (data) => {
-          this.toastr.success(data.message, "Actualización de contraseña");
-          this.loading = false;
-        },
-        error: (e) => {
-          this.loading = false;
-          e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de contraseña');
-        }
-      });
-    }
+      } else {  
+        this.loading = true;
+        this._serviceUser.updatePassword({ actualPassword: actualPassword, newPassword: newPassword }).subscribe({
+          next: (data) => {
+            this.toastr.success(data.message, "Actualización de contraseña");
+            this.loading = false;
+          },
+          error: (e) => {
+            this.loading = false;
+            e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de contraseña');
+          }
+        });
+      }
       this.formPassword.reset();
     }
   }

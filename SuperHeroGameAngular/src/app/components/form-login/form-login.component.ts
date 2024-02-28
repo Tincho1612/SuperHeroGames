@@ -16,6 +16,7 @@ export class FormLoginComponent {
   form: FormGroup;
   textoLogueo: string = "";
   loading: boolean = false;
+  hidePassword: boolean = true;
 
   constructor(private _serviceUser: UsersService,
     private fb: FormBuilder,
@@ -52,5 +53,9 @@ export class FormLoginComponent {
     this._serviceUser.getActualUser().subscribe((user) => {
       this._navbar.cambiarEstadoComponente(user.userResponse.confirmado);
     })
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
   }
 }

@@ -14,13 +14,23 @@
                 </div>
             </div>
 
-            <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="password" placeholder="password"
-                    formControlName="password" required>
-                <label for="password">Contraseña</label>
-                <span *ngIf="form.get('password')?.hasError('required') && form.get('password')?.touched">
-                    El campo password es <strong>REQUERIDO</strong>
-                </span>
+            <div class="form-floating mb-3 password-input">
+                <div class="input-container">
+                    <input type="{{ hidePassword ? 'password' : 'text' }}" class="form-control" id="password" formControlName="password" placeholder="Contraseña" required> 
+                    <span class="password-toggle" (click)="togglePasswordVisibility()">
+                        <i *ngIf="hidePassword" class="fa-regular fa-eye"></i>
+                        <i *ngIf="!hidePassword" class="fa-solid fa-eye"></i>
+                    </span> 
+                </div>
+                <div class="error-container">
+                    <span *ngIf="form.get('password')?.hasError('required') && form.get('password')?.touched">
+                        El campo password es <strong>REQUERIDO</strong>
+                    </span>
+                    <span *ngIf="form.get('password')?.hasError('minlength') && form.get('password')?.touched ||
+                                 form.get('password')?.hasError('maxlength') && form.get('password')?.touched">
+                        La contraseña debe contener entre <strong>8 y 24 caracteres</strong>
+                    </span>
+                </div>
             </div>
 
             <div class="d-grid gap-2">

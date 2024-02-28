@@ -25,8 +25,7 @@
                 </div>
             </div>
             <div class="d-grid gap-2">
-                <button type="submit" [disabled]="formEmail.invalid" class="btn btn-outline-primary" data-bs-toggle="modal"
-                    data-bs-target="#registerModal">
+                <button type="submit" [disabled]="formEmail.invalid" class="btn btn-outline-primary">
                     <span *ngIf="!loading">Cambiar mail</span>
                     <app-spinner *ngIf="loading" [showMargin]="false"></app-spinner>
                 </button>
@@ -52,7 +51,10 @@
                 </span>
             </div>
             <div class="d-grid gap-2">
-                <button type="submit" [disabled]="formPassword.invalid" class="btn btn-outline-primary" (click)="changePassword()">Cambiar contraseña</button>
+                <button type="submit" [disabled]="formPassword.invalid" class="btn btn-outline-primary">
+                    <span *ngIf="!loading">Cambiar password</span>
+                    <app-spinner *ngIf="loading" [showMargin]="false"></app-spinner>
+                </button>
             </div>
         </form>
 

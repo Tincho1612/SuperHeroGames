@@ -14,6 +14,7 @@ export class FormRegisterComponent {
   form: FormGroup;
   loading: boolean = false;
   modalMessage: string = ``;
+  hidePassword: boolean = true;
 
   constructor(private _serviceUser: UsersService,
     private readonly fb: FormBuilder,
@@ -60,6 +61,11 @@ export class FormRegisterComponent {
         e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
       }
     })
+  }
+
+  // Método para alternar la visibilidad de la contraseña
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
   }
 
 }
