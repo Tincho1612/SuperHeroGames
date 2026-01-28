@@ -15,7 +15,7 @@ export class SuperHeroApiService {
   
   constructor(private http: HttpClient) {
     this.apiUrl = "https://superheroapi.com/api.php/";
-    this.apiKey = "/3715170588728325/"
+    this.apiKey = "/75b621e6e0413eee85b4f7383e2492c0/"
   }
 
   getListHeroes(): Observable<any> {

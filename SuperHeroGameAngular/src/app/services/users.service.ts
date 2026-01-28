@@ -12,8 +12,8 @@ export class UsersService {
 
   token: string = ""
 
-  private url: string = "https://servidor-superherogame.vercel.app";
-
+ // private url: string = "https://servidor-superherogame.vercel.app";
+  private url: string = "http://localhost:8080";
   constructor(private http: HttpClient) {
     const lsToken = localStorage.getItem('token');
     if (lsToken !== null) {
