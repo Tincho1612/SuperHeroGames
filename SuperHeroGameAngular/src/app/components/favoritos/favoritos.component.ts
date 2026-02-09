@@ -36,7 +36,7 @@ export class FavoritosComponent implements OnInit {
   recibirHeroes(): any {
     this.loading = true;
 
-    this._serviceUser.getFavoritosTest().subscribe({
+    this._serviceUser.getActualUser().subscribe({
       next: (data) => {
         {
           if (data && data.listaFavoritos) {

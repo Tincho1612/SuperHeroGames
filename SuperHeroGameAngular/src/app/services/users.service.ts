@@ -54,20 +54,16 @@ export class UsersService {
     return this.http.get<any>(`${this.url}/api/user/getUsers`, this.getHeaders());
   }
 
-  getFavoritosTest(): Observable<any> {
-    return this.http.get<any>(`${this.url}/api/user/favoritos`, this.getHeaders());
-  }
-
   getEquipoTest(): Observable<any> {
     return this.http.get<any>(`${this.url}/api/user/equipo`, this.getHeaders());
   }
 
   agregarFavoritoUser(idHeroe: number): Observable<any> {
-    return this.http.put(`${this.url}/api/user/agregarFavorito/${idHeroe}`, {}, this.getHeaders());
+    return this.http.patch(`${this.url}/api/user/agregarFavorito/${idHeroe}`, {}, this.getHeaders());
   }
 
   eliminarFavoritoUser(idHeroe: number): Observable<any> {
-    return this.http.delete(`${this.url}/api/user/eliminarFavorito/${idHeroe}`, this.getHeaders());
+    return this.http.patch(`${this.url}/api/user/eliminarFavorito/${idHeroe}`,{}, this.getHeaders());
   }
 
   updateUser(body: object): Observable<any> {
