@@ -36,19 +36,14 @@ export class UsersService {
     return this.isConfirmed;
   }
 
-  getHeaders() {
-    const tokenAsString = String(this.token); // Convertir a string si es necesario
+ getHeaders() {
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${this.token}` // Spring Security espera este formato
+  });
 
-    const headers = new HttpHeaders({
-      'access-token': tokenAsString // Asegurarse de que el token sea de tipo string
-    });
+  return { headers };
+}
 
-    const requestOptions = {
-      headers: headers
-    };
-
-    return requestOptions;
-  }
 
   //////////////////////////////////////////////////////////
   //FUNCIONES PARA OBTENCION/MODIFICACIÓN DEL USUARIO
