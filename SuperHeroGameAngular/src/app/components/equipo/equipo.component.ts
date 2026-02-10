@@ -51,7 +51,7 @@ export class EquipoComponent implements OnInit {
 
   cargarEquipos() {
     this.loading = true;
-    this._serviceUser.getEquipoTest().subscribe({
+    this._serviceUser.getActualUser().subscribe({
       next: (data) => {
         data.listaEquipo.forEach((heroeId: Number) => {
           this.cargarheroe(heroeId);

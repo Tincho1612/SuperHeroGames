@@ -54,10 +54,6 @@ export class UsersService {
     return this.http.get<any>(`${this.url}/api/user/getUsers`, this.getHeaders());
   }
 
-  getEquipoTest(): Observable<any> {
-    return this.http.get<any>(`${this.url}/api/user/equipo`, this.getHeaders());
-  }
-
   agregarFavoritoUser(idHeroe: number): Observable<any> {
     return this.http.patch(`${this.url}/api/user/agregarFavorito/${idHeroe}`, {}, this.getHeaders());
   }

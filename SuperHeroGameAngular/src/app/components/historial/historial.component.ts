@@ -42,39 +42,53 @@ export class HistorialComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  cargarHistorial() {
-    this.loading = true;
-    this._serviceUser.getPeleasUser().subscribe({
-      next: (data) => {
-        if (data && data.historialCompleto) {
-          this.peleas = data.historialCompleto;
+ cargarHistorial() {
+  this.loading = true;
+  this._serviceUser.getPeleasUser().subscribe({
+    next: (data: {
+      idHeroe1: number;
+      idHeroe2: number;
+      idGanador: number;
+      fechaPelea: string;
+    }[]) => {
+      if (data) {
+        this.peleas = data;
 
-          const heroesDetailsObservables = this.peleas.map(pelea => this.obtenerDetallesHeroes(pelea));
+        this.peleas.forEach(p =>
+          p.fechaPelea = new Date(p.fechaPelea).toLocaleString('es-AR')
+        );
 
-          forkJoin(heroesDetailsObservables)
-            .pipe(
-              takeUntil(this.ngUnsubscribe),
-              catchError(error => {
-                console.error(error);
-                return [];
-              })
-            )
-            .subscribe(detallesHeroes => {
-              this.detallesHeroes = detallesHeroes;
-              this.historialActualizado.emit(this.detallesHeroes);
-              this.loading = false;
-            });
-        } else {
-          this.loading = false;
-        }
-      },
-      error: (e) => {
+        const heroesDetailsObservables = this.peleas.map(pelea =>
+          this.obtenerDetallesHeroes(pelea)
+        );
+
+        forkJoin(heroesDetailsObservables)
+          .pipe(
+            takeUntil(this.ngUnsubscribe),
+            catchError(error => {
+              console.error(error);
+              return [];
+            })
+          )
+          .subscribe(detallesHeroes => {
+            this.detallesHeroes = detallesHeroes;
+            this.historialActualizado.emit(this.detallesHeroes);
+            this.loading = false;
+          });
+      } else {
         this.loading = false;
-        console.log(e);
-        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
       }
-    });
-  }
+    },
+    error: (e) => {
+      this.loading = false;
+      console.log(e);
+      e.status === 429
+        ? this.toastr.error(e.error, 'Error')
+        : this.toastr.error(e.error.message, 'Error');
+    }
+  });
+}
+
 
   private obtenerDetallesHeroes(pelea: Pelea): Observable<any> {
     const heroe1 = this._serviceHeroe.getHeroe(pelea.idHeroe1);
