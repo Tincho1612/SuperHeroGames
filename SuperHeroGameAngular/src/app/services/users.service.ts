@@ -63,11 +63,11 @@ export class UsersService {
   }
 
   updateUser(body: object): Observable<any> {
-    return this.http.put<any>(`${this.url}/api/user/update`, body, this.getHeaders());
+    return this.http.patch<any>(`${this.url}/api/user/updateEmail`, body, this.getHeaders());
   }
 
   updatePassword(body: object): Observable<any> {
-    return this.http.put<any>(`${this.url}/api/user/updatePassword`, body, this.getHeaders());
+    return this.http.patch<any>(`${this.url}/api/user/updatePassword`, body, this.getHeaders());
   }
 
   validarUsuario(): Observable<any> {

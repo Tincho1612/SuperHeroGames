@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { User } from 'src/app/interfaces/User';
+import { UserResponse } from 'src/app/interfaces/UserResponse';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { UsersService } from 'src/app/services/users.service';
 export class UpdateUserComponent {
   formEmail: FormGroup;
   formPassword: FormGroup;
-  actualUser!: User;
+  actualUser!: UserResponse;
   textoLogueo: string = "";
   isConfirmed: boolean;
 
@@ -22,7 +22,7 @@ export class UpdateUserComponent {
     private toastr: ToastrService,
     private _serviceUser: UsersService) {
     this._serviceUser.getActualUser().subscribe((data) => {
-      this.actualUser = data.userResponse
+      this.actualUser = data;
     })
 
     this.formEmail = this.fb.group({
@@ -44,11 +44,11 @@ export class UpdateUserComponent {
 
       if (newEmail == confirmNewEmail) {
         this.loading = true;
-        this._serviceUser.updateUser({ email: newEmail, confirmado: false }).subscribe({
+        this._serviceUser.updateUser({ email: newEmail}).subscribe({
           next: (data) => {
             this.toastr.success(data.message +
               ". Recuerda que al cambiar el mail, es necesario volver a confirmarlo, inicie sesión nuevamente para que aparezca la opción correspondiente"
-              , "Actualización de contraseña", {
+              , "Actualización de email", {
               timeOut: 8500
             });
             this.actualUser.email = newEmail;
@@ -56,7 +56,11 @@ export class UpdateUserComponent {
           },
           error: (e) => {
             this.loading = false;
-            e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de email');
+            if (e.status === 400 || e.status === 409) {
+                this.toastr.error(e.error, 'Actualización de email');
+              } else {
+                this.toastr.error('Ocurrió un error inesperado', 'Actualización de email');
+              }
           }
         })
       } else {
