@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { UserResponse } from 'src/app/interfaces/UserResponse';
 import { UsersService } from 'src/app/services/users.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-update-user',
@@ -85,10 +86,13 @@ export class UpdateUserComponent {
             this.toastr.success(data.message, "Actualización de contraseña");
             this.loading = false;
           },
-          error: (e) => {
-            this.loading = false;
-            e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Actualización de contraseña');
-          }
+          error: (e: HttpErrorResponse) => {
+          this.loading = false;
+
+          const message = e.error as string;
+
+          this.toastr.error(message, 'Actualización de contraseña');
+}
         });
       }
       this.formPassword.reset();

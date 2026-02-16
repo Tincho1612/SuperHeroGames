@@ -21,12 +21,11 @@ export class ConfirmEmailComponent {
       this._serviceUser.confirmarEmail(this.token).subscribe({
         next: (data) => {
           this.loading = false;
-          this.text = data.message + ". Ya podés cerrar esta ventana!";
-          this._serviceUser.updateConfirmed();
+          this.text = "Email confirmado correctamente. Ya podés cerrar esta ventana!";
         },
         error: (e) => {
           this.loading = false;
-          this.text = e.error.message;
+           this.text = e.error; 
         }
       })
     })
