@@ -1,10 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.css']
+  
 })
 export class InicioComponent {
 
@@ -19,8 +21,20 @@ export class InicioComponent {
   @ViewChild('backgroundElement') backgroundElement!: ElementRef;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private serviceUser: UsersService
   ) { }
+
+  ngOnInit() {
+  this.serviceUser.warmUpServer().subscribe({
+    next: (res) => {
+      console.log("✅ Confirmación recibida:", res); 
+    },
+    error: (err) => {
+      console.warn("⏳ Señal de encendido enviada. La DB está procesando el arranque.");
+    }
+  });
+  }
 
   mostrarColumnas() {
     this.mostrarOpciones = true;
