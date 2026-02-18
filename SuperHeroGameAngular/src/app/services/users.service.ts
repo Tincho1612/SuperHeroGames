@@ -61,8 +61,8 @@ export class UsersService {
   eliminarFavoritoUser(idHeroe: number): Observable<any> {
     return this.http.patch(`${this.url}/api/user/eliminarFavorito/${idHeroe}`,{}, this.getHeaders());
   }
-  
-  warmUpServer(): Observable<any> {
+
+  warmUp(): Observable<any> {
     return this.http.get(`${this.url}/api/warmup`, { responseType: 'text' });
   }
 
