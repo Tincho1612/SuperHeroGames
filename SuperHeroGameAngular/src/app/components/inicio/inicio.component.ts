@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild,OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -8,7 +8,7 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./inicio.component.css']
   
 })
-export class InicioComponent {
+export class InicioComponent implements OnInit {
 
   mostrarOpciones = false;
   fondoColor = '#000000'; // Color de fondo inicial
