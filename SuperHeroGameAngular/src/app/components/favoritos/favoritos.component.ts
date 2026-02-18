@@ -39,7 +39,7 @@ export class FavoritosComponent implements OnInit {
     this._serviceUser.getActualUser().subscribe({
       next: (data) => {
         {
-          if (data && data.listaFavoritos) {
+          if (data && data.listaFavoritos && data.listaFavoritos.length > 0) {
             const heroesid = data.listaFavoritos;
 
             const observables = heroesid.map((heroeId: number) => this._serviceHeroe.getHeroe(heroeId));

@@ -13,7 +13,7 @@ export class UsersService {
   token: string = ""
 
  // private url: string = "https://servidor-superherogame.vercel.app";
-  private url: string = "http://localhost:8080";
+  private url: string = "https://superherogame-backend.onrender.com";
   constructor(private http: HttpClient) {
     const lsToken = localStorage.getItem('token');
     if (lsToken !== null) {
@@ -38,7 +38,7 @@ export class UsersService {
 
  getHeaders() {
   const headers = new HttpHeaders({
-    'Authorization': `Bearer ${this.token}` // Spring Security espera este formato
+    'Authorization': `Bearer ${this.token}`
   });
 
   return { headers };
@@ -86,7 +86,7 @@ export class UsersService {
   }
 
   confirmarEmail(token: string): Observable<any> {
-    return this.http.get<any>(`${this.url}/api/auth/confirmemail/${token}`);
+    return this.http.get<any>(`${this.url}/api/auth/confirmEmail/${token}`);
   }
 
   requestConfirmationEmail(email: string): Observable<any> {
@@ -97,8 +97,8 @@ export class UsersService {
     return this.http.post<any>(`${this.url}/api/auth/recoverPassword`, { email });
   }
 
-  resetPassword(newPassword: string, token: string): Observable<any> {
-    return this.http.post<any>(`${this.url}/api/auth/resetPassword/${token}`, { newPassword });
+  resetPassword(newPassword: string, confirmPassword: string, token: string): Observable<any> {
+    return this.http.patch<any>(`${this.url}/api/auth/resetPassword/${token}`, { newPassword, confirmPassword});
   }
 
   //////////////////////////////////////////////////////////

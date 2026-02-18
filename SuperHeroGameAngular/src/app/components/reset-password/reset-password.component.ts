@@ -41,7 +41,7 @@ export class ResetPasswordComponent implements OnInit {
       return;
     }
 
-    this._serviceUser.resetPassword(this.form.value.password, this.token).subscribe({
+    this._serviceUser.resetPassword(this.form.value.password, this.form.value.confirmPassword, this.token).subscribe({
       next: (data) => {
         this.toastr.success(data.message, 'Contraseña cambiada!');
         this.navigate.navigate(['/login']);
