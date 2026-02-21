@@ -47,8 +47,8 @@ export class UpdateUserComponent {
         this.loading = true;
         this._serviceUser.updateUser({ email: newEmail}).subscribe({
           next: (data) => {
-            this.toastr.success(data.message +
-              ". Recuerda que al cambiar el mail, es necesario volver a confirmarlo, inicie sesión nuevamente para que aparezca la opción correspondiente"
+            this.toastr.success(
+              "Email modificado con exito!! Recuerda verificar tu casilla de correo para confirmar el nuevo email."
               , "Actualización de email", {
               timeOut: 8500
             });
@@ -83,7 +83,7 @@ export class UpdateUserComponent {
         this.loading = true;
         this._serviceUser.updatePassword({ actualPassword: actualPassword, newPassword: newPassword }).subscribe({
           next: (data) => {
-            this.toastr.success(data.message, "Actualización de contraseña");
+            this.toastr.success("Contraseña modificada con exito", "Actualización de contraseña");
             this.loading = false;
           },
           error: (e: HttpErrorResponse) => {

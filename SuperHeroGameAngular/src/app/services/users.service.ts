@@ -13,7 +13,8 @@ export class UsersService {
   token: string = ""
 
  // private url: string = "https://servidor-superherogame.vercel.app";
-  private url: string = "https://superherogame-backend.onrender.com";
+  //private url: string = "https://superherogame-backend.onrender.com";
+   private url: string = "http://localhost:8080";
   constructor(private http: HttpClient) {
     const lsToken = localStorage.getItem('token');
     if (lsToken !== null) {
@@ -63,7 +64,7 @@ export class UsersService {
   }
 
   warmUp(): Observable<any> {
-    return this.http.get(`${this.url}/api/warmup`, { responseType: 'text' });
+    return this.http.get(`${this.url}/api/warmup`,  this.getHeaders());
   }
 
   updateUser(body: object): Observable<any> {

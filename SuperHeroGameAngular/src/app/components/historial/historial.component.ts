@@ -45,28 +45,18 @@ export class HistorialComponent implements OnInit, OnDestroy {
  cargarHistorial() {
   this.loading = true;
   this._serviceUser.getPeleasUser().subscribe({
-    next: (data: {
-      idHeroe1: number;
-      idHeroe2: number;
-      idGanador: number;
-      fechaPelea: string;
-    }[]) => {
-      if (data) {
+    next: (data) => {
+      if (data && data.length > 0) {
         this.peleas = data;
+        this.peleas.forEach(p => p.fechaPelea = new Date(p.fechaPelea).toLocaleString('es-AR'));
 
-        this.peleas.forEach(p =>
-          p.fechaPelea = new Date(p.fechaPelea).toLocaleString('es-AR')
-        );
-
-        const heroesDetailsObservables = this.peleas.map(pelea =>
-          this.obtenerDetallesHeroes(pelea)
-        );
+        const heroesDetailsObservables = this.peleas.map(pelea => this.obtenerDetallesHeroes(pelea));
 
         forkJoin(heroesDetailsObservables)
           .pipe(
             takeUntil(this.ngUnsubscribe),
             catchError(error => {
-              console.error(error);
+              this.loading = false;
               return [];
             })
           )
@@ -76,15 +66,14 @@ export class HistorialComponent implements OnInit, OnDestroy {
             this.loading = false;
           });
       } else {
+        this.peleas = [];
         this.loading = false;
       }
     },
     error: (e) => {
       this.loading = false;
-      console.log(e);
-      e.status === 429
-        ? this.toastr.error(e.error, 'Error')
-        : this.toastr.error(e.error.message, 'Error');
+      const mensaje = typeof e.error === 'string' ? e.error : e.error?.message || 'Error';
+      this.toastr.error(mensaje, 'Error');
     }
   });
 }

@@ -38,8 +38,9 @@ export class EquipoComponent implements OnInit {
         this.toastr.success(data.message, "Favoritos");
       },
       error: (e) => {
-        console.log(e);
-        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+        this.loading = false;
+        const mensaje = typeof e.error === 'string' ? e.error : e.error?.message || 'Error';
+        this.toastr.error(mensaje, 'Error');
       }
     })
   }
@@ -60,7 +61,8 @@ export class EquipoComponent implements OnInit {
       },
       error: (e) => {
         this.loading = false;
-        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+        const mensaje = typeof e.error === 'string' ? e.error : e.error?.message || 'Error';
+        this.toastr.error(mensaje, 'Error');
       }
     })
   }

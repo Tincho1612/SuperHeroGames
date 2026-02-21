@@ -26,8 +26,6 @@ export class InicioComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  console.log("📡 Servicio: Enviando señal de vida a ");
-
   this.serviceUser.warmUp().subscribe({
     next: (res) => {
       console.log("✅ Confirmación recibida:", res); 

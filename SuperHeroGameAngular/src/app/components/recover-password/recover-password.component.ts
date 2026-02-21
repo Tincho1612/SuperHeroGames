@@ -31,8 +31,8 @@ export class RecoverPasswordComponent {
         },
         error: (e) => {
           this.loading = false;
-          console.log(e);
-          e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
+          const mensaje = typeof e.error === 'string' ? e.error : e.error?.message || 'Error';
+          this.toastr.error(mensaje, 'Error');
         }
       })
     } else {

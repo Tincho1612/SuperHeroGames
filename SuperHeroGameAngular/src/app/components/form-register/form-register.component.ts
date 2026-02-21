@@ -56,10 +56,10 @@ export class FormRegisterComponent {
         ruleta!</p>`
       },
       error: (e) => {
-        this.loading = false
-        this.modalMessage = `<p>Ha ocurrido un error en el registro. ${e.error.message}</p>`
-        e.status === 429 ? this.toastr.error(e.error, 'Error') : this.toastr.error(e.error.message, 'Error');
-      }
+        this.loading = false;
+        const mensaje = typeof e.error === 'string' ? e.error : e.error?.message || 'Error';
+        this.toastr.error(mensaje, 'Error');
+}
     })
   }
 
